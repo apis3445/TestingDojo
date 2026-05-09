@@ -1,0 +1,26 @@
+{
+    "home": {
+        "user": "Usuario",
+        "pass": "Contraseña",
+        "company": "Empresa",
+        "avalilabeCompanies": "Empresas Disponibles",
+        "login": "Iniciar Sesión",
+        "rememberMe": "Recuérdame",
+        "forgotPassword": "¿Olvidaste tu Contraseña?",
+        "invalidCredentials": "Error: Usuario no válido"
+    },
+    "menu": {
+        "admin": [
+            "Cuentas por Cobrar",
+            "Seguridad",
+            "Configuración"
+        ],
+        "normal": [
+            "Cuentas por Cobrar",
+            "Configuración"
+        ]
+    },
+    "notFound": {
+        "title": "Página No Encontrada"
+    }
+}

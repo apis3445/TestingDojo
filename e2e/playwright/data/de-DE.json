@@ -1,0 +1,26 @@
+{
+    "home": {
+        "user": "Benutzer",
+        "pass": "Passwort",
+        "company": "Unternehmen",
+        "avalilabeCompanies": "Verfügbare Unternehmen",
+        "login": "Anmelden",
+        "rememberMe": "Angemeldet bleiben",
+        "forgotPassword": "Passwort vergessen?",
+        "invalidCredentials": "Fehler: Ungültiger Benutzer"
+    },
+    "menu": {
+        "admin": [
+            "Forderungen",
+            "Sicherheit",
+            "Konfiguration"
+        ],
+        "normal": [
+            "Forderungen",
+            "Konfiguration"
+        ]
+    },
+    "notFound": {
+        "title": "Seite nicht gefunden"
+    }
+}

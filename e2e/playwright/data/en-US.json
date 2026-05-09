@@ -1,0 +1,26 @@
+{
+    "home": {
+        "user": "User",
+        "pass": "Password",
+        "company": "Company",
+        "avalilabeCompanies": "Available Companies",
+        "login": "Login",
+        "rememberMe": "Remember me",
+        "forgotPassword": "Forgot Password?",
+        "invalidCredentials": "Error: Invalid user"
+    },
+    "menu": {
+        "admin": [
+            "Accounts Receivable",
+            "Security",
+            "Config"
+        ],
+        "normal": [
+            "Accounts Receivable",
+            "Config"
+        ]
+    },
+    "notFound": {
+        "title": "Page Not Found"
+    }
+}

@@ -1,0 +1,47 @@
+<svg width="1000" height="500" viewBox="0 0 1000 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Definitions for shadows -->
+  <defs>
+    <filter id="shadow" x="-2%" y="-2%" width="104%" height="104%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.1"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1000" height="500" rx="12" fill="#F8FAFC"/>
+
+  <!-- Playwright Box -->
+  <rect x="60" y="50" width="260" height="200" rx="12" fill="#EFF6FF" stroke="#2563EB" stroke-width="2" filter="url(#shadow)"/>
+  <text x="190" y="95" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#1E3A8A" text-anchor="middle">Playwright</text>
+  <text x="190" y="130" font-family="monospace" font-size="18" fill="#1D4ED8" text-anchor="middle">e2e/playwright/</text>
+  <text x="190" y="175" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#1E3A8A" text-anchor="middle">UI &amp; E2E Testing</text>
+  <text x="190" y="210" font-family="Arial, sans-serif" font-size="18" font-weight="600" fill="#475569" text-anchor="middle">Clicks like a real user</text>
+
+  <!-- .NET Box -->
+  <rect x="370" y="50" width="260" height="200" rx="12" fill="#F0FDF4" stroke="#16A34A" stroke-width="2" filter="url(#shadow)"/>
+  <text x="500" y="95" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#14532D" text-anchor="middle">.NET (TUnit)</text>
+  <text x="500" y="130" font-family="monospace" font-size="18" fill="#15803D" text-anchor="middle">APINet/</text>
+  <text x="500" y="175" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#14532D" text-anchor="middle">API &amp; Integration</text>
+  <text x="500" y="210" font-family="Arial, sans-serif" font-size="18" font-weight="600" fill="#475569" text-anchor="middle">Sends HTTP requests</text>
+
+  <!-- Postman Box -->
+  <rect x="680" y="50" width="260" height="200" rx="12" fill="#FFF7ED" stroke="#EA580C" stroke-width="2" filter="url(#shadow)"/>
+  <text x="810" y="95" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#7C2D12" text-anchor="middle">Postman</text>
+  <text x="810" y="130" font-family="monospace" font-size="18" fill="#C2410C" text-anchor="middle">postman/</text>
+  <text x="810" y="175" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#7C2D12" text-anchor="middle">Manual &amp; Auto API</text>
+  <text x="810" y="210" font-family="Arial, sans-serif" font-size="18" font-weight="600" fill="#475569" text-anchor="middle">Collection based testing</text>
+
+  <!-- Manual Arrows -->
+  <path d="M190 250 C 190 300, 400 290, 400 335" stroke="#64748B" stroke-width="4" fill="none"/>
+  <polygon points="400,350 392,335 408,335" fill="#475569" />
+  
+  <path d="M500 250 V 335" stroke="#64748B" stroke-width="4" fill="none"/>
+  <polygon points="500,350 492,335 508,335" fill="#475569" />
+  
+  <path d="M810 250 C 810 300, 600 290, 600 335" stroke="#64748B" stroke-width="4" fill="none"/>
+  <polygon points="600,350 592,335 608,335" fill="#475569" />
+
+  <!-- App Under Test -->
+  <rect x="350" y="350" width="300" height="90" rx="10" fill="#F1F5F9" stroke="#334155" stroke-width="2.5" filter="url(#shadow)"/>
+  <text x="500" y="390" font-family="Arial, sans-serif" font-size="22" font-weight="bold" fill="#0F172A" text-anchor="middle">Testing Dojo Demo App</text>
+  <text x="500" y="415" font-family="Arial, sans-serif" font-size="16" font-weight="600" fill="#475569" text-anchor="middle">(Application Under Test)</text>
+</svg>
