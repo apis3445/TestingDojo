@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <UserSecretsId>64696253-18e0-4cc6-a56a-542c46f8e4c0</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="RestAssured.Net" Version="5.0.0" />
+    <PackageReference Include="RestSharp" Version="114.0.0" />
+    <PackageReference Include="TUnit" Version="1.43.11" />
+  </ItemGroup>
+
+  <!-- Copy all appsettings files to the output/test directory -->
+  <ItemGroup>
+    <None Update="appsettings*.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="RestAssured/" />
+    <Folder Include="RestAssured/Tests/" />
+  </ItemGroup>
+
+</Project>

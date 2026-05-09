@@ -1,0 +1,822 @@
+{
+  "info": {
+    "_postman_id": "cdf08318-6fff-48af-a18d-ba4d2e2ec21f",
+    "name": "Abi Testing Dojo",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "1273809",
+    "_collection_link": "https://go.postman.co/collection/1273809-cdf08318-6fff-48af-a18d-ba4d2e2ec21f?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Login",
+      "item": [
+        {
+          "name": "Admin",
+          "item": [
+            {
+              "name": "Login_withAdminUser_ReturnsAdminToken",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "//Date functions",
+                      "const moment = require(\"moment\")",
+                      "",
+                      "// 1. Test that the status code is 200",
+                      "utils.StatusOk();",
+                      "",
+                      "// 2. Parse the response body as a JSON object",
+                      "const jsonData = pm.response.json();",
+                      "",
+                      "// 3. Test the response body — all 8 fields of LoginResponse",
+                      "pm.test(\"AccessToken is a decodable JWT\", function () {",
+                      "    const parts = jsonData.AccessToken.split('.');",
+                      "    pm.expect(parts.length, 'JWT must have 3 segments').to.equal(3);",
+                      "    const decodeSegment = (seg) => {",
+                      "        const base64 = seg.replace(/-/g, '+').replace(/_/g, '/');",
+                      "        const padded = base64 + '='.repeat((4 - base64.length % 4) % 4);",
+                      "        return JSON.parse(atob(padded));",
+                      "    };",
+                      "    pm.expect(() => decodeSegment(parts[0]), 'header must decode to JSON').to.not.throw();",
+                      "    pm.expect(() => decodeSegment(parts[1]), 'payload must decode to JSON').to.not.throw();",
+                      "});",
+                      "",
+                      "pm.test(\"TokenExpiration is in the future and within 24 hours\", function () {",
+                      "    const expiry = moment.utc(jsonData.TokenExpiration);",
+                      "    const now = moment.utc();",
+                      "    pm.expect(expiry.isValid()).to.be.true;",
+                      "    pm.expect(expiry.isAfter(now), 'Token expiration should be in the future').to.be.true;",
+                      "    pm.expect(expiry.isBefore(now.clone().add(24, 'hours').add(5, 'minutes')), 'Token expiration should be within ~24 hours').to.be.true;",
+                      "});",
+                      "",
+                      "const expectedUserId = parseInt(pm.environment.get(\"userIdAdmin\"));",
+                      "pm.test(\"UserId is: \" + expectedUserId, function () {",
+                      "    pm.expect(jsonData.UserId).to.eql(expectedUserId);",
+                      "});",
+                      "",
+                      "const expectedName = pm.environment.get(\"nameAdmin\");",
+                      "pm.test(\"Name is: \" + expectedName, function () {",
+                      "    pm.expect(jsonData.Name).to.eql(expectedName);",
+                      "});",
+                      "",
+                      "const expectedEmail = pm.environment.get(\"emailAdmin\");",
+                      "pm.test(\"Email is: \" + expectedEmail, function () {",
+                      "    pm.expect(jsonData.Email).to.eql(expectedEmail);",
+                      "});",
+                      "",
+                      "pm.test(\"RefreshToken is a non-empty string\", function () {",
+                      "    pm.expect(jsonData.RefreshToken).to.be.a('string').and.to.not.be.empty;",
+                      "});",
+                      "",
+                      "const expectedCompany = pm.environment.get(\"companyAdmin\");",
+                      "pm.test(\"Company is: \" + expectedCompany, function () {",
+                      "    pm.expect(jsonData.Company).to.eql(expectedCompany);",
+                      "});",
+                      "",
+                      "const expectedCompanyKey = parseInt(pm.environment.get(\"companyKeyAdmin\"));",
+                      "pm.test(\"CompanyKey is: \" + expectedCompanyKey, function () {",
+                      "    pm.expect(jsonData.CompanyKey).to.eql(expectedCompanyKey);",
+                      "});",
+                      "",
+                      "const expectedLanguage = parseInt(pm.environment.get(\"language\"));",
+                      "pm.test(\"Language is: \" + expectedCompanyKey, function () {",
+                      "    pm.expect(jsonData.Language).to.eql(Language);",
+                      "});",
+                      "",
+                      "// 4. Response time",
+                      "pm.test(\"Response time is less than 3 seconds\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(3000);",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"Company\": \"{{companyAdmin}}\",\n  \"UserName\": \"{{userNameAdmin}}\",\n  \"Password\": \"{{passwordAdmin}}\",\n  \"Language\": \"{{language}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{AuthAPI}}/api/users/login",
+                  "host": [
+                    "{{AuthAPI}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users",
+                    "login"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "User",
+          "item": [
+            {
+              "name": "Login_withNormalUser_ReturnsToken",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "//Date functions",
+                      "const moment = require(\"moment\")",
+                      "",
+                      "// 1. Test that the status code is 200",
+                      "utils.StatusOk();",
+                      "",
+                      "// 2. Parse the response body as a JSON object",
+                      "const jsonData = pm.response.json();",
+                      "",
+                      "// 3. Test the response body — all 8 fields of LoginResponse",
+                      "pm.test(\"AccessToken is a decodable JWT\", function () {",
+                      "    const parts = jsonData.AccessToken.split('.');",
+                      "    pm.expect(parts.length, 'JWT must have 3 segments').to.equal(3);",
+                      "    const decodeSegment = (seg) => {",
+                      "        const base64 = seg.replace(/-/g, '+').replace(/_/g, '/');",
+                      "        const padded = base64 + '='.repeat((4 - base64.length % 4) % 4);",
+                      "        return JSON.parse(atob(padded));",
+                      "    };",
+                      "    pm.expect(() => decodeSegment(parts[0]), 'header must decode to JSON').to.not.throw();",
+                      "    pm.expect(() => decodeSegment(parts[1]), 'payload must decode to JSON').to.not.throw();",
+                      "});",
+                      "",
+                      "pm.test(\"TokenExpiration is in the future and within 24 hours\", function () {",
+                      "    const expiry = moment.utc(jsonData.TokenExpiration);",
+                      "    const now = moment.utc();",
+                      "    pm.expect(expiry.isValid()).to.be.true;",
+                      "    pm.expect(expiry.isAfter(now), 'Token expiration should be in the future').to.be.true;",
+                      "    pm.expect(expiry.isBefore(now.clone().add(24, 'hours').add(5, 'minutes')), 'Token expiration should be within ~24 hours').to.be.true;",
+                      "});",
+                      "",
+                      "const expectedUserId = parseInt(pm.environment.get(\"userId\"));",
+                      "pm.test(\"UserId is: \" + expectedUserId, function () {",
+                      "    pm.expect(jsonData.UserId).to.eql(expectedUserId);",
+                      "});",
+                      "",
+                      "const expectedName = pm.environment.get(\"name\");",
+                      "pm.test(\"Name is: \" + expectedName, function () {",
+                      "    pm.expect(jsonData.Name).to.eql(expectedName);",
+                      "});",
+                      "",
+                      "const expectedEmail = pm.environment.get(\"email\");",
+                      "pm.test(\"Email is: \" + expectedEmail, function () {",
+                      "    pm.expect(jsonData.Email).to.eql(expectedEmail);",
+                      "});",
+                      "",
+                      "pm.test(\"RefreshToken is a non-empty string\", function () {",
+                      "    pm.expect(jsonData.RefreshToken).to.be.a('string').and.to.not.be.empty;",
+                      "});",
+                      "",
+                      "const expectedCompany = pm.environment.get(\"company\");",
+                      "pm.test(\"Company is: \" + expectedCompany, function () {",
+                      "    pm.expect(jsonData.Company).to.eql(expectedCompany);",
+                      "});",
+                      "",
+                      "const expectedCompanyKey = parseInt(pm.environment.get(\"companyKey\"));",
+                      "pm.test(\"CompanyKey is: \" + expectedCompanyKey, function () {",
+                      "    pm.expect(jsonData.CompanyKey).to.eql(expectedCompanyKey);",
+                      "});",
+                      "",
+                      "// 4. Check the response time is less than 5 seconds",
+                      "pm.test(\"Response time is less than 5 seconds\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(5*1000);",
+                      "});",
+                      "",
+                      "// 5. Store the AccessToken in a collection variable for future use",
+                      "pm.collectionVariables.set(\"AccessToken\", jsonData.AccessToken);",
+                      ""
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"Company\": \"{{company}}\",\n  \"UserName\": \"{{userName}}\",\n  \"Password\": \"{{password}}\",\n  \"Language\": \"{{language}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{AuthAPI}}/api/users/login",
+                  "host": [
+                    "{{AuthAPI}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users",
+                    "login"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Menu_withNormalUser_ReturnsMenu",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "// 1. Test that the status code is 200",
+                      "utils.StatusOk();",
+                      "",
+                      "// 2. Parse the response body as a JSON object",
+                      "const jsonData = pm.response.json();",
+                      "",
+                      "const totalMenus = 2;",
+                      "// 3. Verify that returns 3 main menus",
+                      "pm.test(\"The menu has exactly \" + totalMenus + \" main items\", function () {",
+                      "   pm.expect(jsonData.length).to.eql(totalMenus);",
+                      "});",
+                      "",
+                      "// 4. Vefify first menu",
+                      "let expectedMenu = \"売掛金\"",
+                      " pm.test(\"Frist menu is: \" + expectedMenu + \"(Account Receivable)\",  function () {",
+                      "        pm.expect(jsonData[0].label).to.eql(expectedMenu);",
+                      "        pm.expect(jsonData[0].items).to.be.an('array'); ",
+                      "});",
+                      "",
+                      "expectedMenu = \"設定\";",
+                      "// 6. Check the third main item (Settings)",
+                      "pm.test(\"Second main item is \" + expectedMenu +  \" (Config)\", function () {",
+                      "    pm.expect(jsonData[1].label).to.eql(expectedMenu);",
+                      "    pm.expect(jsonData[1].items).to.be.an('array');",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{AccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{AuthAPI}}/api/menu",
+                  "host": [
+                    "{{AuthAPI}}"
+                  ],
+                  "path": [
+                    "api",
+                    "menu"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Validation",
+          "item": [
+            {
+              "name": "Login_WithMissingCompany_Returns400",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "utils.Status400();"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"UserName\": \"{{userNameAdmin}}\",\n  \"Password\": \"{{passwordAdmin}}\",\n  \"Language\": \"{{language}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{AuthAPI}}/api/users/login",
+                  "host": [
+                    "{{AuthAPI}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users",
+                    "login"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Login_WithMissingUserName_Returns400",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "utils.Status400();"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"Company\": \"{{companyAdmin}}\",\n  \"Password\": \"{{passwordAdmin}}\",\n  \"Language\": \"{{language}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{AuthAPI}}/api/users/login",
+                  "host": [
+                    "{{AuthAPI}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users",
+                    "login"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Login_WithMissingPassword_Returns400",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "utils.Status400();",
+                      "",
+                      "pm.test(\"Error field is Password\", function () {",
+                      "    const jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.errors).to.have.property(\"Password\");",
+                      "});",
+                      "",
+                      "pm.test(\"Password error message is Required\", function () {",
+                      "    const jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.errors.Password[0]).to.eql(\"Required\");",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"Company\": \"{{companyAdmin}}\",\n  \"UserName\": \"{{userNameAdmin}}\",\n  \"Language\": \"{{language}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{AuthAPI}}/api/users/login",
+                  "host": [
+                    "{{AuthAPI}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users",
+                    "login"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Login_WithInvalidUser_Returns401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// 1. Test that the status code is 401",
+                  "utils.Status401()"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"Company\": \"{{companyAdmin}}\",\n  \"UserName\": \"invalid\",\n  \"Password\": \"invalid\",\n  \"Language\": \"{{language}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{AuthAPI}}/api/users/login",
+              "host": [
+                "{{AuthAPI}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Menu",
+      "item": [
+        {
+          "name": "Menu_withAdminUser_ReturnsAdminMenu",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// 1. Test that the status code is 200",
+                  "utils.StatusOk();",
+                  "",
+                  "// 2. Parse the response body as a JSON object",
+                  "const jsonData = pm.response.json();",
+                  "",
+                  "const totalMenus = 3;",
+                  "// 3. Verify that returns 3 main menus",
+                  "pm.test(\"The menu has exactly \" + totalMenus +  \" main items\", function () {",
+                  "   pm.expect(jsonData.length).to.eql(totalMenus);",
+                  "});",
+                  "",
+                  "// 4. Vefify first menu",
+                  "let expectedMenu = \"売掛金\"",
+                  " pm.test(\"Frist menu is: \" + expectedMenu + \"(Account Receivable)\",  function () {",
+                  "        pm.expect(jsonData[0].label).to.eql(expectedMenu);",
+                  "        pm.expect(jsonData[0].items).to.be.an('array'); ",
+                  "});",
+                  "",
+                  "expectedMenu = \"セキュリティ\";",
+                  "// 5. Vefify second menu",
+                  "pm.test(\"Second main item is: \" + expectedMenu + \" (Security)\", function () {",
+                  "    pm.expect(jsonData[1].label).to.eql(expectedMenu);",
+                  "    pm.expect(jsonData[1].items).to.be.an('array');",
+                  "});",
+                  "",
+                  "expectedMenu = \"設定\";",
+                  "// 6. Check the third main item (Settings)",
+                  "pm.test(\"Third main item is \" + expectedMenu +  \" (Config)\", function () {",
+                  "    pm.expect(jsonData[2].label).to.eql(expectedMenu);",
+                  "    pm.expect(jsonData[2].items).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{AccessTokenAdmin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{AuthAPI}}/api/menu",
+              "host": [
+                "{{AuthAPI}}"
+              ],
+              "path": [
+                "api",
+                "menu"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Menu_withoutUser_returns401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// 1. Test that the status code is 401",
+                  "utils.Status401()"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{AuthAPI}}/api/menu",
+              "host": [
+                "{{AuthAPI}}"
+              ],
+              "path": [
+                "api",
+                "menu"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "MenuAccess_withUserWithAccess_ReturnHasAccess",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "utils.StatusOk()",
+                  "",
+                  "//Convert response to an object",
+                  "var response = pm.response.json();",
+                  "",
+                  "pm.test(\"Has Access is true\", function() ",
+                  "{",
+                  "    pm.expect(response.HasAccess).to.be.true",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{AccessTokenAdmin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{AuthAPI}}/api/menu/access/:pageLink",
+              "host": [
+                "{{AuthAPI}}"
+              ],
+              "path": [
+                "api",
+                "menu",
+                "access",
+                ":pageLink"
+              ],
+              "variable": [
+                {
+                  "key": "pageLink",
+                  "value": "dashboard",
+                  "description": "Page link to get access"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "MenuAccess_withUserWithAccess_ReturnHasAccess Copy",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "utils.StatusOk()",
+                  "",
+                  "//Convert response to an object",
+                  "var response = pm.response.json();",
+                  "",
+                  "pm.test(\"Has Access is true\", function() ",
+                  "{",
+                  "    pm.expect(response.HasAccess).to.be.false",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{AccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{AuthAPI}}/api/menu/access/:pageLink",
+              "host": [
+                "{{AuthAPI}}"
+              ],
+              "path": [
+                "api",
+                "menu",
+                "access",
+                ":pageLink"
+              ],
+              "variable": [
+                {
+                  "key": "pageLink",
+                  "value": "server",
+                  "description": "Page link to get access"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          "utils = {",
+          "  StatusOk: function() {",
+          "    pm.test(\"Status is 200\", function () {",
+          "        pm.response.to.be.ok;",
+          "    });",
+          "  },",
+          "  Status401: function () {",
+          "    pm.test(\"Status is 401\", function () {",
+          "        pm.response.to.have.status(401);",
+          "    });",
+          "  },",
+          "  Status400: function() {",
+          "    pm.test(\"Status is 400\", function () {",
+          "        pm.response.to.have.status(400);",
+          "    });",
+          "  },",
+          "  ArrayAbove0: function(arrayName) {",
+          "    var response = pm.response.json();",
+          "    pm.test(\"Array of '\" + arrayName + \"' is greater than 0\", function() ",
+          "    {",
+          "        pm.expect(response.length).to.be.above(0)",
+          "    });",
+          "  },",
+          "  CheckLength: function(length) {",
+          "    var response = pm.response.json();",
+          "    pm.test(\"Returns \" + length + \" results\" , function() ",
+          "    {",
+          "        pm.expect(response.length).to.be.eql(length)",
+          "    });",
+          "  }",
+          "};"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "AccessToken",
+      "value": ""
+    },
+    {
+      "key": "AccessTokenAdmin",
+      "value": ""
+    }
+  ]
+}

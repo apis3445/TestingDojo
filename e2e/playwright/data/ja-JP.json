@@ -1,0 +1,26 @@
+{
+    "home": {
+        "user": "ユーザー",
+        "pass": "パスワード",
+        "company": "会社",
+        "avalilabeCompanies": "利用可能な会社",
+        "login": "ログイン",
+        "rememberMe": "ログイン状態を保持する",
+        "forgotPassword": "パスワードを忘れましたか？",
+        "invalidCredentials": "エラー：ユーザーが無効です"
+    },
+    "menu": {
+        "admin": [
+            "売掛金",
+            "セキュリティ",
+            "設定"
+        ],
+        "normal": [
+            "売掛金",
+            "設定"
+        ]
+    },
+    "notFound": {
+        "title": "ページが見つかりません"
+    }
+}

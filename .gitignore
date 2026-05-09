@@ -1,0 +1,33 @@
+
+# Playwright
+e2e/playwright/node_modules/
+e2e/playwright/test-results/
+e2e/playwright/playwright-report/
+e2e/playwright/blob-report/
+e2e/playwright/.cache/
+e2e/playwright/.auth/
+e2e/playwright/.env
+
+API/Net/bin/Debug/net10.0/
+API/Net/bin/Release/net10.0/
+API/Net/obj/Debug/net10.0/
+API/Net/obj/Release/net10.0/
+
+APINet/obj/
+APINet/bin/Debug/
+
+# Postman — never commit files with real credentials
+postman/*secrets*
+postman/*local*
+
+# macOS metadata files (created automatically by Finder)
+.DS_Store
+**/.DS_Store
+
+# .NET — environment-specific settings with real URLs/credentials
+appsettings.Development.json
+appsettings.Staging.json
+appsettings.Production.json
+
+.auth/
+.env
