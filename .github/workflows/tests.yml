@@ -81,6 +81,16 @@ jobs:
             --env-var "company=${{ vars.COMPANY }}" \
             --env-var "userName=${{ secrets.NORMAL_USER }}" \
             --env-var "password=${{ secrets.NORMAL_PASSWORD }}" \
+            --env-var "AuthAPI=${{ vars.AUTH_URL }}" \
+            --env-var "language=${{ vars.LANGUAGE }}" \
+            --env-var "userIdAdmin=${{ vars.USER_ID_ADMIN }}" \
+            --env-var "nameAdmin=${{ vars.NAME_ADMIN }}" \
+            --env-var "emailAdmin=${{ vars.EMAIL_ADMIN }}" \
+            --env-var "companyKeyAdmin=${{ vars.COMPANY_KEY_ADMIN }}" \
+            --env-var "userId=${{ vars.USER_ID }}" \
+            --env-var "name=${{ vars.NAME }}" \
+            --env-var "email=${{ vars.EMAIL }}" \
+            --env-var "companyKey=${{ vars.COMPANY_KEY }}" \
             --reporters cli,junitfull \
             --reporter-junitfull-export results/postman-results.xml
       - uses: actions/upload-artifact@v4

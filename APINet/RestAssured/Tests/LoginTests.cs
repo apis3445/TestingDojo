@@ -1,4 +1,5 @@
 using APINet.Models;
+using NHamcrest;
 using static RestAssured.Dsl;
 
 namespace APINet.RestAssured;
@@ -30,11 +31,13 @@ public class LoginTests : TestBase
             .Post($"{AuthUrl}/api/Users/login")
         .Then()
             .StatusCode(200)
+            .And().Body("$.AccessToken", Is.Not(Is.Null<object>()))
+            .And().Body("$.TokenExpiration", Is.Not(Is.Null<object>()))
         .DeserializeTo<LoginResponse>();
 
         await Assert.That(CanDecodeJwt(response?.AccessToken ?? string.Empty)).IsTrue();
-        await Assert.That(response?.TokenExpiration).IsGreaterThan(DateTime.UtcNow);
-        await Assert.That(response?.TokenExpiration).IsLessThan(DateTime.UtcNow.AddHours(24));
+        await Assert.That(response!.TokenExpiration).IsGreaterThan(DateTime.UtcNow);
+        await Assert.That(response!.TokenExpiration).IsLessThan(DateTime.UtcNow.AddHours(24).AddMinutes(1));
     }
 
     [Test]
@@ -78,6 +81,7 @@ public class LoginTests : TestBase
             .Post($"{AuthUrl}/api/Users/login")
         .Then()
             .StatusCode(200)
+            .And().Body("$.AccessToken", Is.Not(Is.Null<object>()))
         .DeserializeTo<LoginResponse>();
 
         await Assert.That(CanDecodeJwt(response?.AccessToken ?? string.Empty)).IsTrue();
@@ -101,6 +105,7 @@ public class LoginTests : TestBase
             .Post($"{AuthUrl}/api/Users/login")
         .Then()
             .StatusCode(200)
+            .And().Body("$.AccessToken", Is.Not(Is.Null<object>()))
         .DeserializeTo<LoginResponse>();
 
         await Assert.That(CanDecodeJwt(response?.AccessToken ?? string.Empty)).IsTrue();

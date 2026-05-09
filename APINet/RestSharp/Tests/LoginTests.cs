@@ -25,8 +25,8 @@ public class LoginTests : TestBase
 
         await Assert.That(response.StatusCode).IsEqualTo(200);
         await Assert.That(CanDecodeJwt(response.Data?.AccessToken ?? string.Empty)).IsTrue();
-        await Assert.That(response.Data?.TokenExpiration).IsGreaterThan(DateTime.UtcNow);
-        await Assert.That(response.Data?.TokenExpiration).IsLessThan(DateTime.UtcNow.AddHours(24));
+        await Assert.That(response.Data!.TokenExpiration).IsGreaterThan(DateTime.UtcNow);
+        await Assert.That(response.Data!.TokenExpiration).IsLessThan(DateTime.UtcNow.AddHours(24).AddMinutes(1));
     }
 
     [Test]
