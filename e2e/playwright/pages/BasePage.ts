@@ -21,6 +21,7 @@ export class BasePage {
 
     public menu: Menu;
     public localeInfo: LocaleData;
+    public screencastOverlay = false;
     protected baseURL: string;
 
     /**
@@ -62,12 +63,31 @@ export class BasePage {
         await test.step(assertMessage, async () => {
             expect(actual, assertMessage).toEqual(expected);
         });
+        if (this.screencastOverlay) await this.showAssertOverlay(assertMessage);
     }
 
     public async assertArrayEqual(expected: string[], actual: string[], assertMessage: string) {
         await test.step(assertMessage, async () => {
             expect(actual, assertMessage).toEqual(expected);
         });
+        if (this.screencastOverlay) await this.showAssertOverlay(assertMessage);
+    }
+
+    private async showAssertOverlay(message: string): Promise<void> {
+        await this.page.screencast.showOverlay(
+            `<div style="
+                background: #1a4731;
+                color: #6ee7b7;
+                border-left: 4px solid #34d399;
+                border-radius: 8px;
+                padding: 10px 18px;
+                font-family: monospace;
+                font-size: 14px;
+                box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+                opacity: 0.8;
+            ">✔ ${message}</div>`,
+            { duration: 2000 },
+        );
     }
 
 }

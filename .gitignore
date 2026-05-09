@@ -31,3 +31,5 @@ appsettings.Production.json
 
 .auth/
 .env
+video.webm
+adminLogin.webm

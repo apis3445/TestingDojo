@@ -15,7 +15,7 @@ export class NotFoundPage extends BasePage {
 
     public async assertTitleVisible() {
         await test.step('Not Found page title is visible', async () => {
-            await expect(this.title.locator).toBeVisible();
+            await expect(this.title.locator, 'Should be visible').toBeVisible();
         });
     }
 }

@@ -2,8 +2,8 @@ import { Page, test } from "@playwright/test";
 import { BaseComponent } from "./BaseComponent";
 
 export class InputText extends BaseComponent {
-    constructor(page: Page, selector: string, byRole = true) {
-        super(page, selector, 'textbox', byRole);
+    constructor(page: Page, selector: string, byRole = true, name = '') {
+        super(page, selector, 'textbox', byRole, name);
     }
 
     async fill(value: string) {

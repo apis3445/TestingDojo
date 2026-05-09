@@ -22,7 +22,7 @@ export class LoginPage extends BasePage {
     password: InputPassword = new InputPassword(this.page, this.localeInfo.home.pass);
     submit: Button = new Button(this.page, this.localeInfo.home.login);
     forgotPassword: Link = new Link(this.page, this.localeInfo.home.forgotPassword, false);
-    errorMessage: Alert = new Alert(this.page);
+    errorMessage: Alert = new Alert(this.page, "Login error message");
 
     constructor(page: Page, locale?: string) {
         super(page, 'Login', locale);
@@ -43,7 +43,7 @@ export class LoginPage extends BasePage {
 
     async assertLoginFormVisible() {
         await test.step('Login form is visible', async () => {
-            await expect(this.submit.locator).toBeVisible();
+            await expect(this.submit.locator, 'Should be visible').toBeVisible();
         });
     }
 }

@@ -11,7 +11,7 @@ export class Canvas extends BaseComponent {
      * @param page Playwright page 
      * @param selector selector for the canvas element
      */
-    constructor(page: Page, public selector: string) {
-        super(page, selector, 'generic');
+    constructor(page: Page, public selector: string, description = '') {
+        super(page, selector, 'generic', false, description || selector);
     }
 }

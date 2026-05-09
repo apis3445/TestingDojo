@@ -114,9 +114,7 @@ export class BaseComponent {
         if (byRole) {
             this.locator = page.getByRole(role, { name: selector }).describe(selector);
         } else {
-            this.locator = name
-                ? page.locator(selector).describe(name)
-                : page.locator(selector);
+            this.locator = page.locator(selector).describe(name || selector);
         }
     }
 

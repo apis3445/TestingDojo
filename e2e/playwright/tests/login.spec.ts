@@ -5,13 +5,20 @@ import { DashboardPage } from '../pages/DashboardPage';
 
 test.describe('Valid login', () => {
 
+  const testDescription = 'Login with valid credentials should navigate to dashboard and get menu for the user role';
   test('Admin user sees correct menu', {
     tag: ['@Login'],
     annotation: [
-      { type: AnnotationType.Description, description: 'Login with valid admin user' },
+      { type: AnnotationType.Description, description: testDescription },
       { type: AnnotationType.Precondition, description: 'A valid admin username and password should exist' },
     ],
   }, async ({ page, locale }) => {
+    await page.screencast.start({ path: 'adminLogin.webm' });
+    await page.screencast.showActions({ position: 'top' });
+
+    await page.screencast.showChapter("Login", {
+      description: testDescription,
+    });
     const loginPage = new LoginPage(page, locale);
     await loginPage.login({
       Company: process.env.COMPANY ?? '',
@@ -19,10 +26,12 @@ test.describe('Valid login', () => {
       Password: process.env.ADMIN_PASSWORD ?? '',
     });
     const dashboardPage = new DashboardPage(page, locale);
+    dashboardPage.screencastOverlay = true;
     await dashboardPage.menu.waitFor();
     const expectedMenus = dashboardPage.localeInfo.menu.admin;
     const menuInPage = await dashboardPage.menu.getMenus();
     await dashboardPage.assertArrayEqual(expectedMenus, menuInPage, `Menu are equal to: "${expectedMenus}"`);
+    await page.screencast.stop();
   });
 
   test('Normal user sees correct menu', {

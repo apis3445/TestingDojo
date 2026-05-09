@@ -3,8 +3,8 @@ import { BaseComponent } from './BaseComponent';
 
 export class Link extends BaseComponent {
 
-    constructor(page: Page, selector: string, byRole = true) {
-        super(page, selector, 'link', byRole);
+    constructor(page: Page, selector: string, byRole = true, name = '') {
+        super(page, selector, 'link', byRole, name);
     }
 
     async click() {

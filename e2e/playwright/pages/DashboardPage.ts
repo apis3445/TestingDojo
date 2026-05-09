@@ -13,16 +13,10 @@ export class DashboardPage extends BasePage {
     constructor(page: Page, locale?: string) {
         super(page, 'Dashboard', locale);
         this.title = new Heading(page, '#title', false);
-        this.top5 = new Canvas(page, '#top5');
-        this.top5Debt = new Canvas(page, '#top5-debt');
-        this.top5DaysDelay = new Canvas(
-            page,
-            '#top5-type-delay',
-        );
-        this.summaryExpiration = new Canvas(
-            page,
-            '#summary-expiration',
-        );
+        this.top5 = new Canvas(page, '#top5', 'Top 5 chart');
+        this.top5Debt = new Canvas(page, '#top5-debt', 'Top 5 Debt chart');
+        this.top5DaysDelay = new Canvas(page, '#top5-type-delay', 'Top 5 Days Delay chart');
+        this.summaryExpiration = new Canvas(page, '#summary-expiration', 'Summary Expiration chart');
     }
 
     public async goTo() {
@@ -35,10 +29,10 @@ export class DashboardPage extends BasePage {
 
     public async waitForChartsAreVisible() {
         await test.step('Wait for charts to be visible', async () => {
-            await expect(this.top5.locator).toBeVisible();
-            await expect(this.top5Debt.locator).toBeVisible();
-            await expect(this.top5DaysDelay.locator).toBeVisible();
-            await expect(this.summaryExpiration.locator).toBeVisible();
+            await expect(this.top5.locator, 'Should be visible').toBeVisible();
+            await expect(this.top5Debt.locator, 'Should be visible').toBeVisible();
+            await expect(this.top5DaysDelay.locator, 'Should be visible').toBeVisible();
+            await expect(this.summaryExpiration.locator, 'Should be visible').toBeVisible();
         });
     }
 }

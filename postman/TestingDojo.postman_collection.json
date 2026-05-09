@@ -36,7 +36,7 @@
                       "    const decodeSegment = (seg) => {",
                       "        const base64 = seg.replace(/-/g, '+').replace(/_/g, '/');",
                       "        const padded = base64 + '='.repeat((4 - base64.length % 4) % 4);",
-                      "        return JSON.parse(atob(padded));",
+                      "        return JSON.parse(require('atob')(padded));",
                       "    };",
                       "    pm.expect(() => decodeSegment(parts[0]), 'header must decode to JSON').to.not.throw();",
                       "    pm.expect(() => decodeSegment(parts[1]), 'payload must decode to JSON').to.not.throw();",
@@ -87,7 +87,10 @@
                       "// 4. Response time",
                       "pm.test(\"Response time is less than 3 seconds\", function () {",
                       "    pm.expect(pm.response.responseTime).to.be.below(3000);",
-                      "});"
+                      "});",
+                      "",
+                      "// 5. Store the admin AccessToken in the environment for menu tests",
+                      "pm.environment.set(\"AccessTokenAdmin\", jsonData.AccessToken);"
                     ],
                     "type": "text/javascript",
                     "packages": {},
@@ -150,7 +153,7 @@
                       "    const decodeSegment = (seg) => {",
                       "        const base64 = seg.replace(/-/g, '+').replace(/_/g, '/');",
                       "        const padded = base64 + '='.repeat((4 - base64.length % 4) % 4);",
-                      "        return JSON.parse(atob(padded));",
+                      "        return JSON.parse(require('atob')(padded));",
                       "    };",
                       "    pm.expect(() => decodeSegment(parts[0]), 'header must decode to JSON').to.not.throw();",
                       "    pm.expect(() => decodeSegment(parts[1]), 'payload must decode to JSON').to.not.throw();",
@@ -198,9 +201,8 @@
                       "    pm.expect(pm.response.responseTime).to.be.below(5*1000);",
                       "});",
                       "",
-                      "// 5. Store the AccessToken in a collection variable for future use",
-                      "pm.collectionVariables.set(\"AccessToken\", jsonData.AccessToken);",
-                      ""
+                      "// 5. Store the AccessToken in the environment for menu tests",
+                      "pm.environment.set(\"AccessToken\", jsonData.AccessToken);"
                     ]
                   }
                 }
