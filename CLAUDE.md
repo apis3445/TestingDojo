@@ -56,11 +56,11 @@ dotnet run --project APINet/APINet.csproj -- --filter "Login_WithInvalidUser_Ret
 Tests follow a **Page Object Model** with a shared component library:
 
 - **`tests/`** — Test specs. Each test uses page objects; never interacts with the DOM directly.
-- **`pages/`** — Page objects extend `BasePage`, which wraps Playwright's `Page` and provides `addStepWithAnnotation()` for structured HTML reporting. Pages compose typed components (e.g., `InputText`, `Button`).
-- **`components/`** — UI component wrappers extend `BaseComponent`. Components locate elements by ARIA role (`byRole=true`) or CSS selector, and emit annotations for the reporter automatically.
-- **`utils/AnnotationType.ts`** — Enum of annotation labels (`GoTo`, `Step`, `Assert`, `Mock`, `Data`, etc.) used throughout pages and components to annotate the HTML report.
+- **`pages/`** — Page objects extend `BasePage`. Pages compose typed components (e.g., `InputText`, `Button`) and use `test.step()` directly for structured HTML reporting.
+- **`components/`** — UI component wrappers extend `BaseComponent`. Components locate elements by ARIA role (`byRole=true`) or CSS selector, and wrap every action in `test.step()` for the report timeline.
+- **`utils/AnnotationType.ts`** — Enum with three values (`Precondition`, `PostCondition`, `Description`) used exclusively in spec annotation arrays. Never used inside page objects or components.
 
-Every interaction (click, fill, navigation) is wrapped in `test.step()` + `test.info().annotations.push()`, so the HTML report reflects a readable test trace.
+Every interaction (click, fill, navigation) is wrapped in `test.step()` directly — there is no `addStep()` wrapper. `test.info().annotations.push()` is only used in spec annotation arrays for `Precondition`, `PostCondition`, and `Description`.
 
 **Environment:** `BASE_URL` and credentials are read from `e2e/playwright/.env` (see that file for variable names). On CI the `BASE_URL` env var must be set externally; `workers` is forced to 1 and retries to 2.
 

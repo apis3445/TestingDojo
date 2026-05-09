@@ -1,4 +1,4 @@
-import { expect, Page } from '@playwright/test';
+import { expect, Page, test } from '@playwright/test';
 import { BaseComponent } from './BaseComponent';
 
 export class Alert extends BaseComponent {
@@ -8,7 +8,7 @@ export class Alert extends BaseComponent {
     }
 
     async assertText(expected: string): Promise<void> {
-        await this.addStep(`Assert alert text: "${expected}"`, async () => {
+        await test.step(`Assert alert text: "${expected}"`, async () => {
             await expect(this.locator).toBeVisible();
             await expect(this.locator.locator('.message-text')).toHaveText(expected);
         });

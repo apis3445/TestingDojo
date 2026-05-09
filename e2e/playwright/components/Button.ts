@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test';
+import { Page, test } from '@playwright/test';
 import { BaseComponent } from './BaseComponent';
 
 export class Button extends BaseComponent {
@@ -9,7 +9,7 @@ export class Button extends BaseComponent {
 
     async click() {
         const stepDescription = `Click: "${this.locator.description()}"`;
-        await this.addStep(stepDescription, async () => {
+        await test.step(stepDescription, async () => {
             await this.locator.click();
         });
     }

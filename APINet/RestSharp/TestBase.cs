@@ -23,7 +23,7 @@ public abstract class TestBase
         // Load order: appsettings.json → appsettings.{env}.json → env vars → user secrets
         var env = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT") ?? "Development";
         Configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
+            .SetBasePath(AppContext.BaseDirectory)
             .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
             .AddJsonFile($"appsettings.{env}.json", optional: true, reloadOnChange: false)
             .AddEnvironmentVariables()

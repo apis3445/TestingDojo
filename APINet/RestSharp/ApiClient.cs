@@ -109,7 +109,7 @@ public class ApiClient
         var sw = Stopwatch.StartNew();
         var response = await _client.ExecuteAsync(request);
         sw.Stop();
-        LogRequestResponse(request, response, body);
+        LogRequestResponse(request, response);
         return ProcessApiResponse(response, sw.Elapsed);
     }
 
@@ -120,7 +120,7 @@ public class ApiClient
         var sw = Stopwatch.StartNew();
         var response = await _client.ExecuteAsync(request);
         sw.Stop();
-        LogRequestResponse(request, response, body);
+        LogRequestResponse(request, response);
         return ProcessApiResponse<T>(response, sw.Elapsed);
     }
 
@@ -131,7 +131,7 @@ public class ApiClient
         var sw = Stopwatch.StartNew();
         var response = await _client.ExecuteAsync(request);
         sw.Stop();
-        LogRequestResponse(request, response, body);
+        LogRequestResponse(request, response);
         return ProcessApiResponse(response, sw.Elapsed);
     }
 
@@ -142,7 +142,7 @@ public class ApiClient
         var sw = Stopwatch.StartNew();
         var response = await _client.ExecuteAsync(request);
         sw.Stop();
-        LogRequestResponse(request, response, body);
+        LogRequestResponse(request, response);
         return ProcessApiResponse<T>(response, sw.Elapsed);
     }
 
@@ -185,19 +185,13 @@ public class ApiClient
         return apiResponse;
     }
 
-    private void LogRequestResponse(RestRequest request, RestResponse response, object? body = null)
+    private void LogRequestResponse(RestRequest request, RestResponse response)
     {
         if ((int)response.StatusCode >= 400)
         {
             Console.WriteLine($"Method: {request.Method}");
             Console.WriteLine($"URL: {response.ResponseUri}");
             Console.WriteLine($"Status Code: {(int)response.StatusCode} {response.StatusCode}");
-
-            if (body != null)
-            {
-                Console.WriteLine($"Request Body: {JsonSerializer.Serialize(body, new JsonSerializerOptions { WriteIndented = true })}");
-            }
-
             Console.WriteLine($"Response Body: {response.Content}");
         }
     }

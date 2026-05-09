@@ -1,5 +1,4 @@
 import { Page, test, expect } from '@playwright/test';
-import { AnnotationType } from '../utils/AnnotationType';
 import { Menu } from '../components/Menu';
 import enUS from '../data/en-US.json';
 import esMX from '../data/es-MX.json';
@@ -37,28 +36,20 @@ export class BasePage {
     }
 
     public async goTo() {
-        await this.addStep(`Go to: "${this.baseURL}"`, async () => {
+        await test.step(`Go to: "${this.baseURL}"`, async () => {
             await this.page.goto(this.baseURL);
         });
     }
 
-    addAnnotation(type: AnnotationType, description: string) {
-        test.info().annotations.push({ type: type, description: description });
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    async addStep(stepDescription: string, stepFunction: any): Promise<any> {
-        return test.step(stepDescription, stepFunction);
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    async addStepWithAnnotation(type: AnnotationType, description: string, stepFunction: () => Promise<any>) {
-        this.addAnnotation(type, description);
-        return this.addStep(description, stepFunction);
+    public async navigateTo(path: string) {
+        const url = this.baseURL + path;
+        await test.step(`Go to: "${url}"`, async () => {
+            await this.page.goto(url);
+        });
     }
 
     async goToDefaultPage() {
-        await this.addStep('Go to default page', async () => {
+        await test.step('Go to default page', async () => {
             await this.page.goto('/');
         });
     }
@@ -68,13 +59,13 @@ export class BasePage {
     }
 
     public async assertEqual(expected: string, actual: string, assertMessage: string) {
-        await this.addStep(assertMessage, async () => {
+        await test.step(assertMessage, async () => {
             expect(actual, assertMessage).toEqual(expected);
         });
     }
 
     public async assertArrayEqual(expected: string[], actual: string[], assertMessage: string) {
-        await this.addStep(assertMessage, async () => {
+        await test.step(assertMessage, async () => {
             expect(actual, assertMessage).toEqual(expected);
         });
     }

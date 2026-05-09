@@ -1,5 +1,7 @@
 import { Page, chromium } from '@playwright/test';
 import * as dotenv from 'dotenv';
+import * as fs from 'fs/promises';
+import * as path from 'path';
 import { LoginApi } from './api/LoginApi';
 import { Login } from './api/Login';
 
@@ -12,6 +14,8 @@ const authFolder = '.auth';
 // Tests that need a logged-in user load that file instead of navigating through the login page —
 // this avoids repeating authentication in every test and keeps tests faster and more independent.
 async function globalSetup() {
+    await fs.mkdir(authFolder, { recursive: true });
+
     const browser = await chromium.launch();
     const page = await browser.newPage();
     await page.goto(process.env.BASE_URL!);
@@ -49,7 +53,7 @@ async function storeToken(page: Page, token: string) {
 // Saves the full browser context (cookies, localStorage, sessionStorage) to a file.
 // Playwright can restore this state in any test without re-running the login flow.
 async function saveAuthState(page: Page, fileName: string) {
-    await page.context().storageState({ path: authFolder + '/' + fileName });
+    await page.context().storageState({ path: path.join(authFolder, fileName) });
 }
 
 export default globalSetup;

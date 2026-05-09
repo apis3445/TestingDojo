@@ -1,8 +1,4 @@
-// Access-control tests — verify that the app protects routes correctly.
-// test.use({ storageState }) loads a pre-authenticated browser session saved by global-setup.ts,
-// so these tests start already logged in without touching the login page.
 import { test } from '../fixtures';
-import { expect } from '@playwright/test';
 import { NotFoundPage } from '../pages/NotFoundPage';
 import { LoginPage } from '../pages/LoginPage';
 import { AnnotationType } from '../utils/AnnotationType';
@@ -17,9 +13,9 @@ test.describe('Valid access to the page', () => {
             { type: AnnotationType.Precondition, description: 'A valid admin username and password should exist' },
         ],
     }, async ({ page, locale }) => {
-        await page.goto('/servers');
         const notFoundPage = new NotFoundPage(page, locale);
-        await expect(notFoundPage.title.locator).toBeVisible();
+        await notFoundPage.goTo();
+        await notFoundPage.assertTitleVisible();
     });
 });
 
@@ -32,8 +28,8 @@ test.describe('Access without authentication', () => {
             { type: AnnotationType.Precondition, description: 'A valid admin username and password should exist' },
         ],
     }, async ({ page, locale }) => {
-        await page.goto('/accounts-receivable/dashboard');
         const loginPage = new LoginPage(page, locale);
-        await expect(loginPage.submit.locator).toBeVisible();
+        await loginPage.navigateTo('/accounts-receivable/dashboard');
+        await loginPage.assertLoginFormVisible();
     });
 });

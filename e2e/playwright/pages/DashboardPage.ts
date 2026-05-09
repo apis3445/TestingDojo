@@ -1,8 +1,7 @@
-import { expect, Page } from "@playwright/test";
+import { expect, Page, test } from "@playwright/test";
 import { Canvas } from "../components/Canvas";
 import { Heading } from "../components/Heading";
 import { BasePage } from "./BasePage";
-import { AnnotationType } from "../utils/AnnotationType";
 
 export class DashboardPage extends BasePage {
     readonly title: Heading;
@@ -27,27 +26,19 @@ export class DashboardPage extends BasePage {
     }
 
     public async goTo() {
-        const dashboardPage = this.baseURL + '/accounts-receivable/dashboard';
-        await this.addStepWithAnnotation(
-            AnnotationType.GoTo,
-            `Go to: "${dashboardPage}"`,
-            async () => {
-                await this.page.goto(dashboardPage);
-                await this.title.locator.waitFor({ timeout: 30_000 });
-            },
-        );
+        const url = this.baseURL + '/accounts-receivable/dashboard';
+        await test.step(`Go to: "${url}"`, async () => {
+            await this.page.goto(url);
+            await this.title.locator.waitFor({ timeout: 30_000 });
+        });
     }
 
     public async waitForChartsAreVisible() {
-        await this.addStepWithAnnotation(
-            AnnotationType.Assert,
-            'Wait to charts are visible',
-            async () => {
-                await expect(this.top5.locator).toBeVisible();
-                await expect(this.top5Debt.locator).toBeVisible();
-                await expect(this.top5DaysDelay.locator).toBeVisible();
-                await expect(this.summaryExpiration.locator).toBeVisible();
-            },
-        );
+        await test.step('Wait for charts to be visible', async () => {
+            await expect(this.top5.locator).toBeVisible();
+            await expect(this.top5Debt.locator).toBeVisible();
+            await expect(this.top5DaysDelay.locator).toBeVisible();
+            await expect(this.summaryExpiration.locator).toBeVisible();
+        });
     }
 }

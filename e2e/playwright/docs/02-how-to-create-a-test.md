@@ -117,11 +117,11 @@ export class LoginPage extends BasePage {
     submit = new Button(this.page, this.localeInfo.home.login);
 
     async login(userLogin: UserLogin) {
+        await this.goTo();
         await this.company.fill(userLogin.Company);
         await this.user.fill(userLogin.UserName);
         await this.password.fill(userLogin.Password);
         await this.submit.click();
-        await this.menu.locator.waitFor();
     }
 }
 ```
@@ -144,22 +144,23 @@ Instead, we use **Environment Variables** (`process.env.VARIABLE_NAME`). This al
 ```typescript
 import { test } from '../fixtures';
 import { LoginPage } from '../pages/LoginPage';
+import { DashboardPage } from '../pages/DashboardPage';
 
 test.describe('Login Scenarios', () => {
   test('should login with valid admin user', async ({ page, locale }) => {
     const loginPage = new LoginPage(page, locale);
-    await loginPage.goTo();
     await loginPage.login({
       Company: process.env.COMPANY!,
       UserName: process.env.ADMIN_USER!,
       Password: process.env.ADMIN_PASSWORD!,
     });
-    
+
     // Assertions using localization
     const dashboardPage = new DashboardPage(page, locale);
+    await dashboardPage.menu.waitFor();
     const expectedMenus = dashboardPage.localeInfo.menu.admin;
     const menuInPage = await dashboardPage.menu.getMenus();
-    await dashboardPage.assertArrayEqual(expectedMenus, menuInPage, "Menu items should match");
+    await dashboardPage.assertArrayEqual(expectedMenus, menuInPage, 'Menu items should match');
   });
 });
 ```

@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test';
+import { expect, Page, test } from '@playwright/test';
 import { BasePage } from './BasePage';
 import { Alert } from '../components/Alert';
 import { Button } from '../components/Button';
@@ -30,14 +30,20 @@ export class LoginPage extends BasePage {
 
 
     async login(userLogin: UserLogin) {
+        await this.goTo();
         await this.company.fill(userLogin.Company);
         await this.user.fill(userLogin.UserName);
         await this.password.fill(userLogin.Password);
         await this.submit.click();
-        await this.menu.locator.waitFor();
     }
 
     async assertInvalidCredentials() {
         await this.errorMessage.assertText(this.localeInfo.home.invalidCredentials);
+    }
+
+    async assertLoginFormVisible() {
+        await test.step('Login form is visible', async () => {
+            await expect(this.submit.locator).toBeVisible();
+        });
     }
 }

@@ -51,9 +51,11 @@ submit = new Button(this.page, 'Login');
 3. Add a `fixtures/index.ts` entry mapping the project name to the locale code.
 4. Add a project in `playwright.config.ts`.
 
-### 3. Reporting & Annotations
+### 3. Reporting & Steps
 
-Every action — click, fill, navigation, assertion — is automatically recorded in the Playwright HTML report via `addStep` and `addAnnotation`. The `AnnotationType` enum provides consistent labels (`GoTo`, `Step`, `Assert`, etc.) so the report reads like a plain-English test trace even without reading the code.
+Every action — click, fill, navigation, assertion — is wrapped in `test.step()` directly inside the component or page object method. This produces a readable timeline in the Playwright HTML report without any extra abstraction layer.
+
+`AnnotationType` contains only three values (`Precondition`, `PostCondition`, `Description`) and is only used in spec annotation arrays — never inside page objects or components.
 
 ```
 Open the report after any run:
@@ -62,8 +64,8 @@ npx playwright show-report
 
 ### 4. Base Classes
 
-- **`BasePage`** — provides `localeInfo` (translated strings), `goTo()`, `addStep()`, and access to the shared `Menu` component. All page objects extend this.
-- **`BaseComponent`** — provides the `locator`, `addStep()`, and `addAnnotation()`. All component wrappers extend this.
+- **`BasePage`** — provides `localeInfo` (translated strings), `goTo()`, `navigateTo()`, and access to the shared `Menu` component. All page objects extend this.
+- **`BaseComponent`** — provides the `locator`. All component wrappers extend this. Each component method wraps its action in `test.step()` for automatic report logging.
 
 ### 5. API Setup / Teardown
 

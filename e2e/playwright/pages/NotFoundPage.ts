@@ -1,4 +1,4 @@
-import { Page } from "@playwright/test";
+import { expect, Page, test } from "@playwright/test";
 import { BasePage } from "./BasePage";
 import { Heading } from "../components/Heading";
 
@@ -7,5 +7,15 @@ export class NotFoundPage extends BasePage {
 
     constructor(page: Page, locale?: string) {
         super(page, 'NotFound', locale);
+    }
+
+    public async goTo() {
+        await this.navigateTo('/servers');
+    }
+
+    public async assertTitleVisible() {
+        await test.step('Not Found page title is visible', async () => {
+            await expect(this.title.locator).toBeVisible();
+        });
     }
 }

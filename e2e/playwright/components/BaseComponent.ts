@@ -1,5 +1,4 @@
-import test, { Locator, Page } from "@playwright/test";
-import { AnnotationType } from "../utils/AnnotationType";
+import { Locator, Page } from "@playwright/test";
 
 // Base class for every UI component (Button, InputText, etc.).
 // Centralizes two responsibilities:
@@ -119,25 +118,6 @@ export class BaseComponent {
                 ? page.locator(selector).describe(name)
                 : page.locator(selector);
         }
-    }
-
-    async addStep(stepDescription: string, stepFunction: () => Promise<any>): Promise<any> {
-        return test.step(stepDescription, stepFunction);
-    }
-
-    addAnnotation(description: string): void {
-        if (this.isAnnotationEnabled) {
-            test.info().annotations.push({ type: AnnotationType.Step, description: description });
-        }
-    }
-
-    /**
-     * Records the action in the HTML report as both an annotation (sidebar metadata) and a named step (timeline).
-     * Use this instead of `addStep` alone when you want the action to be visible at the top of the report as well.
-     */
-    async addStepWithAnnotation(stepDescription: string, action: () => Promise<any>): Promise<any> {
-        this.addAnnotation(stepDescription);
-        return this.addStep(stepDescription, action);
     }
 
 }

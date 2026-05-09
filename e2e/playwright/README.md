@@ -30,7 +30,7 @@ This project combines two patterns: **Page Object Model (POM)** and **Atomic Com
 // components/Button.ts — knows how to click one button and log it
 export class Button extends BaseComponent {
     async click() {
-        await this.addStep(`Click: "${this.locator.description()}"`, async () => {
+        await test.step(`Click: "${this.locator.description()}"`, async () => {
             await this.locator.click();
         });
     }
@@ -44,6 +44,7 @@ export class LoginPage extends BasePage {
     submit   = new Button(this.page, this.localeInfo.home.login);
 
     async login(userLogin: UserLogin) {
+        await this.goTo();
         await this.company.fill(userLogin.Company);
         await this.user.fill(userLogin.UserName);
         await this.password.fill(userLogin.Password);
@@ -54,7 +55,6 @@ export class LoginPage extends BasePage {
 // tests/login.spec.ts — describes the scenario, no selectors in sight
 test('Admin user sees correct menu', async ({ page, locale }) => {
     const loginPage = new LoginPage(page, locale);
-    await loginPage.goTo();
     await loginPage.login({
         Company:  process.env.COMPANY,
         UserName: process.env.ADMIN_USER,
@@ -119,7 +119,7 @@ e2e/playwright/
   api/                  API helpers for pre-conditions (faster than going through the UI)
   fixtures/             Custom test setup — injects locale and pre-authenticated pages
   utils/
-    AnnotationType.ts   Labels used to annotate the HTML report steps
+    AnnotationType.ts   Enum with Precondition / PostCondition / Description — spec annotation arrays only
   global-setup.ts       Runs once before all tests — logs in via API and saves browser auth state
   playwright.config.ts  Browser projects (one per language), timeouts, reporter config
   .env                  Local credentials — excluded from git, never committed
