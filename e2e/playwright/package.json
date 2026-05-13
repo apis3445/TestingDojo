@@ -24,10 +24,10 @@
     "report": "npx playwright show-report e2e/playwright/playwright-report"
   },
   "dependencies": {
-    "dotenv": "^17.3.1"
+    "dotenv": "^17.4.2"
   },
   "devDependencies": {
-    "@playwright/test": "^1.59.1",
-    "@types/node": "^25.5.0"
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^25.7.0"
   }
 }
