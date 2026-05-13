@@ -36,7 +36,7 @@
                       "    const decodeSegment = (seg) => {",
                       "        const base64 = seg.replace(/-/g, '+').replace(/_/g, '/');",
                       "        const padded = base64 + '='.repeat((4 - base64.length % 4) % 4);",
-                      "        return JSON.parse(require('atob')(padded));",
+                      "        return JSON.parse(atob(padded));",
                       "    };",
                       "    pm.expect(() => decodeSegment(parts[0]), 'header must decode to JSON').to.not.throw();",
                       "    pm.expect(() => decodeSegment(parts[1]), 'payload must decode to JSON').to.not.throw();",
@@ -89,8 +89,9 @@
                       "    pm.expect(pm.response.responseTime).to.be.below(3000);",
                       "});",
                       "",
-                      "// 5. Store the admin AccessToken in the environment for menu tests",
-                      "pm.environment.set(\"AccessTokenAdmin\", jsonData.AccessToken);"
+                      "// 5. Store the AccessToken in a collection variable for future use",
+                      "pm.collectionVariables.set(\"AccessTokenAdmin\", jsonData.AccessToken);",
+                      ""
                     ],
                     "type": "text/javascript",
                     "packages": {},
@@ -153,7 +154,7 @@
                       "    const decodeSegment = (seg) => {",
                       "        const base64 = seg.replace(/-/g, '+').replace(/_/g, '/');",
                       "        const padded = base64 + '='.repeat((4 - base64.length % 4) % 4);",
-                      "        return JSON.parse(require('atob')(padded));",
+                      "        return JSON.parse(atob(padded));",
                       "    };",
                       "    pm.expect(() => decodeSegment(parts[0]), 'header must decode to JSON').to.not.throw();",
                       "    pm.expect(() => decodeSegment(parts[1]), 'payload must decode to JSON').to.not.throw();",
@@ -201,8 +202,9 @@
                       "    pm.expect(pm.response.responseTime).to.be.below(5*1000);",
                       "});",
                       "",
-                      "// 5. Store the AccessToken in the environment for menu tests",
-                      "pm.environment.set(\"AccessToken\", jsonData.AccessToken);"
+                      "// 5. Store the AccessToken in a collection variable for future use",
+                      "pm.collectionVariables.set(\"AccessToken\", jsonData.AccessToken);",
+                      ""
                     ]
                   }
                 }
@@ -232,88 +234,11 @@
                 }
               },
               "response": []
-            },
-            {
-              "name": "Menu_withNormalUser_ReturnsMenu",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "// 1. Test that the status code is 200",
-                      "utils.StatusOk();",
-                      "",
-                      "// 2. Parse the response body as a JSON object",
-                      "const jsonData = pm.response.json();",
-                      "",
-                      "const totalMenus = 2;",
-                      "// 3. Verify that returns 3 main menus",
-                      "pm.test(\"The menu has exactly \" + totalMenus + \" main items\", function () {",
-                      "   pm.expect(jsonData.length).to.eql(totalMenus);",
-                      "});",
-                      "",
-                      "// 4. Vefify first menu",
-                      "let expectedMenu = \"売掛金\"",
-                      " pm.test(\"Frist menu is: \" + expectedMenu + \"(Account Receivable)\",  function () {",
-                      "        pm.expect(jsonData[0].label).to.eql(expectedMenu);",
-                      "        pm.expect(jsonData[0].items).to.be.an('array'); ",
-                      "});",
-                      "",
-                      "expectedMenu = \"設定\";",
-                      "// 6. Check the third main item (Settings)",
-                      "pm.test(\"Second main item is \" + expectedMenu +  \" (Config)\", function () {",
-                      "    pm.expect(jsonData[1].label).to.eql(expectedMenu);",
-                      "    pm.expect(jsonData[1].items).to.be.an('array');",
-                      "});"
-                    ],
-                    "type": "text/javascript",
-                    "packages": {},
-                    "requests": {}
-                  }
-                }
-              ],
-              "protocolProfileBehavior": {
-                "disableBodyPruning": true
-              },
-              "request": {
-                "auth": {
-                  "type": "bearer",
-                  "bearer": [
-                    {
-                      "key": "token",
-                      "value": "{{AccessToken}}",
-                      "type": "string"
-                    }
-                  ]
-                },
-                "method": "GET",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{AuthAPI}}/api/menu",
-                  "host": [
-                    "{{AuthAPI}}"
-                  ],
-                  "path": [
-                    "api",
-                    "menu"
-                  ]
-                }
-              },
-              "response": []
             }
           ]
         },
         {
-          "name": "Validation",
+          "name": "400 Bad Request",
           "item": [
             {
               "name": "Login_WithMissingCompany_Returns400",
@@ -321,12 +246,10 @@
                 {
                   "listen": "test",
                   "script": {
-                    "exec": [
-                      "utils.Status400();"
-                    ],
                     "type": "text/javascript",
-                    "packages": {},
-                    "requests": {}
+                    "exec": [
+                      "utils.CheckRequired(\"Company\");"
+                    ]
                   }
                 }
               ],
@@ -362,12 +285,10 @@
                 {
                   "listen": "test",
                   "script": {
-                    "exec": [
-                      "utils.Status400();"
-                    ],
                     "type": "text/javascript",
-                    "packages": {},
-                    "requests": {}
+                    "exec": [
+                      "utils.CheckRequired(\"UserName\");"
+                    ]
                   }
                 }
               ],
@@ -403,22 +324,10 @@
                 {
                   "listen": "test",
                   "script": {
-                    "exec": [
-                      "utils.Status400();",
-                      "",
-                      "pm.test(\"Error field is Password\", function () {",
-                      "    const jsonData = pm.response.json();",
-                      "    pm.expect(jsonData.errors).to.have.property(\"Password\");",
-                      "});",
-                      "",
-                      "pm.test(\"Password error message is Required\", function () {",
-                      "    const jsonData = pm.response.json();",
-                      "    pm.expect(jsonData.errors.Password[0]).to.eql(\"Required\");",
-                      "});"
-                    ],
                     "type": "text/javascript",
-                    "packages": {},
-                    "requests": {}
+                    "exec": [
+                      "utils.CheckRequired(\"Password\");"
+                    ]
                   }
                 }
               ],
@@ -447,59 +356,162 @@
                 }
               },
               "response": []
+            },
+            {
+              "name": "Login_WithInvalidUser_Returns400",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"Company\": \"{{companyAdmin}}\",\n  \"UserName\": \"invalid\",\n  \"Password\": \"invalid\",\n  \"Language\": \"{{language}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{AuthAPI}}/api/users/login",
+                  "host": [
+                    "{{AuthAPI}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users",
+                    "login"
+                  ]
+                }
+              },
+              "response": []
             }
-          ]
-        },
-        {
-          "name": "Login_WithInvalidUser_Returns401",
+          ],
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {},
+                "exec": [
+                  ""
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
-                "exec": [
-                  "// 1. Test that the status code is 401",
-                  "utils.Status401()"
-                ],
                 "type": "text/javascript",
                 "packages": {},
-                "requests": {}
+                "requests": {},
+                "exec": [
+                  "utils.Status400();"
+                ]
               }
             }
-          ],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          },
-          "request": {
-            "method": "GET",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"Company\": \"{{companyAdmin}}\",\n  \"UserName\": \"invalid\",\n  \"Password\": \"invalid\",\n  \"Language\": \"{{language}}\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{AuthAPI}}/api/users/login",
-              "host": [
-                "{{AuthAPI}}"
-              ],
-              "path": [
-                "api",
-                "users",
-                "login"
-              ]
-            }
-          },
-          "response": []
+          ]
         }
       ]
     },
     {
       "name": "Menu",
       "item": [
+        {
+          "name": "401 Unauthorized",
+          "item": [
+            {
+              "name": "Menu_withoutUser_returns401",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{AuthAPI}}/api/menu",
+                  "host": [
+                    "{{AuthAPI}}"
+                  ],
+                  "path": [
+                    "api",
+                    "menu"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {},
+                "exec": [
+                  ""
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {},
+                "exec": [
+                  "// 1. Test that the status code is 401",
+                  "utils.Status401()"
+                ]
+              }
+            }
+          ]
+        },
         {
           "name": "Menu_withAdminUser_ReturnsAdminMenu",
           "event": [
@@ -585,14 +597,37 @@
           "response": []
         },
         {
-          "name": "Menu_withoutUser_returns401",
+          "name": "Menu_withNormalUser_ReturnsMenu",
           "event": [
             {
               "listen": "test",
               "script": {
                 "exec": [
-                  "// 1. Test that the status code is 401",
-                  "utils.Status401()"
+                  "// 1. Test that the status code is 200",
+                  "utils.StatusOk();",
+                  "",
+                  "// 2. Parse the response body as a JSON object",
+                  "const jsonData = pm.response.json();",
+                  "",
+                  "const totalMenus = 2;",
+                  "// 3. Verify that returns 3 main menus",
+                  "pm.test(\"The menu has exactly \" + totalMenus + \" main items\", function () {",
+                  "   pm.expect(jsonData.length).to.eql(totalMenus);",
+                  "});",
+                  "",
+                  "// 4. Vefify first menu",
+                  "let expectedMenu = \"売掛金\"",
+                  " pm.test(\"Frist menu is: \" + expectedMenu + \"(Account Receivable)\",  function () {",
+                  "        pm.expect(jsonData[0].label).to.eql(expectedMenu);",
+                  "        pm.expect(jsonData[0].items).to.be.an('array'); ",
+                  "});",
+                  "",
+                  "expectedMenu = \"設定\";",
+                  "// 6. Check the third main item (Settings)",
+                  "pm.test(\"Second main item is \" + expectedMenu +  \" (Config)\", function () {",
+                  "    pm.expect(jsonData[1].label).to.eql(expectedMenu);",
+                  "    pm.expect(jsonData[1].items).to.be.an('array');",
+                  "});"
                 ],
                 "type": "text/javascript",
                 "packages": {},
@@ -609,7 +644,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "",
+                  "value": "{{AccessToken}}",
                   "type": "string"
                 }
               ]
@@ -639,7 +674,7 @@
           "response": []
         },
         {
-          "name": "MenuAccess_withUserWithAccess_ReturnHasAccess",
+          "name": "MenuAccess_withAdminUserWithAccess_ReturnHasAccess",
           "event": [
             {
               "listen": "test",
@@ -697,7 +732,7 @@
           "response": []
         },
         {
-          "name": "MenuAccess_withUserWithAccess_ReturnHasAccess Copy",
+          "name": "MenuAccess_withUserWithoutAccess_ReturnHasAccessFalse",
           "event": [
             {
               "listen": "test",
@@ -708,7 +743,7 @@
                   "//Convert response to an object",
                   "var response = pm.response.json();",
                   "",
-                  "pm.test(\"Has Access is true\", function() ",
+                  "pm.test(\"Has Access is false\", function() ",
                   "{",
                   "    pm.expect(response.HasAccess).to.be.false",
                   "});"
@@ -762,7 +797,6 @@
       "listen": "prerequest",
       "script": {
         "type": "text/javascript",
-        "packages": {},
         "requests": {},
         "exec": [
           ""
@@ -773,7 +807,6 @@
       "listen": "test",
       "script": {
         "type": "text/javascript",
-        "packages": {},
         "requests": {},
         "exec": [
           "utils = {",
@@ -804,6 +837,16 @@
           "    pm.test(\"Returns \" + length + \" results\" , function() ",
           "    {",
           "        pm.expect(response.length).to.be.eql(length)",
+          "    });",
+          "  },",
+          "  CheckRequired: function(fieldName) {",
+          "    pm.test(\"Error field is \" + fieldName, function () {",
+          "        const jsonData = pm.response.json();",
+          "        pm.expect(jsonData.errors).to.have.property(fieldName);",
+          "    });",
+          "    pm.test(fieldName + \" error message is Required\", function () {",
+          "        const jsonData = pm.response.json();",
+          "        pm.expect(jsonData.errors[fieldName][0]).to.eql(\"Required\");",
           "    });",
           "  }",
           "};"

@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ main, master ]
 
+permissions:
+  contents: write
+
 jobs:
 
   playwright:
@@ -40,6 +43,13 @@ jobs:
           name: playwright-report
           path: e2e/playwright/playwright-report/
           retention-days: 30
+      - name: Deploy Playwright report to GitHub Pages
+        if: ${{ !cancelled() && github.ref == 'refs/heads/main' }}
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: e2e/playwright/playwright-report
+          destination_dir: playwright-report
 
   dotnet:
     name: .NET API Tests
