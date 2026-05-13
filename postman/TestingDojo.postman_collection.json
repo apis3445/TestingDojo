@@ -246,20 +246,10 @@
                 {
                   "listen": "test",
                   "script": {
-                    "exec": [
-                      "pm.test(\"Error field is Company\", function () {",
-                      "    const jsonData = pm.response.json();",
-                      "    pm.expect(jsonData.errors).to.have.property(\"Company\");",
-                      "});",
-                      "",
-                      "pm.test(\"Company error message is Required\", function () {",
-                      "    const jsonData = pm.response.json();",
-                      "    pm.expect(jsonData.errors.Company[0]).to.eql(\"Required\");",
-                      "});"
-                    ],
                     "type": "text/javascript",
-                    "packages": {},
-                    "requests": {}
+                    "exec": [
+                      "utils.CheckRequired(\"Company\");"
+                    ]
                   }
                 }
               ],
@@ -295,20 +285,10 @@
                 {
                   "listen": "test",
                   "script": {
-                    "exec": [
-                      "pm.test(\"Error field is UserName\", function () {",
-                      "    const jsonData = pm.response.json();",
-                      "    pm.expect(jsonData.errors).to.have.property(\"UserName\");",
-                      "});",
-                      "",
-                      "pm.test(\"UserName error message is Required\", function () {",
-                      "    const jsonData = pm.response.json();",
-                      "    pm.expect(jsonData.errors.UserName[0]).to.eql(\"Required\");",
-                      "});"
-                    ],
                     "type": "text/javascript",
-                    "packages": {},
-                    "requests": {}
+                    "exec": [
+                      "utils.CheckRequired(\"UserName\");"
+                    ]
                   }
                 }
               ],
@@ -344,20 +324,10 @@
                 {
                   "listen": "test",
                   "script": {
-                    "exec": [
-                      "pm.test(\"Error field is Password\", function () {",
-                      "    const jsonData = pm.response.json();",
-                      "    pm.expect(jsonData.errors).to.have.property(\"Password\");",
-                      "});",
-                      "",
-                      "pm.test(\"Password error message is Required\", function () {",
-                      "    const jsonData = pm.response.json();",
-                      "    pm.expect(jsonData.errors.Password[0]).to.eql(\"Required\");",
-                      "});"
-                    ],
                     "type": "text/javascript",
-                    "packages": {},
-                    "requests": {}
+                    "exec": [
+                      "utils.CheckRequired(\"Password\");"
+                    ]
                   }
                 }
               ],
@@ -431,11 +401,8 @@
                   }
                 }
               ],
-              "protocolProfileBehavior": {
-                "disableBodyPruning": true
-              },
               "request": {
-                "method": "GET",
+                "method": "POST",
                 "header": [],
                 "body": {
                   "mode": "raw",
@@ -510,9 +477,6 @@
                   }
                 }
               ],
-              "protocolProfileBehavior": {
-                "disableBodyPruning": true
-              },
               "request": {
                 "auth": {
                   "type": "bearer",
@@ -526,15 +490,6 @@
                 },
                 "method": "GET",
                 "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
                 "url": {
                   "raw": "{{AuthAPI}}/api/menu",
                   "host": [
@@ -621,9 +576,6 @@
               }
             }
           ],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          },
           "request": {
             "auth": {
               "type": "bearer",
@@ -637,15 +589,6 @@
             },
             "method": "GET",
             "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
             "url": {
               "raw": "{{AuthAPI}}/api/menu",
               "host": [
@@ -698,9 +641,6 @@
               }
             }
           ],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          },
           "request": {
             "auth": {
               "type": "bearer",
@@ -714,15 +654,6 @@
             },
             "method": "GET",
             "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
             "url": {
               "raw": "{{AuthAPI}}/api/menu",
               "host": [
@@ -860,7 +791,6 @@
       "listen": "prerequest",
       "script": {
         "type": "text/javascript",
-        "packages": {},
         "requests": {},
         "exec": [
           ""
@@ -871,7 +801,6 @@
       "listen": "test",
       "script": {
         "type": "text/javascript",
-        "packages": {},
         "requests": {},
         "exec": [
           "utils = {",
@@ -902,6 +831,16 @@
           "    pm.test(\"Returns \" + length + \" results\" , function() ",
           "    {",
           "        pm.expect(response.length).to.be.eql(length)",
+          "    });",
+          "  },",
+          "  CheckRequired: function(fieldName) {",
+          "    pm.test(\"Error field is \" + fieldName, function () {",
+          "        const jsonData = pm.response.json();",
+          "        pm.expect(jsonData.errors).to.have.property(fieldName);",
+          "    });",
+          "    pm.test(fieldName + \" error message is Required\", function () {",
+          "        const jsonData = pm.response.json();",
+          "        pm.expect(jsonData.errors[fieldName][0]).to.eql(\"Required\");",
           "    });",
           "  }",
           "};"
