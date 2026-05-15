@@ -21,7 +21,7 @@ steps:
       fi
     displayName: Allow package build scripts
 
-  - task: NewMan@2
+  - task: NewmanPostman@2
     displayName: Run Postman collection
     inputs:
       collectionFileSource: postman/TestingDojo.postman_collection.json
