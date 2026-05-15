@@ -14,31 +14,39 @@ pool:
 steps:
   - checkout: self
 
-  - script: npm install -g newman newman-reporter-junitfull
-    displayName: Install Newman
-
   - script: |
-      newman run postman/TestingDojo.postman_collection.json \
-        --environment postman/TestingDojoDemo.postman_environment.json \
-        --env-var "companyAdmin=$(COMPANY)" \
-        --env-var "userNameAdmin=$(ADMIN_USER)" \
-        --env-var "passwordAdmin=$(ADMIN_PASSWORD)" \
-        --env-var "company=$(COMPANY)" \
-        --env-var "userName=$(NORMAL_USER)" \
-        --env-var "password=$(NORMAL_PASSWORD)" \
-        --env-var "AuthAPI=$(AUTH_URL)" \
-        --env-var "language=$(LANGUAGE)" \
-        --env-var "userIdAdmin=$(USER_ID_ADMIN)" \
-        --env-var "nameAdmin=$(NAME_ADMIN)" \
-        --env-var "emailAdmin=$(EMAIL_ADMIN)" \
-        --env-var "companyKeyAdmin=$(COMPANY_KEY_ADMIN)" \
-        --env-var "userId=$(USER_ID)" \
-        --env-var "name=$(NAME)" \
-        --env-var "email=$(EMAIL)" \
-        --env-var "companyKey=$(COMPANY_KEY)" \
-        --reporters cli,junitfull \
-        --reporter-junitfull-export $(Build.ArtifactStagingDirectory)/postman-results.xml
+      echo "unsafe-perm=true" >> ~/.npmrc
+      if command -v pnpm &> /dev/null; then
+        pnpm config set -g unsafe-perm true 2>/dev/null || true
+      fi
+    displayName: Allow package build scripts
+
+  - task: NewMan@2
     displayName: Run Postman collection
+    inputs:
+      collectionFileSource: postman/TestingDojo.postman_collection.json
+      environmentFileSource: postman/TestingDojoDemo.postman_environment.json
+      additionalOptions: >
+        --env-var "companyAdmin=$(COMPANY)"
+        --env-var "userNameAdmin=$(ADMIN_USER)"
+        --env-var "passwordAdmin=$(ADMIN_PASSWORD)"
+        --env-var "company=$(COMPANY)"
+        --env-var "userName=$(NORMAL_USER)"
+        --env-var "password=$(NORMAL_PASSWORD)"
+        --env-var "AuthAPI=$(AUTH_URL)"
+        --env-var "language=$(LANGUAGE)"
+        --env-var "userIdAdmin=$(USER_ID_ADMIN)"
+        --env-var "nameAdmin=$(NAME_ADMIN)"
+        --env-var "emailAdmin=$(EMAIL_ADMIN)"
+        --env-var "companyKeyAdmin=$(COMPANY_KEY_ADMIN)"
+        --env-var "userId=$(USER_ID)"
+        --env-var "name=$(NAME)"
+        --env-var "email=$(EMAIL)"
+        --env-var "companyKey=$(COMPANY_KEY)"
+        --reporters cli,junitfull,htmlextra
+        --reporter-junitfull-export $(Build.ArtifactStagingDirectory)/postman-results.xml
+        --reporter-htmlextra-export $(Build.ArtifactStagingDirectory)/newman-report.html
+        --reporter-htmlextra-title "Postman – $(Build.BuildNumber)"
 
   - task: PublishTestResults@2
     displayName: Publish test results
@@ -51,8 +59,8 @@ steps:
       failTaskOnFailedTests: true
 
   - task: PublishBuildArtifacts@1
-    displayName: Upload results artifact
+    displayName: Upload HTML report artifact
     condition: always()
     inputs:
-      PathtoPublish: $(Build.ArtifactStagingDirectory)/postman-results.xml
-      ArtifactName: postman-report
+      PathtoPublish: $(Build.ArtifactStagingDirectory)/newman-report.html
+      ArtifactName: newman-html-report

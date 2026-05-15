@@ -36,7 +36,7 @@
                       "    const decodeSegment = (seg) => {",
                       "        const base64 = seg.replace(/-/g, '+').replace(/_/g, '/');",
                       "        const padded = base64 + '='.repeat((4 - base64.length % 4) % 4);",
-                      "        return JSON.parse(atob(padded));",
+                      "        return JSON.parse(require('atob')(padded));",
                       "    };",
                       "    pm.expect(() => decodeSegment(parts[0]), 'header must decode to JSON').to.not.throw();",
                       "    pm.expect(() => decodeSegment(parts[1]), 'payload must decode to JSON').to.not.throw();",
@@ -154,7 +154,7 @@
                       "    const decodeSegment = (seg) => {",
                       "        const base64 = seg.replace(/-/g, '+').replace(/_/g, '/');",
                       "        const padded = base64 + '='.repeat((4 - base64.length % 4) % 4);",
-                      "        return JSON.parse(atob(padded));",
+                      "        return JSON.parse(require('atob')(padded));",
                       "    };",
                       "    pm.expect(() => decodeSegment(parts[0]), 'header must decode to JSON').to.not.throw();",
                       "    pm.expect(() => decodeSegment(parts[1]), 'payload must decode to JSON').to.not.throw();",
@@ -447,9 +447,6 @@
                   }
                 }
               ],
-              "protocolProfileBehavior": {
-                "disableBodyPruning": true
-              },
               "request": {
                 "auth": {
                   "type": "bearer",
@@ -463,15 +460,6 @@
                 },
                 "method": "GET",
                 "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
                 "url": {
                   "raw": "{{AuthAPI}}/api/menu",
                   "host": [
@@ -558,9 +546,6 @@
               }
             }
           ],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          },
           "request": {
             "auth": {
               "type": "bearer",
@@ -574,15 +559,6 @@
             },
             "method": "GET",
             "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
             "url": {
               "raw": "{{AuthAPI}}/api/menu",
               "host": [
@@ -635,9 +611,6 @@
               }
             }
           ],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          },
           "request": {
             "auth": {
               "type": "bearer",
@@ -651,15 +624,6 @@
             },
             "method": "GET",
             "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
             "url": {
               "raw": "{{AuthAPI}}/api/menu",
               "host": [
