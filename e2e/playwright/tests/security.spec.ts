@@ -14,7 +14,7 @@ test.describe('Valid access to the page', () => {
         ],
     }, async ({ page, locale }) => {
         const notFoundPage = new NotFoundPage(page, locale);
-        await notFoundPage.goTo();
+        await notFoundPage.navigateTo('/security/servers');
         await notFoundPage.assertTitleVisible();
     });
 });
