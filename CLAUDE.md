@@ -68,6 +68,20 @@ Every interaction (click, fill, navigation) is wrapped in `test.step()` directly
 
 `APINet/` is a single TUnit project (net10.0) with `RestAssured.Net` and `RestSharp` for HTTP. Tests use TUnit's `[Before(Class)]`/`[Before(Test)]` lifecycle hooks. There is currently one test class (`BasicTests` in `LoginTests.cs`).
 
+## Claude Code setup
+
+The Azure DevOps MCP is pre-configured via `.mcp.json` (org: `wbi1521`, default project: `EffizienteAuth`). Authentication uses the Azure CLI (`--authentication azurecli`), so no Personal Access Token is needed. Each developer just signs in once:
+
+```bash
+az login
+```
+
+The MCP reads your Azure CLI session to mint Azure DevOps tokens on demand. Work item IDs are org-wide, so the default project does not restrict which projects you can query — pass a different `project` per call when needed.
+
+## Code style
+
+Use comments sparingly. Only comment complex or non-obvious code.
+
 ## CI
 
-`.github/workflows/playwright.yml` runs Playwright tests on push/PR to `main`/`master`. The workflow runs from the repo root (`npm ci`, `npx playwright test`) — ensure `package.json` and `playwright.config.ts` remain at `e2e/playwright/` and the working-directory is set if the workflow ever moves.
+`.github/workflows/tests.yml` runs Playwright, .NET, and Postman tests on push/PR to `main`/`master`. The Playwright job sets `working-directory: e2e/playwright` and runs `npm ci` / `npx playwright test` from there — ensure `package.json` and `playwright.config.ts` remain at `e2e/playwright/`.

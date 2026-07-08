@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": ["mcp__playwright", "Bash(playwright-cli*)", "Bash(npx tsc --noEmit*)"],
+    "deny": []
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Read|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node /Users/abigailarmijohernandez/GitHub/TestingDojo/hooks/read_hook.js",
+            "statusMessage": "Checking file access..."
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 /Users/abigailarmijohernandez/GitHub/TestingDojo/hooks/bash_env_check.py",
+            "statusMessage": "Checking command..."
+          }
+        ]
+      }
+    ],
+    "PostToolUse": []
+  }
+}

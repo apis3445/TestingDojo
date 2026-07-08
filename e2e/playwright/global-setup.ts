@@ -5,7 +5,7 @@ import * as path from 'path';
 import { LoginApi } from './api/LoginApi';
 import { Login } from './api/Login';
 
-dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 const authFolder = '.auth';
 
@@ -14,6 +14,10 @@ const authFolder = '.auth';
 // Tests that need a logged-in user load that file instead of navigating through the login page —
 // this avoids repeating authentication in every test and keeps tests faster and more independent.
 async function globalSetup() {
+    if (process.env.IS_AGENT) {
+        return;
+    }
+
     await fs.mkdir(authFolder, { recursive: true });
 
     const browser = await chromium.launch();

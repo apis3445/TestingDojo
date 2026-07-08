@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Root package to forward commands to Playwright",
   "scripts": {
-    "test": "npx playwright test -c e2e/playwright",
-    "report": "npx playwright show-report e2e/playwright/playwright-report"
+    "test": "npm --prefix e2e/playwright test",
+    "report": "npm --prefix e2e/playwright run report"
+  },
+  "dependencies": {
   }
 }

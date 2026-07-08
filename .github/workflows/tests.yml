@@ -11,6 +11,20 @@ permissions:
 
 jobs:
 
+  guard-env-files:
+    name: Guard against committed .env files
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fail if tracked .env files are present
+        run: |
+          matches=$(git ls-files | grep -E '(^|/)\.env[^/]*$' | grep -vE '\.example$' || true)
+          if [ -n "$matches" ]; then
+            echo "::error::Tracked .env file(s) found — remove them and rotate any exposed credentials:"
+            echo "$matches"
+            exit 1
+          fi
+
   playwright:
     name: Playwright
     timeout-minutes: 60

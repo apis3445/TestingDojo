@@ -35,4 +35,10 @@ export class ComboBox extends BaseComponent {
     private pickRandom(options: string[]): string {
         return options[Math.floor(Math.random() * options.length)];
     }
+
+    async getOptionValues(): Promise<string[]> {
+        return await test.step(`Get options of "${this.locator.description()}"`, async () => {
+            return (await this.locator.locator('option').allInnerTexts()).map(o => o.trim());
+        });
+    }
 }

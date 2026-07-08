@@ -1,10 +1,18 @@
 import { expect, Page, test } from '@playwright/test';
 import { BaseComponent } from './BaseComponent';
 
+type AlertRole = ConstructorParameters<typeof BaseComponent>[2];
+
+export interface AlertOptions {
+    description?: string;
+    role?: AlertRole;
+}
+
 export class Alert extends BaseComponent {
 
-    constructor(page: Page, description = 'Alert') {
-        super(page, '[data-test="message"]', 'generic', false, description);
+    constructor(page: Page, description: string)  
+    {
+        super(page, '[data-test="message"]', 'alert', false, description);
     }
 
     async assertText(expected: string): Promise<void> {

@@ -22,9 +22,10 @@ export class LoginPage extends BasePage {
     password: InputPassword = new InputPassword(this.page, this.localeInfo.home.pass);
     submit: Button = new Button(this.page, this.localeInfo.home.login);
     forgotPassword: Link = new Link(this.page, this.localeInfo.home.forgotPassword, false);
-    errorMessage: Alert = new Alert(this.page, "Login error message");
+    errorMessage: Alert = new Alert(this.page,  "Login error message");
 
     constructor(page: Page, locale?: string) {
+
         super(page, 'Login', locale);
     }
 
