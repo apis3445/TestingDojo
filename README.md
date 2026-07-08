@@ -1,6 +1,6 @@
 # Testing Dojo
 
-A multi-stack test automation project covering UI, API, and contract testing against the [Testing Dojo demo app](https://abi-testing-dojo-demo.azurewebsites.net/).
+A multi-stack test automation project covering UI and API testing against the [Testing Dojo demo app](https://abi-testing-dojo-demo.azurewebsites.net/).
 
 ---
 
@@ -14,7 +14,7 @@ This repo contains three independent testing projects, each targeting the same a
 | ------------------------------------ | ---------------- | --------------------------------------------------- |
 | [`e2e/playwright/`](e2e/playwright/) | TypeScript       | UI (browser) — verifies what a user sees and clicks |
 | [`APINet/`](APINet/)                 | C# (.NET 10)     | REST API — verifies the server's responses directly |
-| [`postman/`](postman/)               | Postman / Newman | REST API — same coverage, visual and scriptable     |
+| [`postman/`](postman/)               | Postman / Newman | REST API — requests, test scripts, and data-driven runs via CSV |
 
 Each project has its own README with detailed setup and architecture notes:
 
@@ -28,7 +28,7 @@ Each project has its own README with detailed setup and architecture notes:
 
 These two rules apply to every project in this repo. They are the most important things to understand before writing or running any test.
 
-### Rule 1 — Never store credentials in code
+### Best Practice 1 — Never store credentials in code
 
 Usernames and passwords must **never** appear in `.ts`, `.cs`, or `.json` files that are committed to git. If they are, anyone with access to the repository can read them — including in old commits even after they are "deleted".
 
@@ -56,7 +56,7 @@ Company  = Configuration["USER_ADMIN_COMPANY"],
 Password = Configuration["USER_ADMIN_PASSWORD"],
 ```
 
-### Rule 2 — Store UI text in JSON locale files, not in code
+### Best Practice 2 — Store UI text in JSON locale files, not in code
 
 The app supports multiple languages (English, Spanish, German, Japanese). UI tests locate elements by their **visible text** — for example, the label on the Login button. If that text is hardcoded in English, tests will fail when a different language is active.
 
@@ -91,6 +91,14 @@ submit = new Button(this.page, "Login");
 ```
 
 The framework automatically loads the correct file based on the active Playwright project (language).
+
+---
+
+## Prerequisites
+
+- **Node.js** (LTS) — required for Playwright and Newman
+- **.NET 10 SDK** — required for the C# API tests
+- **Newman** — installed as part of the Postman quick-start steps below
 
 ---
 
@@ -134,6 +142,8 @@ newman run postman/TestingDojo.postman_collection.json \
   --env-var "passwordAdmin=secret"
 ```
 
+> The collection requires additional variables (user IDs, emails, company keys, language, etc.). See [postman/README.md](postman/README.md) for the full list.
+
 ---
 
 ## CI/CD
@@ -144,17 +154,28 @@ GitHub Actions runs all three projects on every push and pull request to `main` 
 
 Go to **Settings → Secrets and variables → Actions** and add:
 
-| Name              | Type     | Description                                      |
-| ----------------- | -------- | ------------------------------------------------ |
-| `BASE_URL`        | Variable | App base URL (not sensitive — visible in logs)   |
-| `AUTH_URL`        | Variable | Authentication/token endpoint URL (not sensitive — visible in logs) |
-| `COMPANY`         | Variable | Company identifier for login (not sensitive)     |
-| `ADMIN_USER`      | Secret   | Admin username (encrypted, masked in logs)       |
-| `ADMIN_PASSWORD`  | Secret   | Admin password (encrypted, masked in logs)       |
-| `NORMAL_USER`     | Secret   | Normal user username (encrypted, masked in logs) |
-| `NORMAL_PASSWORD` | Secret   | Normal user password (encrypted, masked in logs) |
+| Name                | Type     | Used by              | Description                                                         |
+| ------------------- | -------- | -------------------- | ------------------------------------------------------------------- |
+| `BASE_URL`          | Variable | Playwright                | App base URL (not sensitive — visible in logs)                      |
+| `AUTH_URL`          | Variable | Playwright, Postman       | Authentication/token endpoint URL (not sensitive — visible in logs) |
+| `COMPANY`           | Variable | Playwright, .NET, Postman | Company identifier for login (not sensitive)                        |
+| `ADMIN_USER`        | Secret   | Playwright, .NET, Postman | Admin username (encrypted, masked in logs)                          |
+| `ADMIN_PASSWORD`    | Secret   | Playwright, .NET, Postman | Admin password (encrypted, masked in logs)                          |
+| `NORMAL_USER`       | Secret   | Playwright, .NET, Postman | Normal user username (encrypted, masked in logs)                    |
+| `NORMAL_PASSWORD`   | Secret   | Playwright, .NET, Postman | Normal user password (encrypted, masked in logs)                    |
+| `LANGUAGE`          | Variable | Postman              | Language/locale code passed to the Newman run                       |
+| `USER_ID_ADMIN`     | Variable | Postman              | Admin user ID                                                       |
+| `NAME_ADMIN`        | Variable | Postman              | Admin display name                                                  |
+| `EMAIL_ADMIN`       | Variable | Postman              | Admin email address                                                 |
+| `COMPANY_KEY_ADMIN` | Variable | Postman              | Company key for the admin account                                   |
+| `USER_ID`           | Variable | Postman              | Normal user ID                                                      |
+| `NAME`              | Variable | Postman              | Normal user display name                                            |
+| `EMAIL`             | Variable | Postman              | Normal user email address                                           |
+| `COMPANY_KEY`       | Variable | Postman              | Company key for the normal user account                             |
 
 Use **Variables** for non-sensitive values like URLs. Use **Secrets** for anything that must not appear in logs.
+
+> The .NET tests read their base and auth URLs from `APINet/appsettings.json`, so they don't need `BASE_URL` or `AUTH_URL` as GitHub variables — only the credential values above.
 
 ---
 
@@ -174,5 +195,24 @@ APINet/              .NET API tests (C# + TUnit)
   RestSharp/         Tests using the RestSharp HTTP library
   RestAssured/       Same tests using the RestAssured.Net library (for comparison)
   Models/            Request/response data models
-postman/             Postman collection + environment file
+postman/             Postman / Newman API tests
+  TestingDojo.postman_collection.json        All requests, folders, and test scripts
+  TestingDojoDemo.postman_environment.json   Environment template — sensitive values are empty, injected at runtime
+  README.md                                  Full setup, variables reference, and data-driven testing guide
 ```
+
+The collection is organised into folders that mirror the API surface:
+
+```
+Login/
+  Admin/    Admin login — asserts token is returned
+  User/     Normal user login — asserts token is returned
+            Invalid credentials — asserts 401
+Menu/
+  Admin/    Admin menu request — asserts admin-only items
+  User/     User menu request — asserts user-level items
+            Unauthenticated request — asserts 401
+            Authenticated request — asserts menu is returned
+```
+
+Each folder runs in sequence. The `Login` folders capture the access token and store it in a collection variable so subsequent `Menu` requests can use it automatically — no manual copy-paste required.

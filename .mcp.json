@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "azure-devops-remote": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-azure-devops",
+        "--remote",
+        "wbi1521",
+        "--project",
+        "EffizienteAuth",
+        "--authentication",
+        "azcli"
+      ]
+    }
+  }
+}

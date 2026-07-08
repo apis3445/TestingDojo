@@ -20,6 +20,18 @@ export const test = base.extend<Fixtures>({
     locale: async ({}, use, testInfo) => {
         await use(localeMap[testInfo.project.name] ?? 'en-US');
     },
+
+    // Overrides the built-in `page` fixture so every test — regardless of spec file —
+    // forces the app's `lang` localStorage key to match the project's locale before
+    // any navigation happens. This runs after storageState is restored but before the
+    // app's own scripts, so it wins over both the app's default and any value baked
+    // into a stored auth file (see .auth/*.json, which are frozen at "en").
+    page: async ({ page, locale }, use) => {
+        await page.addInitScript((lang) => {
+            window.localStorage.setItem('lang', lang);
+        }, locale.split('-')[0]);
+        await use(page);
+    },
 });
 
 export { expect } from '@playwright/test';

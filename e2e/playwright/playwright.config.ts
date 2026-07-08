@@ -1,11 +1,12 @@
 import { defineConfig, devices } from '@playwright/test';
 import * as dotenv from 'dotenv';
+import * as path from 'path';
 
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
-dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 export default defineConfig({
   globalSetup: require.resolve('./global-setup'),

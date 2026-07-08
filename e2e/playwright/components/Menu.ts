@@ -18,4 +18,11 @@ export class Menu extends BaseComponent {
             return menuTexts.map(text => text.replace(/\n/g, ''));
         });
     }
+
+    async openItem(topLabel: string, itemLabel: string) {
+        await test.step(`Open menu item "${topLabel} > ${itemLabel}"`, async () => {
+            await this.locator.getByRole('button', { name: topLabel }).click();
+            await this.locator.getByRole('button', { name: itemLabel }).click();
+        });
+    }
 }

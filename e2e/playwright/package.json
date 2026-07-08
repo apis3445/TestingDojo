@@ -21,13 +21,14 @@
   "main": "index.js",
   "scripts": {
     "test": "npx playwright test",
-    "report": "npx playwright show-report e2e/playwright/playwright-report"
+    "report": "npx playwright show-report playwright-report"
   },
   "dependencies": {
     "dotenv": "^17.4.2"
   },
   "devDependencies": {
-    "@playwright/test": "^1.60.0",
-    "@types/node": "^25.7.0"
+    "@playwright/test": "^1.61.1",
+    "@types/node": "^26.1.1",
+    "tsx": "^4.23.0"
   }
 }

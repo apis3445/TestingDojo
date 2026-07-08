@@ -29,7 +29,7 @@ export class ApiHelper {
 
     /**
      * Wait for response from url contains the api url
-     * @param apiUrl api url to wait until get the response 
+     * @param apiUrl api url to wait until get the response
      * @param statusCode Status code returned by the api
      * @returns responsePromise
      */
