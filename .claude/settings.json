@@ -10,7 +10,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node /Users/abigailarmijohernandez/GitHub/TestingDojo/hooks/read_hook.js",
+            "command": "node \"$CLAUDE_PROJECT_DIR/hooks/read_hook.js\"",
             "statusMessage": "Checking file access..."
           }
         ]
@@ -20,7 +20,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 /Users/abigailarmijohernandez/GitHub/TestingDojo/hooks/bash_env_check.py",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/hooks/bash_env_check.py\"",
             "statusMessage": "Checking command..."
           }
         ]
