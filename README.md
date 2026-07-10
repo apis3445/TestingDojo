@@ -1,5 +1,8 @@
 # Testing Dojo
 
+[![Tests](https://github.com/apis3445/TestingDojo/actions/workflows/tests.yml/badge.svg)](https://github.com/apis3445/TestingDojo/actions/workflows/tests.yml)
+[![Claude Code Review](https://github.com/apis3445/TestingDojo/actions/workflows/claude-code-review.yml/badge.svg)](https://github.com/apis3445/TestingDojo/actions/workflows/claude-code-review.yml)
+
 A multi-stack test automation project covering UI and API testing against the [Testing Dojo demo app](https://abi-testing-dojo-demo.azurewebsites.net/).
 
 ---
@@ -176,6 +179,19 @@ Go to **Settings → Secrets and variables → Actions** and add:
 Use **Variables** for non-sensitive values like URLs. Use **Secrets** for anything that must not appear in logs.
 
 > The .NET tests read their base and auth URLs from `APINet/appsettings.json`, so they don't need `BASE_URL` or `AUTH_URL` as GitHub variables — only the credential values above.
+
+---
+
+## Claude Code integration
+
+Two workflows wire [Claude Code](https://claude.ai/code) into this repo, both authenticating via `CLAUDE_CODE_OAUTH_TOKEN` (generated with `claude setup-token`, works on Pro and Max plans):
+
+| Workflow                                                          | Trigger                                                      | What it does                                                                             |
+| ------------------------------------------------------------------ | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| [`claude.yml`](.github/workflows/claude.yml)                       | `@claude` mentioned in a PR/issue comment or review by an OWNER/MEMBER/COLLABORATOR | Interactive assistant — implements whatever the tagging comment asks |
+| [`claude-code-review.yml`](.github/workflows/claude-code-review.yml) | Every PR opened, updated, or reopened                        | Automatic review via the `code-review` plugin — no tag needed                              |
+
+> If a PR modifies either workflow file itself, GitHub blocks the app token exchange until the change is merged to the default branch (a generic GitHub Actions security restriction, not a Claude-specific issue). This self-resolves once the PR lands on `main`.
 
 ---
 
