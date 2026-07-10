@@ -1,4 +1,7 @@
-Update all npm dependencies
+---
+name: update-packages
+description: Update all npm dependencies
+---
 
 Do the following:
 

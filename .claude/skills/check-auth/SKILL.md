@@ -1,4 +1,7 @@
-Verify that the Playwright admin auth token exists and is not expired.
+---
+name: check-auth
+description: Verify that the Playwright admin auth token exists and is not expired.
+---
 
 ## Steps
 

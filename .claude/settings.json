@@ -8,9 +8,9 @@
       {
         "matcher": "Read|Edit",
         "hooks": [
-          {
+          { 
             "type": "command",
-            "command": "node \"$CLAUDE_PROJECT_DIR/hooks/read_hook.js\"",
+            "command": "node ./hooks/read_hook.js",
             "statusMessage": "Checking file access..."
           }
         ]
@@ -20,7 +20,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR/hooks/bash_env_check.py\"",
+            "command": "python3 ./hooks/bash_env_check.py",
             "statusMessage": "Checking command..."
           }
         ]

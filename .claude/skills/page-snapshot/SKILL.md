@@ -1,4 +1,7 @@
-Get the HTML snapshot of a page and save it to a file for component creation.
+---
+name: page-snapshot
+description: Get the HTML snapshot of a page and save it to a file for component creation.
+---
 
 Arguments: `<URL> [valid-value]`
 - First argument: the URL to inspect
@@ -8,7 +11,7 @@ Parse `$ARGUMENTS` to extract the URL (first token) and optional valid value (se
 
 ## Before doing anything
 
-Read and follow `.claude/commands/check-auth.md`. If it reports missing or expired auth, stop — do not continue with the snapshot.
+Run the `check-auth` skill. If it reports missing or expired auth, stop — do not continue with the snapshot.
 
 ## Capture the snapshot
 
