@@ -87,7 +87,7 @@ Identify what the test case is derived from. The user picked one of these inputs
 
 ## Step 4: Draft and present the steps
 
-Applies whether drafting brand-new cases or revising an existing one's steps. Write each test case as an ordered list of `action → expected result` pairs, following the chosen template. Rules that keep the cases usable:
+Applies whether drafting brand-new cases or revising an existing one's steps. Write each test case as an ordered list of `action → expected result` pairs, following the chosen template. Two formats matter here — don't conflate them: this **preview format** (`N. Action → Expected Result`, used throughout drafting and presenting) is for the user to review; the pipe-delimited **tool input format** (`N. Action|Expected Result`) only applies when actually calling the ADO tools in Step 5. Rules that keep the cases usable:
 
 - **Every step is a concrete, executable action** a manual tester can perform without guessing. "Verify it works" is not a step.
 - **Expected result is observable** — a status code, a visible message (use the real `localeInfo` text when known), a row count, a latency threshold.
@@ -174,7 +174,7 @@ Run through this silently before presenting the draft/diff for approval, and onc
 - [ ] Steps derived from real source (story fields / actual spec file / stated facts) — zero invented endpoints, fields, or thresholds
 - [ ] Figma link in the story spotted and the design opened and inspected before drafting (E2E create mode); design-quoted text marked High confidence
 - [ ] Open doubts (unspecified texts, behaviors, edge cases) batched and asked before drafting; assumptions only after the user deferred or couldn't answer
-- [ ] No `|` inside any action or expected-result text
+- [ ] No extra `|` inside any action/expected-result text — `|` is the tool-input delimiter (Step 5), not part of the preview's `→` format
 - [ ] No assertion-only "Observe/Inspect/Verify" steps; multi-assertion expected results written as bullets (steps XML via `wit_update_work_item`)
 - [ ] Journeys are positive-scenario only, negative scenarios split into their own (parameterized) cases; cleanup postcondition present when the case creates data
 - [ ] Destination plan + suite resolved (plan/suite created on request when none exists) — create mode
@@ -184,7 +184,11 @@ Run through this silently before presenting the draft/diff for approval, and onc
 
 Once approved, create each test case in Azure DevOps with `mcp__azure-devops__testplan_create_test_case` (`project`, `title`, `steps`, `testsWorkItemId` to link it to the source story/bug — follow the tool's own format instructions for `steps`), capture the returned ID, then add it to the suite with `mcp__azure-devops__testplan_add_test_cases_to_suite` (`project`, `planId`, `suiteId`, `testCaseIds`).
 
-For bulleted expected results (the tool only accepts one line per step), read the case back with `wit_get_work_item` to see the generated XML, prefix each assertion with `- `, and write it back with `wit_update_work_item`.
+For bulleted expected results (the tool only accepts one line per step), create the case with the plain string first, then read it back with `wit_get_work_item` to see the generated `Microsoft.VSTS.TCM.Steps` XML. Edit **only** that step's expected-result `parameterizedString` — keep every id, the `type` (`ValidateStep` has an expected result, `ActionStep` doesn't), and the surrounding tags exactly as read — then write it back with `wit_update_work_item` (op `replace`). The HTML inside each `parameterizedString` must be XML-escaped, one `&lt;P&gt;- …&lt;/P&gt;` per assertion — never paste raw, unescaped `<P>` tags, or the field becomes malformed. Verified working shape for one step:
+
+```xml
+<steps id="0" last="1"><step id="1" type="ValidateStep"><parameterizedString isformatted="true">&lt;P&gt;Click the Login button&lt;/P&gt;</parameterizedString><parameterizedString isformatted="true">&lt;P&gt;- An "Invalid credentials" error is shown&lt;/P&gt;&lt;P&gt;- The user stays on /login&lt;/P&gt;</parameterizedString><description/></step></steps>
+```
 
 If a call fails, stop and report what was already created rather than retrying — on a free ADO tier, suite-add can fail with "not authorized" (Test Plans is a paid add-on) even though the test case itself was created fine.
 
