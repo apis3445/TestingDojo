@@ -1,6 +1,7 @@
 ---
 name: read-testcase
 description: Read Azure DevOps Test Case
+allowed-tools: mcp__azure-devops__wit_get_work_item
 ---
 
 Fetch a test case by ID from Azure DevOps and display its manual steps.
@@ -17,7 +18,7 @@ Fetch a test case by ID from Azure DevOps and display its manual steps.
 
 ### 1. Verify MCP is available
 
-Before doing anything, check that the Azure DevOps MCP is connected by attempting to call `mcp_ado_wit_get_work_item`. If it fails or is not available, stop and show this message:
+Before doing anything, check that the Azure DevOps MCP is connected by attempting to call `mcp__azure-devops__wit_get_work_item`. If it fails or is not available, stop and show this message:
 
 ```
 Azure DevOps MCP is not set up. Run this once to configure it:
@@ -31,7 +32,7 @@ Then restart Claude Code and try again.
 
 Parse the arguments: the first token is `id`, the second token (if present) is `project`.
 
-Call `mcp_ado_wit_get_work_item` with:
+Call `mcp__azure-devops__wit_get_work_item` with:
 - `id`: the ID provided by the user
 - `expand`: `"all"` (to include all fields including test steps)
 - `project`: the project argument if provided; omit the field entirely if not provided (let the MCP use its default)

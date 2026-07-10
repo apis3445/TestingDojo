@@ -1,6 +1,7 @@
 ---
 name: playwright-page
 description: Create or update a Playwright Page Object Model (POM) class. Use when the user asks to create a page object, create a POM for a screen, update an existing page, or add fields/methods to a page. Also use when wiring a new component into its page.
+allowed-tools: Read, Write, Edit, Bash(npx tsc*), Skill
 ---
 
 Read `.claude/skills/_shared/conventions.md` for locator rules, `test.step` format, locale handling, and all hard rules — skip if already read in this session.
