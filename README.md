@@ -175,6 +175,7 @@ Go to **Settings → Secrets and variables → Actions** and add:
 | `NAME`              | Variable | Postman              | Normal user display name                                            |
 | `EMAIL`             | Variable | Postman              | Normal user email address                                           |
 | `COMPANY_KEY`       | Variable | Postman              | Company key for the normal user account                             |
+| `CLAUDE_CODE_OAUTH_TOKEN` | Secret | Claude Code workflows | OAuth token from `claude setup-token` — required by `claude.yml` and `claude-code-review.yml` |
 
 Use **Variables** for non-sensitive values like URLs. Use **Secrets** for anything that must not appear in logs.
 
@@ -188,8 +189,8 @@ Two workflows wire [Claude Code](https://claude.ai/code) into this repo, both au
 
 | Workflow                                                          | Trigger                                                      | What it does                                                                             |
 | ------------------------------------------------------------------ | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| [`claude.yml`](.github/workflows/claude.yml)                       | `@claude` mentioned in a PR/issue comment or review by an OWNER/MEMBER/COLLABORATOR | Interactive assistant — implements whatever the tagging comment asks |
-| [`claude-code-review.yml`](.github/workflows/claude-code-review.yml) | Every PR opened, updated, or reopened                        | Automatic review via the `code-review` plugin — no tag needed                              |
+| [`claude.yml`](.github/workflows/claude.yml)                       | `@claude` mentioned in a PR/issue comment or review, or an issue opened/assigned with `@claude` in the title/body — always requires OWNER/MEMBER/COLLABORATOR authorship | Interactive assistant — implements whatever the tagging comment asks |
+| [`claude-code-review.yml`](.github/workflows/claude-code-review.yml) | Every PR opened, updated, or reopened from a branch on this repo (forked PRs are skipped) | Automatic review via the `code-review` plugin — no tag needed |
 
 > If a PR modifies either workflow file itself, GitHub blocks the app token exchange until the change is merged to the default branch (a generic GitHub Actions security restriction, not a Claude-specific issue). This self-resolves once the PR lands on `main`.
 
