@@ -1,13 +1,7 @@
 ---
 name: playwright-automation
 description: Automate an Azure DevOps E2E/UI test case into a Playwright spec. Use when asked to automate, implement, or generate a Playwright test e.g. "automate test case 1234".
-allowed-tools: >-
-  Read,
-  Write,
-  Edit,
-  Bash,
-  Skill,
-  mcp__azure-devops__wit_get_work_item
+allowed-tools: Read, Write, Edit, Bash, Skill, mcp__azure-devops__wit_get_work_item
 ---
 
 Turn a **manual** Azure DevOps E2E/UI test case into an **automated** Playwright spec. Follow the steps to create the test. Use the `playwright-component` when a component is needed like a grid, or date picker. Use `playwright-page` when the page doesn't exists or needs a new method. The test case must have an ID and be in the manual test format (action + expected result steps). If the case isn't in ADO, ask for the ID and read it with `read-testcase`. 

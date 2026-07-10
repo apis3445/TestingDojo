@@ -1,6 +1,6 @@
 ---
 name: manual-tests
-description: Create and update manual Test Cases in Azure DevOps from a user story — API, E2E/UI, and performance types — and wire them into a Test Plan/Suite. Use to write, generate, revise, or refresh manual test cases, e.g. "create test cases for story 123", "turn this Playwright spec into ADO test cases", "update test case 456 steps", "create test cases from this Figma design".
+description: Create and update manual Test Cases in Azure DevOps from a user story — API, E2E/UI, and performance types and wire them into a Test Plan/Suite. Use to write, generate, revise, or refresh manual test cases, e.g. "create test cases for story 123", "turn this Playwright spec into ADO test cases", "update test case 456 steps", "create test cases from this Figma design".
 allowed-tools: >-
   Read,
   mcp__azure-devops__core_list_projects,
