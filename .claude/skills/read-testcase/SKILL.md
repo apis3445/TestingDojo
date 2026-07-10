@@ -21,9 +21,16 @@ Fetch a test case by ID from Azure DevOps and display its manual steps.
 Before doing anything, check that the Azure DevOps MCP is connected by attempting to call `mcp__azure-devops__wit_get_work_item`. If it fails or is not available, stop and show this message:
 
 ```
-Azure DevOps MCP is not set up. Run this once to configure it:
+Azure DevOps MCP is not set up. Add an `azure-devops` entry to `.mcp.json` using the `@modelcontextprotocol/server-azure-devops` package, e.g.:
 
-  claude mcp add azure-devops -- npx -y @azure-devops/mcp YourOrgName
+  {
+    "mcpServers": {
+      "azure-devops": {
+        "command": "npx",
+        "args": ["-y", "@modelcontextprotocol/server-azure-devops", "--remote", "YourOrgName", "--project", "YourProject", "--authentication", "azcli"]
+      }
+    }
+  }
 
 Then restart Claude Code and try again.
 ```

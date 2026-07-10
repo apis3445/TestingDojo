@@ -1,7 +1,7 @@
 ---
 name: playwright-component
 description: Create or update a reusable Playwright component class that wraps a UI widget (date picker, grid, autocomplete, rich text editor, etc.). Use when the user asks to create a component for a specific element or control, or to update or add a method to an existing component.
-allowed-tools: Read, Write, Edit, Bash(npx tsc*), Skill, mcp__plugin_playwright_playwright__browser_navigate
+allowed-tools: Read, Write, Edit, Bash(npx tsc*), Skill, mcp__plugin_playwright_playwright__browser_navigate, mcp__plugin_playwright_playwright__browser_click
 ---
 
 Read `e2e/playwright/components/ComboBox.ts` for the reference implementation — skip if already read in this session.

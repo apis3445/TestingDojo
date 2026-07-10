@@ -1,6 +1,6 @@
 {
   "permissions": {
-    "allow": ["mcp__playwright", "Bash(playwright-cli*)", "Bash(npx tsc --noEmit*)"],
+    "allow": ["mcp__plugin_playwright_playwright", "Bash(playwright-cli*)", "Bash(npx tsc --noEmit*)"],
     "deny": []
   },
   "hooks": {
