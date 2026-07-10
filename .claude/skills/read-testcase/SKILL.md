@@ -1,4 +1,7 @@
-# Read Azure DevOps Test Case
+---
+name: read-testcase
+description: Read Azure DevOps Test Case
+---
 
 Fetch a test case by ID from Azure DevOps and display its manual steps.
 

@@ -8,7 +8,7 @@
       {
         "matcher": "Read|Edit",
         "hooks": [
-          {
+          { 
             "type": "command",
             "command": "node \"$CLAUDE_PROJECT_DIR/hooks/read_hook.js\"",
             "statusMessage": "Checking file access..."
