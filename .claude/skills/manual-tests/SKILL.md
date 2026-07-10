@@ -26,14 +26,14 @@ Act as a manual tester: turn a user story (or an automated test / feature descri
 
 Decide up front which you're doing:
 
-- **Create** — author new test cases and wire them into a Test Plan/Suite. Follow Steps 1–7.
-- **Update** — revise the steps of an existing test case (e.g. the story's acceptance criteria changed, or a step is wrong). Jump to the **Updating an existing test case** section near the end.
+- **Create** — author new test cases and wire them into a Test Plan/Suite. Follow Steps 1–5.
+- **Update** — revise the steps of an existing test case (e.g. the story's acceptance criteria changed, or a step is wrong). Resolve the project and find the test case per Step 1, then jump to the **Updating an existing test case** section near the end.
 
 A single request can mix both (a story gained a new criterion → add one case, and an existing case needs a tweak). Handle each test case in its appropriate mode.
 
 This skill **writes to live Azure DevOps**. Creating or overwriting a work item is hard to undo, so always present the drafted/changed test case(s) for approval before calling any `create`, `add`, or `update` tool. Never write silently.
 
-## Step 0: Verify the MCP is available
+## Step 1: Verify the MCP is available and Test Plan Id
 
 Before anything else, confirm the Azure DevOps MCP is connected (e.g. attempt a small read like `mcp__azure-devops__testplan_list_test_plans`). If it is not available, stop and show:
 
@@ -42,36 +42,39 @@ Azure DevOps MCP is not set up. Configure it in .mcp.json (set your org) and set
 AZURE_DEVOPS_TOKEN in your shell, then restart Claude Code and try again.
 ```
 
-**Determine the target project** — never hardcode it:
-
-1. If the user named a project, use it.
-2. Otherwise, propose the MCP default from `.mcp.json` (the `--project` arg) and confirm it's the right one before writing.
-3. If neither is clear, list the available projects with `mcp__azure-devops__core_list_projects` and ask which one.
+**Determine the target project** — never hardcode it: use the project the user named; otherwise propose the `.mcp.json` default (`--project` arg) and confirm before writing; if neither is clear, list projects with `mcp__azure-devops__core_list_projects` and ask.
 
 `testplan_*` and `wit_*` tools require an explicit `project` arg on every call, so resolve it once up front and reuse it. If a single request spans projects (e.g. a story in one project, test cases destined for another), confirm each.
 
-## Step 1: Determine the test type
+**Determine the destination Plan/Suite** — ask the user whether cases go into an **existing** Plan/Suite or a **new** one, if they haven't said:
 
-Pick exactly one per test case: **API**, **E2E** (UI / end-to-end), or **Performance**. Infer from the request when obvious (an endpoint/HTTP verb → API; a screen/user journey → E2E; load/throughput/latency → Performance). If genuinely ambiguous, ask.
+- **Existing** — `mcp__azure-devops__testplan_list_test_plans` (project) to find the named plan; `mcp__azure-devops__testplan_list_test_suites` (project, planId) to find the named suite, or use the root suite (`parentSuite` empty/itself) if they don't want a sub-suite.
+- **New** — create the plan with `mcp__azure-devops__testplan_create_test_plan` (project, name, iteration — default to the project root iteration unless they name a sprint), then the suite with `mcp__azure-devops__testplan_create_test_suite` (project, planId, `parentSuiteId` = root suite id, name). Confirm both names before creating.
 
-One story can — and often should — yield cases of more than one type. A story whose feature sits on an endpoint deserves API cases (the response contract: status codes, body, error payloads) *alongside* the E2E cases (what the user sees). When the story clearly covers both layers, draft both and let the user drop what they don't want at the approval step, rather than silently covering only the UI.
+Capture `planId` and `suiteId` — needed later when the cases are created and added to the suite.
 
-Then read the matching template — it defines the step structure and what each step's expected result must assert:
+**Find the test case (update mode)** — if the user gave a test case ID, use it directly; if they gave a story ID and asked to refresh its cases, fetch the story with `mcp__azure-devops__wit_get_work_item` (`expand: "all"`) and follow its `Microsoft.VSTS.Common.TestedBy` links to the linked test cases.
+
+## Step 2: Determine the test type
+
+Each test case is **API**, **E2E** (UI), or **Performance** — infer from cues (endpoint/HTTP verb → API; screen/user journey → E2E; load/latency → Performance), ask if ambiguous. Stories often span more than one type (e.g. an endpoint-backed feature gets both API and E2E cases) — draft all types the story covers and let the user drop unwanted ones at approval, rather than silently covering only one.
+
+Read the matching template before drafting — it defines the step structure and what each expected result must assert:
 
 - API → `references/api.md`
 - E2E → `references/e2e.md`
 - Performance → `references/performance.md`
 
-## Step 2: Gather the source material
+## Step 3: Identify the story, spec file, or description
 
 Identify what the test case is derived from. The user picked one of these inputs:
 
 **From an ADO work item (user story / bug):**
 - Fetch it with `mcp__azure-devops__wit_get_work_item` (`expand: "all"`).
-- Extract the title, description, and acceptance criteria. Scope test cases as **user journeys**, not one case per criterion: group the criteria into a handful of coherent flows — e.g. one case for the grid (view, sort, filter, pagination, export), one for create, one for edit, one for delete — and let each criterion become a `- ` assertion line inside the step that exercises it. A story should typically yield about 3–6 cases per layer (UI / API), not 20; only split a journey when it needs different preconditions or data.
-- **A journey covers the positive scenario only** — the happy path from start to outcome. Negative scenarios (validation errors, rejected duplicates, unauthorized access) go in **separate test cases**, parameterized when only the data varies.
-- **A journey that creates data ends with a cleanup postcondition** — e.g. delete the new row and confirm it's gone — so the environment is left as it was found.
-- Remember the work item ID — it becomes the `testsWorkItemId` link (TestedBy) in Step 5.
+- Extract the title, description, and acceptance criteria. If the story includes a Figma link, open it with Claude-in-Chrome and inspect via screenshots before drafting — quote real field labels, button text, and error messages verbatim instead of paraphrasing. Skip only if inspection isn't possible and draft from the story alone, flagging those results as an assumption.
+- For API cases, check the story's linked child Task work items (`relations`, type Task) — endpoint paths, verbs, request/response bodies, and status codes typically live there, not in the story itself. Fetch each with `wit_get_work_item` and use them as the source of truth instead of inventing endpoints.
+- Scope test cases as **user journeys**, not one case per criterion: group the criteria into a handful of coherent flows — e.g. one case for the grid (view, sort, filter, pagination, export), one for create, one for edit, one for delete — and let each criterion become a `- ` assertion line inside the step that exercises it. A story should typically yield about 3–6 cases per layer (UI / API), not 20; only split a journey when it needs different preconditions or data.
+- Remember the work item ID — it becomes the `testsWorkItemId` link (TestedBy) when creating the case.
 
 **From an existing automated test in the repo:**
 - Read the actual spec file — never reconstruct it from memory. Playwright specs live in `e2e/playwright/tests/`; .NET tests in `APINet/`.
@@ -80,45 +83,11 @@ Identify what the test case is derived from. The user picked one of these inputs
 **From a free-text description:**
 - Work only from what the user stated plus obvious, low-risk preconditions (e.g. "user is logged in"). Do not invent endpoints, field names, or thresholds. If a critical detail is missing (endpoint URL, a performance threshold, expected error text), ask rather than guess.
 
-### Figma design check (E2E cases)
+**Before drafting**, batch any open doubts (exact message text, unspecified behavior, undefined edge cases) into one question — answers become High confidence; if the user defers, draft with Med/Low confidence and a `Why` note.
 
-User stories often carry a Figma link, either in the description HTML or as a hyperlink in the work item's `relations`. Check for one every time you draft E2E/UI cases from a story. When you find one (or the user pastes one), **open it in the user's Chrome via Claude-in-Chrome and inspect it before drafting — by default, without asking first**. The link is in the story precisely because the design is the source of truth for what a manual tester will see — real field labels, button captions, headings, error/empty states — so expected results should quote the actual UI, not paraphrase it. Offering the check and waiting for a yes only costs a round-trip; the link is in the story to be used.
+## Step 4: Draft and present the steps
 
-Skip the inspection only when it genuinely can't happen: the browser tools are unavailable, the Chrome extension lacks site permission for figma.com, Figma shows a login/permission wall you can't get past, or the user told you not to open it. In that fallback, draft from the story alone — mention which expected results would have benefited, and rate them Med confidence.
-
-To inspect:
-
-1. Load the browser tools in **one** ToolSearch call: `select:mcp__claude-in-chrome__tabs_context_mcp,mcp__claude-in-chrome__tabs_create_mcp,mcp__claude-in-chrome__navigate,mcp__claude-in-chrome__computer,mcp__claude-in-chrome__read_page`.
-2. Call `tabs_context_mcp` first, then open the Figma URL in a **new** tab — don't reuse the user's tabs.
-3. Figma renders on a canvas, so reading the page DOM returns almost nothing — work from screenshots (`computer`). Zoom/pan to the frame(s) the story covers; a link with a `node-id` usually lands on the right frame already.
-4. Extract verbatim what the tester will observe: field labels, button text, headings, validation/error messages, placeholder text, empty states. Quote these exactly in the actions and expected results.
-
-Expected-result text taken from the design counts as **High** confidence in Step 5 — it comes from a real artifact, not app convention. Keep the boundary clear, though: the story's acceptance criteria still decide **which** test cases exist. A design detail the story never mentions can justify an extra assertion step inside an existing case (e.g. a visible success toast), but do not invent whole scenarios from the mock — if the design implies a flow the story doesn't cover, flag the gap to the user instead.
-
-### Ask the open doubts before drafting
-
-Once all sources are gathered (story, specs, design), you'll usually still have gaps: an exact message text neither the story nor the design shows, an unspecified behavior (redirect vs. error page for unauthorized access?), an edge case nobody defined (what does exporting an empty list produce?). **Collect these doubts and ask the user in one batched message before drafting** — the user is a tester who knows the app; one question round-trip is cheaper than presenting a draft full of Med/Low assumptions they then have to correct one by one, and their answers turn those steps into High confidence.
-
-Keep the batch honest and small:
-
-- Ask only what genuinely blocks an accurate expected result — not things any source already answers, and not trivia (an obvious "user is logged in" precondition needs no question).
-- Phrase each doubt so a short answer resolves it: "What exact text shows when the filter matches nothing?", "Unauthorized access to the screen: redirect to login, or an error page?".
-- If the user answers, quote the answers verbatim as High confidence. If they say "just draft it" or can't answer, fall back to the assumption path: draft with Med/Low tags and explicit `Why` notes as before.
-
-## Step 3: Resolve the destination Test Plan and Suite
-
-Test cases must land in a Suite inside a Plan, so figure out where before drafting.
-
-1. `mcp__azure-devops__testplan_list_test_plans` (project) → find the plan the user named, or list active plans and ask which one if unclear.
-2. **If no plan exists** (the list is empty) or the user wants a new one, create it with `mcp__azure-devops__testplan_create_test_plan` — required args are `project`, `name`, and `iteration`. The `iteration` is an iteration path; default it to the project root iteration (the project name itself) unless the user names a sprint/iteration. Confirm the plan name with the user before creating. A freshly created plan comes with a root suite — list suites to get its ID.
-3. `mcp__azure-devops__testplan_list_test_suites` (project, planId) → find the target suite. The suite whose `parentSuite` is empty / equal to itself is the **root suite**; note its ID. Test cases can be added directly to the root suite if the user doesn't want a sub-suite.
-4. If the user wants a new sub-suite, create it with `mcp__azure-devops__testplan_create_test_suite` (project, planId, `parentSuiteId` = root suite id unless they nominate another parent, name). Do this only after they confirm the name.
-
-Capture `planId` and `suiteId` for Step 6.
-
-## Step 4: Draft the steps
-
-Write each test case as an ordered list of `action | expected result` pairs, following the chosen template. Rules that keep the cases usable:
+Applies whether drafting brand-new cases or revising an existing one's steps. Write each test case as an ordered list of `action → expected result` pairs, following the chosen template. Rules that keep the cases usable:
 
 - **Every step is a concrete, executable action** a manual tester can perform without guessing. "Verify it works" is not a step.
 - **Expected result is observable** — a status code, a visible message (use the real `localeInfo` text when known), a row count, a latency threshold.
@@ -127,38 +96,20 @@ Write each test case as an ordered list of `action | expected result` pairs, fol
 - **Cleanup postcondition when the case creates data** — the last step(s) undo what the test created (e.g. delete the new row) with an expected result confirming it's gone.
 - Title: a clear, specific behavior statement, e.g. `Login with invalid password shows error message` — not `Login test`.
 
-The MCP `steps` string must be formatted exactly like this (newline-separated, 1-based, `|` between action and expected result):
-
-```
-1. Navigate to the login page|Login form is displayed
-2. Enter a valid username and an invalid password|
-3. Click the Login button|An "Invalid credentials" error message is shown and the user stays on the login page
-```
-
-**Bulleted expected results:** the plain `steps` string is single-line text per step — it cannot express multiple lines. When a step's expected result carries several assertions, create the case with the plain string first (separate the assertions with "; "), then immediately rewrite `/fields/Microsoft.VSTS.TCM.Steps` with `mcp__azure-devops__wit_update_work_item` (op `replace`) so each assertion sits on its own line prefixed with `- `. Do **not** use `<UL>/<LI>` HTML lists — the user maintains these by hand in the ADO editor, where plain `- ` lines are easier to edit. The field value is the steps XML; the HTML inside each `parameterizedString` must be XML-escaped, one `&lt;P&gt;- …&lt;/P&gt;` per assertion. Verified working shape:
-
-```xml
-<steps id="0" last="1"><step id="1" type="ValidateStep"><parameterizedString isformatted="true">&lt;P&gt;Click the Login button&lt;/P&gt;</parameterizedString><parameterizedString isformatted="true">&lt;P&gt;- An "Invalid credentials" error is shown&lt;/P&gt;&lt;P&gt;- The user stays on /login&lt;/P&gt;</parameterizedString><description/></step></steps>
-```
-
-Use `type="ValidateStep"` for steps with an expected result and `ActionStep` otherwise; step `id`s are 1-based and `last` is the highest id.
-
-## Step 5: Present the draft and get approval
-
-Preview each test case with its full ADO content — title, every step's action and expected result, and any parameters — so the user reviews the real artifact. Use a **compact line format**, not a markdown table: tables cost many more tokens for no extra information, and this matches the `read-testcase` output style (`action → expected`). For every case show:
+Preview each test case with its full content — title, every step's action and expected result, and any parameters — so the user reviews the real artifact before anything is written to ADO. Use a **compact line format**, not a markdown table: tables cost many more tokens for no extra information, and this matches the `read-testcase` output style (`action → expected`). For every case show:
 
 - The **title**, with the destination **Plan/Suite**, **priority**, **linked work item**, and a **confidence** tag on the same header line.
-- One line per step: `N. Action → Expected Result` (1-based). When the expected result holds several assertions, show them as indented `- ` lines under the step line — exactly what will land in ADO. A step with no distinct assertion still gets a light expected result — never blank (see Step 4).
+- One line per step: `N. Action → Expected Result` (1-based). When the expected result holds several assertions, show them as indented `- ` lines under the step line — exactly what will land in ADO. A step with no distinct assertion still gets a light expected result — never blank.
 - A compact **Params** block only when the case is data-driven (see below).
 - A one-line **Why** note whenever confidence is below High, naming the assumption or missing detail behind it.
 
-**Confidence tag** — `High` / `Med` / `Low`, reflecting how directly the case derives from the source material (Step 2):
+**Confidence tag** — `High` / `Med` / `Low`, reflecting how directly the case derives from the source material:
 
-- **High** — every step and expected result comes straight from explicit acceptance criteria, a spec assertion, the design, or a fact the user stated (including their answers to the doubts batch in Step 2). No guessing.
+- **High** — every step and expected result comes straight from explicit acceptance criteria, a spec assertion, the design, or a fact the user stated (including their answers to the doubts batch). No guessing.
 - **Med** — a reasonable, low-risk inference filled a gap (e.g. an obvious "user is logged in" precondition, or expected text taken from app convention rather than the story).
 - **Low** — the case rests on real assumptions or missing detail (an unstated endpoint, field name, error message, or threshold).
 
-Med and Low tags should be rare by this point: the doubts behind them belong in the Step 2 question batch. Reaching Step 5 with Med/Low cases is legitimate only when the user was asked and deferred ("just draft it"), couldn't answer, or the gap surfaced during drafting — and then the `Why` note must make the assumption explicit so they can correct it.
+Med and Low tags should be rare by this point: the doubts behind them belong in the earlier question batch. Reaching this point with Med/Low cases is legitimate only when the user was asked and deferred ("just draft it"), couldn't answer, or the gap surfaced during drafting — and then the `Why` note must make the assumption explicit so they can correct it.
 
 Use this exact layout:
 
@@ -182,51 +133,23 @@ Use this exact layout:
 Create these now?
 ```
 
-**Parameters / data-driven cases:** Sometimes the same steps run several times with only the data changing — for example the spec loops over invalid username, invalid password, and invalid company. When that happens:
+**Parameters / data-driven cases:** when the same steps repeat with only the data changing (e.g. invalid username, invalid password, invalid company), write **one** test case using `@name` tokens for the varying values plus a small table of value sets — not near-duplicate cases. Follow the user's preference if they'd rather have separate cases.
 
-- Write **one** test case, not three near-identical ones.
-- In the action/expected text, use `@name` tokens for the values that change (e.g. `@user`, `@password`, `@company`).
-- Add a small table giving the values for each token, one row per data set.
+**Translations:** when a story includes localized text (an attached translations file, or acceptance criteria naming multiple languages), don't draft a separate case per language — parameterize the one journey with an `@language`-driven token for the translated labels/messages, and a value row per language.
 
-One parameterized case is the standard ADO shape and far less to maintain. If the user would rather have separate cases, follow their preference.
-
-**Tool limitation — always say this when you propose a parameterized case:** `testplan_create_test_case` only accepts the `steps` string. The `@name` tokens make ADO create the parameter **columns** (the headers), but the tool **cannot** fill in the **value rows** (the actual data). So after the case is created, the values do not exist yet:
-
-- The user must type them into the ADO web UI themselves, **or**
-- They give you the values and you create the case, but you tell them clearly that the rows still must be entered by hand.
-
-Never imply the data rows are filled in automatically.
+**Tool limitation:** `testplan_create_test_case` only creates the parameter **columns** from `@name` tokens — it cannot fill in the **value rows**. Always tell the user the rows still need to be entered by hand in the ADO web UI (or hand them the values to enter); never imply they're filled in automatically.
 
 Only proceed once the user confirms. If they request changes, revise and re-present — do not create a "draft" version in ADO and edit it.
-
-## Step 6: Create and wire up
-
-For each approved test case:
-
-1. `mcp__azure-devops__testplan_create_test_case` with:
-   - `project`, `title`, `steps` (the formatted string from Step 4).
-   - `testsWorkItemId` — the source story/bug ID when the input was a work item, so ADO records the TestedBy link.
-   - `priority` — default 2 unless the user specified one.
-   - `areaPath` / `iterationPath` — only if the user named them; otherwise omit and let ADO default.
-   - Capture the returned new test case ID.
-2. `mcp__azure-devops__testplan_add_test_cases_to_suite` with `project`, `planId`, `suiteId`, and the new `testCaseIds` (pass all IDs from this batch in one call when possible).
-
-Failure handling — these are independent steps, so a later failure does not undo an earlier one:
-- If a `create` call fails, stop and report which test cases were already created (with IDs) so nothing is silently half-done — do not blindly retry.
-- If `add_test_cases_to_suite` — or any `testplan_create_test_plan` / `testplan_create_test_suite` call — returns **"not authorized to access this API"**, the test cases were still created as work items. All Test Plans *write* operations (plans, suites, suite membership) need the paid **Basic + Test Plans** access level; the free Basic level only allows creating/editing work items and *reading* plans, so on a free account these calls always fail. Report the created IDs, skip further suite operations in the session, and tell the user their options: add the cases to the plan manually in the ADO web UI (if their UI has the license), have an admin grant Test Plans access (30-day trial exists), or organize the cases with tags/queries instead of suites. Do not treat the cases as failed and do not retry.
-
-## Step 7: Report
-
-Summarize concisely: for each created case, its ID, title, and the suite it was added to. Include the work-item link when one was set. Surface the ADO URL pattern `https://dev.azure.com/<org>/<project>/_workitems/edit/<id>` so the user can open them.
 
 ## Updating an existing test case
 
 Use this when the user wants to change an existing case rather than make a new one — a step is wrong, the acceptance criteria moved, or coverage needs tightening.
 
-1. **Find the test case(s).** If the user gave a test case ID, use it. If they gave a *story* ID and asked to refresh its cases, fetch the story with `mcp__azure-devops__wit_get_work_item` (`expand: "all"`) and follow its `Microsoft.VSTS.Common.TestedBy` links to the linked test cases.
-2. **Read the current steps.** `mcp__azure-devops__wit_get_work_item` (id, `expand: "all"`) → parse `Microsoft.VSTS.TCM.Steps`. The steps XML uses `<step type="ValidateStep">` (has an expected result) or `type="ActionStep">` (action only); each `<parameterizedString>` holds action then expected result, wrapped in `<P>` tags you must strip. (This is the same format `read-testcase` parses.)
-3. **Determine the new step list**, applying the same drafting rules and template as create (Step 4). Re-ground against the current story / spec — don't edit blind.
-4. **Present a before → after diff** and wait for approval. `testplan_update_test_case_steps` **replaces the entire step list**, so always show the full new set, not just the delta, to make accidental drops obvious:
+Find the test case(s) as described in Step 1, then:
+
+1. **Read the current steps.** `mcp__azure-devops__wit_get_work_item` (id, `expand: "all"`) → parse `Microsoft.VSTS.TCM.Steps`. The steps XML uses `<step type="ValidateStep">` (has an expected result) or `type="ActionStep">` (action only); each `<parameterizedString>` holds action then expected result, wrapped in `<P>` tags you must strip. (This is the same format `read-testcase` parses.)
+2. **Determine the new step list**, applying the same drafting rules and template as create. Re-ground against the current story / spec — don't edit blind.
+3. **Present a before → after diff** and wait for approval. `testplan_update_test_case_steps` **replaces the entire step list**, so always show the full new set, not just the delta, to make accidental drops obvious:
 
 ```
 Update test case #456 "Login with invalid password":
@@ -237,12 +160,14 @@ Full new step list:
 Apply this update?
 ```
 
-5. **Apply** with `mcp__azure-devops__testplan_update_test_case_steps` (id, the full formatted `steps` string). When any expected result needs a bullet list, skip that tool (single-line text only) and write the steps XML directly via `wit_update_work_item` as described in Step 4. Title/priority/other fields are not changed by either steps tool — if those need editing, use `wit_update_work_item` on the specific fields and call it out.
-6. **Report** the updated ID and what changed.
+4. **Apply** with `mcp__azure-devops__testplan_update_test_case_steps` (id, the full formatted `steps` string). When any expected result needs a bullet list, skip that tool (single-line text only) and write the steps XML directly via `wit_update_work_item`, following the same bulleted format used when creating. Title/priority/other fields are not changed by either steps tool — if those need editing, use `wit_update_work_item` on the specific fields and call it out.
+5. **Report** the updated ID and what changed.
 
-Because the update overwrites all steps, never call it with a partial list you derived from memory — always start from the freshly read current steps in step 2.
+Because the update overwrites all steps, never call it with a partial list you derived from memory — always start from the freshly read current steps in step 1.
 
 ## Checklist
+
+Run through this silently before presenting the draft/diff for approval, and once more before any write call — it's a final gate, not documentation.
 
 - [ ] Mode (create vs. update) chosen; for updates, current steps read fresh before drafting changes
 - [ ] Test type chosen and the matching `references/*.md` template followed
@@ -254,4 +179,13 @@ Because the update overwrites all steps, never call it with a partial list you d
 - [ ] Journeys are positive-scenario only, negative scenarios split into their own (parameterized) cases; cleanup postcondition present when the case creates data
 - [ ] Destination plan + suite resolved (plan/suite created on request when none exists) — create mode
 - [ ] Draft (create) or before→after diff (update) presented and user approved before any write
-- [ ] Created/updated IDs reported; new cases added to the suite; work-item link set when applicable
+
+## Step 5: Create, wire up, and report
+
+Once approved, create each test case in Azure DevOps with `mcp__azure-devops__testplan_create_test_case` (`project`, `title`, `steps`, `testsWorkItemId` to link it to the source story/bug — follow the tool's own format instructions for `steps`), capture the returned ID, then add it to the suite with `mcp__azure-devops__testplan_add_test_cases_to_suite` (`project`, `planId`, `suiteId`, `testCaseIds`).
+
+For bulleted expected results (the tool only accepts one line per step), read the case back with `wit_get_work_item` to see the generated XML, prefix each assertion with `- `, and write it back with `wit_update_work_item`.
+
+If a call fails, stop and report what was already created rather than retrying — on a free ADO tier, suite-add can fail with "not authorized" (Test Plans is a paid add-on) even though the test case itself was created fine.
+
+Report each case's ID, title, suite, and the ADO URL (`https://dev.azure.com/<org>/<project>/_workitems/edit/<id>`).
