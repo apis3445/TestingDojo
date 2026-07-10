@@ -27,8 +27,7 @@ jobs:
 
       - name: Run Claude Code Review
         id: claude-review
-        # Pin to immutable SHA; bump quarterly or on new releases.
-        uses: anthropics/claude-code-action@v1 
+        uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           # NOTE: plugin_marketplaces pulls from a mutable Git source; pin or vendor the
