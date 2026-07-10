@@ -42,12 +42,6 @@ export class BasePage {
         });
     }
 
-    public async navigateTo(path: string) {
-        const url = this.baseURL + path;
-        await test.step(`Go to: "${url}"`, async () => {
-            await this.page.goto(url);
-        });
-    }
 
     async goToDefaultPage() {
         await test.step('Go to default page', async () => {
