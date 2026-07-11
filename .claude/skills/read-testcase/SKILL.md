@@ -1,6 +1,6 @@
 ---
 name: read-testcase
-description: Read Azure DevOps Test Case
+description: Read Azure DevOps Test Case by Id
 allowed-tools: mcp__azure-devops__wit_get_work_item
 ---
 
