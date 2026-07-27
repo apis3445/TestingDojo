@@ -78,7 +78,21 @@ async export(label: string): Promise<Download> {
 await serversPage.grid.export(serversPage.localeInfo.general.excel);
 ```
 
-**Wrap every public method in `test.step()` — readers included.** Methods that only read (`getRowCount`, `getColumnValues`, `getSelectedDate`) wrap the same as actions; see the test.step section in `conventions.md` for the return-value pattern and the why. Only plain locator getters are exempt.
+**Verify widget content with one `check` method, not per-part getters.** Don't expose a getter per displayed element (`getTitle()`, `getMessage()`) and leave the spec to assemble the assertions. When specs need to verify what the widget shows, expose ONE `check<Widget>(...)` assertion method that receives every expected value as a parameter — title, message, button labels (locale strings the page/spec passes in) — and `expect`s each part with a readable description (see `Alert.assertText` and `ConfirmDialog.checkDialog`):
+
+```typescript
+async checkDialog(title: string, body: string, confirmLabel: string, cancelLabel: string) {
+    await test.step(`Check "${this.locator.description()}" shows title: "${title}" and message: "${body}"`, async () => {
+        await expect(this.locator, 'Should be visible').toBeVisible();
+        await expect(this.locator.locator(this.titleSelector), `Should have the title "${title}"`).toHaveText(title);
+        // ...one expect per part, all expected values from parameters
+    });
+}
+```
+
+Readers that return the widget's value for further test logic (`getSelectedDate()`, `getRowsValues()`, `getOptionValues()`) are still fine — the rule is about content verification, not data retrieval.
+
+**Wrap every public method in `test.step()` — checks and readers included.** See the test.step section in `conventions.md` for the return-value pattern and the why.
 
 Name methods by user intent, not DOM mechanics:
 

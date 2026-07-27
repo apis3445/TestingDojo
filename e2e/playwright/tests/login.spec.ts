@@ -5,6 +5,8 @@ import { DashboardPage } from '../pages/DashboardPage';
 
 test.describe('Valid login', () => {
 
+
+
   const testDescription = 'Login with valid credentials should navigate to dashboard and get menu for the user role';
   test('Admin user sees correct menu', {
     tag: ['@Login'],
@@ -13,6 +15,10 @@ test.describe('Valid login', () => {
       { type: AnnotationType.Precondition, description: 'A valid admin username and password should exist' },
     ],
   }, async ({ page, locale }) => {
+    const temp: number[] = [1, 2, 3, 4, 5];
+    temp.forEach((value) => {
+      console.log(value);
+    });
     await page.screencast.start({ path: 'adminLogin.webm' });
     await page.screencast.showActions({ position: 'top' });
 

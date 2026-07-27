@@ -18,6 +18,7 @@ async function globalSetup() {
         return;
     }
 
+
     await fs.mkdir(authFolder, { recursive: true });
 
     const browser = await chromium.launch();
@@ -51,7 +52,7 @@ async function globalSetup() {
 
 // Injects the JWT into the browser's localStorage so the app treats the session as authenticated.
 async function storeToken(page: Page, token: string) {
-    await page.evaluate(t => localStorage.setItem('token', t), token);
+    await page.localStorage.setItem('token', token);
 }
 
 // Saves the full browser context (cookies, localStorage, sessionStorage) to a file.

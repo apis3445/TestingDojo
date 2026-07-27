@@ -154,7 +154,7 @@
                       "    const decodeSegment = (seg) => {",
                       "        const base64 = seg.replace(/-/g, '+').replace(/_/g, '/');",
                       "        const padded = base64 + '='.repeat((4 - base64.length % 4) % 4);",
-                      "        return JSON.parse(require('atob')(padded));",
+                      "        return JSON.parse(atob(padded));",
                       "    };",
                       "    pm.expect(() => decodeSegment(parts[0]), 'header must decode to JSON').to.not.throw();",
                       "    pm.expect(() => decodeSegment(parts[1]), 'payload must decode to JSON').to.not.throw();",
@@ -430,77 +430,6 @@
       "name": "Menu",
       "item": [
         {
-          "name": "401 Unauthorized",
-          "item": [
-            {
-              "name": "Menu_withoutUser_returns401",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      ""
-                    ],
-                    "type": "text/javascript",
-                    "packages": {},
-                    "requests": {}
-                  }
-                }
-              ],
-              "request": {
-                "auth": {
-                  "type": "bearer",
-                  "bearer": [
-                    {
-                      "key": "token",
-                      "value": "",
-                      "type": "string"
-                    }
-                  ]
-                },
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "{{AuthAPI}}/api/menu",
-                  "host": [
-                    "{{AuthAPI}}"
-                  ],
-                  "path": [
-                    "api",
-                    "menu"
-                  ]
-                }
-              },
-              "response": []
-            }
-          ],
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "type": "text/javascript",
-                "packages": {},
-                "requests": {},
-                "exec": [
-                  ""
-                ]
-              }
-            },
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "packages": {},
-                "requests": {},
-                "exec": [
-                  "// 1. Test that the status code is 401",
-                  "utils.Status401()"
-                ]
-              }
-            }
-          ]
-        },
-        {
           "name": "Menu_withAdminUser_ReturnsAdminMenu",
           "event": [
             {
@@ -546,6 +475,9 @@
               }
             }
           ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
           "request": {
             "auth": {
               "type": "bearer",
@@ -559,6 +491,15 @@
             },
             "method": "GET",
             "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
             "url": {
               "raw": "{{AuthAPI}}/api/menu",
               "host": [
@@ -611,6 +552,9 @@
               }
             }
           ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
           "request": {
             "auth": {
               "type": "bearer",
@@ -624,6 +568,15 @@
             },
             "method": "GET",
             "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
             "url": {
               "raw": "{{AuthAPI}}/api/menu",
               "host": [
@@ -754,6 +707,1073 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "Servers",
+      "item": [
+        {
+          "name": "Servers_WithAdminUser_ReturnsServers",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const schema = {",
+                  "    type: \"array\",",
+                  "    minItems: 1,",
+                  "    additionalProperties: false,",
+                  "    items: {",
+                  "        required: [\"Id\",\"Key\", \"Name\", \"Url\", \"Active\"],",
+                  "        properties: {",
+                  "            \"Id\": {",
+                  "                \"type\": \"integer\"",
+                  "            },",
+                  "            \"Key\": {",
+                  "                \"type\": \"integer\"",
+                  "            },",
+                  "            \"Name\": {",
+                  "                \"type\": \"string\"",
+                  "            },",
+                  "            \"Url\": {",
+                  "                \"type\": \"string\",",
+                  "                \"format\": \"uri\",",
+                  "                \"qt-uri-protocols\": [",
+                  "                    \"https\",",
+                  "                    \"http\"",
+                  "                ]",
+                  "            },",
+                  "            \"Active\": {",
+                  "                \"type\": \"boolean\"",
+                  "            }",
+                  "        }",
+                  "    }",
+                  "}",
+                  "",
+                  "// Test that the status code is 200",
+                  "utils.StatusOk();",
+                  "",
+                  "// Compare the jsonSchema",
+                  "pm.test(\"Valid schema\", ()=>{",
+                  "  pm.response.to.have.jsonSchema(schema)  ",
+                  "})",
+                  "",
+                  "// Parse the response body as a JSON object to get the first Server",
+                  "const jsonData = pm.response.json();",
+                  "const server = jsonData[0]",
+                  "pm.collectionVariables.set(\"serverKey\", server.Key);",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{AuthAPI}}/api/Server",
+              "host": [
+                "{{AuthAPI}}"
+              ],
+              "path": [
+                "api",
+                "Server"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Servers_WithValidServerInfo_CreatesAServer",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "",
+                  "const response = pm.response.json();",
+                  "",
+                  "utils.StatusCreated();",
+                  "",
+                  "const serverKey = pm.collectionVariables.get(\"serverKey\")",
+                  "const serverName = pm.collectionVariables.get(\"serverName\")",
+                  "const serverUrl = pm.collectionVariables.get(\"serverUrl\")",
+                  "",
+                  "pm.test(\"Server key is: \" + serverKey, function() {",
+                  "    pm.expect(response.Key).to.eq(serverKey)",
+                  "})",
+                  "",
+                  "pm.test(\"Server name is: \" + serverName, function() {",
+                  "    pm.expect(response.Name).to.eq(serverName)",
+                  "})",
+                  "",
+                  "pm.test(\"Server Url is: \" + serverUrl, function() {",
+                  "    pm.expect(response.Url).to.eq(serverUrl)",
+                  "})",
+                  "",
+                  "pm.test(\"Server Active is: true\", function() {",
+                  "    pm.expect(response.Active).to.be.true;",
+                  "})",
+                  "",
+                  "pm.collectionVariables.set(\"serverId\", response.Id)"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const _ = require('lodash');",
+                  "",
+                  "const randomName = pm.variables.replaceIn('{{$randomProductName}}');",
+                  "const randomUrl = pm.variables.replaceIn('{{$randomUrl}}');",
+                  "const randomKey =  _.random(2, 999); ",
+                  "",
+                  "pm.collectionVariables.set(\"serverKey\", randomKey);",
+                  "pm.collectionVariables.set(\"serverName\", randomName);",
+                  "pm.collectionVariables.set(\"serverUrl\", randomUrl);",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{AccessTokenAdmin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n        \"Key\": {{serverKey}},\n        \"Name\": \"{{serverName}}\",\n        \"Url\": \"{{serverUrl}}\",\n        \"Active\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{AuthAPI}}/api/Server",
+              "host": [
+                "{{AuthAPI}}"
+              ],
+              "path": [
+                "api",
+                "Server"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Server_WithValidKey_ReturnsServerInfo",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const schema = {",
+                  "    type: \"object\",",
+                  "    additionalProperties: false,",
+                  "    required: [\"Id\",\"Key\", \"Name\", \"Url\", \"Active\"],",
+                  "    properties: {",
+                  "        \"Id\": {",
+                  "            \"type\": \"integer\"",
+                  "        },",
+                  "        \"Key\": {",
+                  "            \"type\": \"integer\"",
+                  "        },",
+                  "        \"Name\": {",
+                  "            \"type\": \"string\"",
+                  "        },",
+                  "        \"Url\": {",
+                  "            \"type\": \"string\",",
+                  "            \"format\": \"uri\",",
+                  "            \"qt-uri-protocols\": [",
+                  "                \"https\",",
+                  "                \"http\"",
+                  "            ]",
+                  "        },",
+                  "        \"Active\": {",
+                  "            \"type\": \"boolean\"",
+                  "        }",
+                  "    }",
+                  "}",
+                  "",
+                  "// Test that the status code is 200",
+                  "utils.StatusOk();",
+                  "",
+                  "// Compare the jsonSchema",
+                  "pm.test(\"The schema is valid\", ()=>{",
+                  "  pm.response.to.have.jsonSchema(schema)  ",
+                  "})",
+                  "",
+                  "// Parse the response body as a JSON object to get the first Server",
+                  "const response = pm.response.json();",
+                  "const serverName = pm.collectionVariables.get(\"serverName\");",
+                  "const serverKey = pm.collectionVariables.get(\"serverKey\");",
+                  "const serverUrl = pm.collectionVariables.get(\"serverUrl\");",
+                  "",
+                  "pm.test(\"Server Key is correct\", () => {",
+                  "    pm.expect(response.Key).to.eql(serverKey);",
+                  "});",
+                  "",
+                  "pm.test(\"Server URL is correct\", () => {",
+                  "    pm.expect(response.Url).to.eql(serverUrl);",
+                  "});",
+                  "",
+                  "pm.test(\"Server Name is correct\", () => {",
+                  "    pm.expect(response.Name).to.eql(serverName);",
+                  "});",
+                  "",
+                  "pm.test(\"Server Active is: true\", function() {",
+                  "    pm.expect(response.Active).to.be.true;",
+                  "})",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{AccessTokenAdmin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{AuthAPI}}/api/Server/:serverKey",
+              "host": [
+                "{{AuthAPI}}"
+              ],
+              "path": [
+                "api",
+                "Server",
+                ":serverKey"
+              ],
+              "variable": [
+                {
+                  "key": "serverKey",
+                  "value": "{{serverKey}}",
+                  "description": "Server key to get the info"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Server_WithValidKey_ReturnsServerInfo Copy",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Test that the status code is 404",
+                  "utils.Status404();",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{AccessTokenAdmin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{AuthAPI}}/api/Server/0",
+              "host": [
+                "{{AuthAPI}}"
+              ],
+              "path": [
+                "api",
+                "Server",
+                "0"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Servers_WithInvalidInfo_ReturnsError",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();",
+                  "",
+                  "utils.Status400();",
+                  "",
+                  "const errors = response.errors;",
+                  "const expectedServerDuplicatedError = \"This server key is already in use. Please choose a different one.\"",
+                  "pm.test(\"Contains server key duplicated error\", function() {",
+                  "    pm.expect(errors[\"Key\"][0]).to.eql(expectedServerDuplicatedError)",
+                  "})",
+                  "",
+                  "const expectedRequiredUrl = \"Url is required.\"",
+                  "pm.test(\"Contains require url error\", function() {",
+                  "    pm.expect(errors[\"Url\"][0]).to.eql(expectedRequiredUrl)",
+                  "})",
+                  "",
+                  "const expectedNameLength = \"Name must be at most 150 characters.\"",
+                  "pm.test(\"Contains a name length error url error\", function() {",
+                  "    pm.expect(errors[\"Name\"][0]).to.eql(expectedNameLength)",
+                  "})"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const server151Chars = \"a\".repeat(151);",
+                  "pm.environment.set(\"server151Chars\", server151Chars);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{AccessTokenAdmin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"Id\": 1,\n    \"Key\": 1,\n    \"Name\": \"{{server151Chars}}\",\n    \"Active\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{AuthAPI}}/api/Server",
+              "host": [
+                "{{AuthAPI}}"
+              ],
+              "path": [
+                "api",
+                "Server"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Servers_WithValidServerInfo_UpdatesAServer",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "utils.StatusNoContent();"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const _ = require('lodash');",
+                  "",
+                  "const randomName = pm.variables.replaceIn('{{$randomProductName}}');",
+                  "const randomUrl = pm.variables.replaceIn('{{$randomUrl}}');",
+                  "const randomKey =  _.random(2, 999); ",
+                  "",
+                  "pm.collectionVariables.set(\"serverKey\", randomKey);",
+                  "pm.collectionVariables.set(\"serverName\", randomName);",
+                  "pm.collectionVariables.set(\"serverUrl\", randomUrl);",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{AccessTokenAdmin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"Id\": {{serverId}},\n    \"Key\": {{serverKey}},\n    \"Name\": \"{{serverName}}\",\n    \"Url\": \"{{serverUrl}}\",\n    \"Active\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{AuthAPI}}/api/Server/:serverId",
+              "host": [
+                "{{AuthAPI}}"
+              ],
+              "path": [
+                "api",
+                "Server",
+                ":serverId"
+              ],
+              "variable": [
+                {
+                  "key": "serverId",
+                  "value": "{{serverId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Servers_WithInvalidServerId_returns400Error",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "utils.Status400();",
+                  "",
+                  "const errorMessage = 'The id in the route does not match the id in the payload.'",
+                  "pm.test(\"Response body contains \" + errorMessage, function () {",
+                  "    pm.expect(pm.response.text()).to.include(errorMessage);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const _ = require('lodash');",
+                  "",
+                  "const randomName = pm.variables.replaceIn('{{$randomProductName}}');",
+                  "const randomUrl = pm.variables.replaceIn('{{$randomUrl}}');",
+                  "const randomKey =  _.random(2, 999); ",
+                  "",
+                  "pm.collectionVariables.set(\"serverKey\", randomKey);",
+                  "pm.collectionVariables.set(\"serverName\", randomName);",
+                  "pm.collectionVariables.set(\"serverUrl\", randomUrl);",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{AccessTokenAdmin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"Id\": {{serverId}},\n    \"Key\": {{serverKey}},\n    \"Name\": \"{{serverName}}\",\n    \"Url\": \"{{serverUrl}}\",\n    \"Active\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{AuthAPI}}/api/Server/0",
+              "host": [
+                "{{AuthAPI}}"
+              ],
+              "path": [
+                "api",
+                "Server",
+                "0"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Servers_WithValidServerId_DeletesCorrectly",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "utils.StatusOk();"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const _ = require('lodash');",
+                  "",
+                  "const randomName = pm.variables.replaceIn('{{$randomProductName}}');",
+                  "const randomUrl = pm.variables.replaceIn('{{$randomUrl}}');",
+                  "const randomKey =  _.random(2, 999); ",
+                  "",
+                  "pm.collectionVariables.set(\"serverKey\", randomKey);",
+                  "pm.collectionVariables.set(\"serverName\", randomName);",
+                  "pm.collectionVariables.set(\"serverUrl\", randomUrl);",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{AccessTokenAdmin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n        \"Key\": {{serverKey}},\n        \"Name\": \"{{serverName}}\",\n        \"Url\": \"{{serverUrl}}\",\n        \"Active\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{AuthAPI}}/api/Server/:serverId",
+              "host": [
+                "{{AuthAPI}}"
+              ],
+              "path": [
+                "api",
+                "Server",
+                ":serverId"
+              ],
+              "variable": [
+                {
+                  "key": "serverId",
+                  "value": "{{serverId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Servers_WithInValidServerId_Returns404",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "utils.Status404();"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const _ = require('lodash');",
+                  "",
+                  "const randomName = pm.variables.replaceIn('{{$randomProductName}}');",
+                  "const randomUrl = pm.variables.replaceIn('{{$randomUrl}}');",
+                  "const randomKey =  _.random(2, 999); ",
+                  "",
+                  "pm.collectionVariables.set(\"serverKey\", randomKey);",
+                  "pm.collectionVariables.set(\"serverName\", randomName);",
+                  "pm.collectionVariables.set(\"serverUrl\", randomUrl);",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{AccessTokenAdmin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n        \"Key\": {{serverKey}},\n        \"Name\": \"{{serverName}}\",\n        \"Url\": \"{{serverUrl}}\",\n        \"Active\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{AuthAPI}}/api/Server/0",
+              "host": [
+                "{{AuthAPI}}"
+              ],
+              "path": [
+                "api",
+                "Server",
+                "0"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{AccessTokenAdmin}}",
+            "type": "string"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              "// Login as Admin and store the AccessToken",
+              "const loginUrl = pm.environment.get(\"AuthAPI\") + \"/api/users/login\";",
+              "",
+              "const loginBody = {",
+              "    Company: pm.environment.get(\"company\"),",
+              "    UserName: pm.environment.get(\"userNameAdmin\"),",
+              "    Password: pm.environment.get(\"passwordAdmin\"),",
+              "    Language: pm.environment.get(\"language\")",
+              "};",
+              "",
+              "pm.sendRequest({",
+              "    url: loginUrl,",
+              "    method: \"POST\",",
+              "    header: { \"Content-Type\": \"application/json\" },",
+              "    body: {",
+              "        mode: \"raw\",",
+              "        raw: JSON.stringify(loginBody)",
+              "    }",
+              "}, function (err, response) {",
+              "    if (err) {",
+              "        console.error(\"Login failed:\", err);",
+              "    } else {",
+              "        const jsonData = response.json();",
+              "        pm.collectionVariables.set(\"AccessTokenAdmin\", jsonData.AccessToken);",
+              "        console.log(\"AccessTokenAdmin set successfully\");",
+              "    }",
+              "});"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "401 Unauthorized",
+      "item": [
+        {
+          "name": "Menu_WithoutUser_Returns401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{AuthAPI}}/api/menu",
+              "host": [
+                "{{AuthAPI}}"
+              ],
+              "path": [
+                "api",
+                "menu"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Servers_withoutJwt_Returns401",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{AuthAPI}}/api/Server",
+              "host": [
+                "{{AuthAPI}}"
+              ],
+              "path": [
+                "api",
+                "Server"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              "// 1. Test that the status code is 401",
+              "utils.Status401()"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "403 Forbidden",
+      "item": [
+        {
+          "name": "Servers_withNormalUser_Returns403",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{AccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{AuthAPI}}/api/Server",
+              "host": [
+                "{{AuthAPI}}"
+              ],
+              "path": [
+                "api",
+                "Server"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              "// Login as Admin and store the AccessToken",
+              "const loginUrl = pm.environment.get(\"AuthAPI\") + \"/api/users/login\";",
+              "",
+              "const loginBody = {",
+              "    Company: pm.environment.get(\"company\"),",
+              "    UserName: pm.environment.get(\"userName\"),",
+              "    Password: pm.environment.get(\"password\"),",
+              "    Language: pm.environment.get(\"language\")",
+              "};",
+              "",
+              "pm.sendRequest({",
+              "    url: loginUrl,",
+              "    method: \"POST\",",
+              "    header: { \"Content-Type\": \"application/json\" },",
+              "    body: {",
+              "        mode: \"raw\",",
+              "        raw: JSON.stringify(loginBody)",
+              "    }",
+              "}, function (err, response) {",
+              "    if (err) {",
+              "        console.error(\"Login failed:\", err);",
+              "    } else {",
+              "        const jsonData = response.json();",
+              "        pm.environment.set(\"AccessToken\", jsonData.AccessToken);",
+              "        console.log(\"AccessToken set successfully\");",
+              "    }",
+              "});"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              "utils.Status403()"
+            ]
+          }
+        }
+      ]
     }
   ],
   "event": [
@@ -779,14 +1799,34 @@
           "        pm.response.to.be.ok;",
           "    });",
           "  },",
-          "  Status401: function () {",
-          "    pm.test(\"Status is 401\", function () {",
-          "        pm.response.to.have.status(401);",
+          "  StatusCreated: function() {",
+          "    pm.test(\"Status is 201\", function () {",
+          "        pm.response.to.have.status(201);",
+          "    });",
+          "  },",
+          "  StatusNoContent: function() {",
+          "    pm.test(\"Status is 204\", function () {",
+          "        pm.response.to.have.status(204);",
           "    });",
           "  },",
           "  Status400: function() {",
-          "    pm.test(\"Status is 400\", function () {",
+          "    pm.test(\"Status is Bad Request\", function () {",
           "        pm.response.to.have.status(400);",
+          "    });",
+          "  },",
+          "  Status401: function () {",
+          "    pm.test(\"Status is Not Authorized\", function () {",
+          "        pm.response.to.have.status(401);",
+          "    });",
+          "  },",
+          "  Status403: function () {",
+          "    pm.test(\"Status is Forbidden\", function () {",
+          "        pm.response.to.have.status(403);",
+          "    });",
+          "  },",
+          "  Status404: function () {",
+          "    pm.test(\"Status is Not Found\", function () {",
+          "        pm.response.to.have.status(404);",
           "    });",
           "  },",
           "  ArrayAbove0: function(arrayName) {",
@@ -812,6 +1852,11 @@
           "        const jsonData = pm.response.json();",
           "        pm.expect(jsonData.errors[fieldName][0]).to.eql(\"Required\");",
           "    });",
+          "  },",
+          "  CheckResponseTime: function(minSeconds = 1) {",
+          "    pm.test(\"Response time should be below \"+ minSeconds +\" second(s)\", function() {",
+          "        pm.expect(pm.response.responseTime).to.be.below(minSeconds * 1000)",
+          "    })",
           "  }",
           "};"
         ]
@@ -820,11 +1865,27 @@
   ],
   "variable": [
     {
-      "key": "AccessToken",
+      "key": "AccessTokenAdmin",
       "value": ""
     },
     {
-      "key": "AccessTokenAdmin",
+      "key": "serverKey",
+      "value": ""
+    },
+    {
+      "key": "serverName",
+      "value": ""
+    },
+    {
+      "key": "serverUrl",
+      "value": ""
+    },
+    {
+      "key": "serverId",
+      "value": ""
+    },
+    {
+      "key": "AccessToken",
       "value": ""
     }
   ]

@@ -1,9 +1,11 @@
-import { Page, test, expect } from '@playwright/test';
+import { Page, test, expect, Dialog } from '@playwright/test';
 import { Menu } from '../components/Menu';
 import enUS from '../data/en-US.json';
 import esMX from '../data/es-MX.json';
 import deDE from '../data/de-DE.json';
 import jaJP from '../data/ja-JP.json';
+import { Alert } from '../components/Alert';
+import { ConfirmDialog } from '../components/ConfirmDialog';
 
 export type Role = 'admin' | 'normal';
 export type LocaleData = typeof enUS;
@@ -23,6 +25,9 @@ export class BasePage {
     public localeInfo: LocaleData;
     public screencastOverlay = false;
     protected baseURL: string;
+    public message: Alert;
+    public confirmDialog: ConfirmDialog;
+    
 
     /**
      * @param page - Playwright Page instance injected by the test fixture.
@@ -34,6 +39,8 @@ export class BasePage {
         this.baseURL = process.env.BASE_URL ?? ''; // Read from .env (local) or CI environment variable — never hardcoded
         this.localeInfo = locales[locale] ?? enUS; // Loads the JSON file for the active locale; defaults to English if unknown
         this.menu = new Menu(page);
+        this.message = new Alert(page, 'Success message');
+        this.confirmDialog = new ConfirmDialog(page);
     }
 
     public async goTo() {
@@ -87,6 +94,16 @@ export class BasePage {
                 opacity: 0.8;
             ">✔ ${message}</div>`,
             { duration: 2000 },
+        );
+    }
+
+    async checkSuccessMessage() {
+        const assertDescription = 'Success message is visible';
+        await test.step(
+            assertDescription,
+            async () => {
+                await expect(this.message.locator, assertDescription).toBeVisible();
+            },
         );
     }
 

@@ -1,4 +1,5 @@
 import { Locator, Page } from "@playwright/test";
+import { test } from "../fixtures";
 
 // Base class for every UI component (Button, InputText, etc.).
 // Centralizes two responsibilities:
@@ -117,5 +118,16 @@ export class BaseComponent {
             this.locator = page.locator(selector).describe(name || selector);
         }
     }
+
+        /**
+     * Encapsulate a function as a step in the HTML report.
+     * @param stepDescription Step description.
+     * @param stepFunction Function to encapsulate as step.
+     * @returns Promise with step execution.
+    */
+    async addStep(stepDescription: string, stepFunction: () => Promise<any>): Promise<any> {
+        return test.step(stepDescription, stepFunction);
+    }
+
 
 }

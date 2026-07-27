@@ -22,5 +22,8 @@
     },
     "notFound": {
         "title": "Página No Encontrada"
+    },
+    "companies": {
+        "title": "Empresas"
     }
 }

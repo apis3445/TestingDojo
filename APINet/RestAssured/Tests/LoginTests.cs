@@ -3,10 +3,6 @@ using NHamcrest;
 using static RestAssured.Dsl;
 
 namespace APINet.RestAssured;
-
-// Same tests as RestSharp/Tests/LoginTests.cs — implemented with RestAssured.Net instead.
-// RestAssured.Net uses a Given / When / Then style borrowed from the Java REST Assured library.
-// The goal is to let you compare the two libraries and choose the style that fits your team.
 public class LoginTests : TestBase
 {
     [Test]
@@ -17,13 +13,11 @@ public class LoginTests : TestBase
     {
         var loginRequest = new User
         {
-            Company  = Configuration[companyKey]!,  // reads from user secrets (local) or env var (CI)
+            Company  = Configuration[companyKey]!,  
             UserName = Configuration[userNameKey]!,
             Password = Configuration[passwordKey]!
         };
 
-        // Given / When / Then reads almost like plain English:
-        //   Given these request details → When we POST → Then we expect status 200 → deserialize the body.
         var response = Given()
             .ContentType("application/json")
             .Body(loginRequest)

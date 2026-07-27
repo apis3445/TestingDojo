@@ -22,5 +22,8 @@
     },
     "notFound": {
         "title": "Page Not Found"
+    },
+    "companies": {
+        "title": "Companies"
     }
 }

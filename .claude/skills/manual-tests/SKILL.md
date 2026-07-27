@@ -6,6 +6,7 @@ allowed-tools: >-
   mcp__azure-devops__core_list_projects,
   mcp__azure-devops__wit_get_work_item,
   mcp__azure-devops__wit_update_work_item,
+  mcp__azure-devops__wit_list_work_item_revisions,
   mcp__azure-devops__testplan_list_test_plans,
   mcp__azure-devops__testplan_create_test_plan,
   mcp__azure-devops__testplan_list_test_suites,
@@ -21,6 +22,8 @@ allowed-tools: >-
 ---
 
 Act as a manual tester: turn a user story (or an automated test / feature description) into well-structured **manual** Test Case work items in Azure DevOps, and keep existing ones current when the story changes. Test cases come in three flavours — API, E2E/UI, and Performance — each with its own step template (see `references/`).
+
+**Skill version: 1.0** — every case this skill creates is tagged `gen:manual-tests@1.0`. Bump this number whenever the skill's behavior changes, so any case in ADO always tells you which generator version produced it (ADO's links and revision history record everything else about a case's origin, but not this).
 
 ## Mode: create vs. update
 
@@ -96,9 +99,16 @@ Applies whether drafting brand-new cases or revising an existing one's steps. Wr
 - **Cleanup postcondition when the case creates data** — the last step(s) undo what the test created (e.g. delete the new row) with an expected result confirming it's gone.
 - Title: a clear, specific behavior statement, e.g. `Login with invalid password shows error message` — not `Login test`.
 
-Preview each test case with its full content — title, every step's action and expected result, and any parameters — so the user reviews the real artifact before anything is written to ADO. Use a **compact line format**, not a markdown table: tables cost many more tokens for no extra information, and this matches the `read-testcase` output style (`action → expected`). For every case show:
+**Tags** — classify every case so its purpose stays visible and queryable in ADO. Tags appear in the preview from the first draft and are written to `System.Tags` only after approval, never before:
+
+- **Level** — `api` | `e2e` | `performance`, straight from the case type (Step 2). Never `unit`: unit tests live in code and cannot be manual cases.
+- **Purpose** — why the case exists: `user-journey` (the positive path), `negative` (an error/validation path), `boundary` (limit values), `regression` (born from a bug work item — pins the fixed behavior). One purpose per case; combine only when both are genuinely true (a bug-derived error case is `negative` + `regression`). Add `smoke` to the few critical-path cases a smoke run would execute — sparingly, or the tag stops meaning anything. No `contract` tag: every API case already asserts status + schema per its template, so it would mark 100% of them and discriminate nothing.
+- **Generator** — `gen:manual-tests@<version>` (the skill version at the top of this file), on every case.
+
+Preview each test case with its full content — title, tags, every step's action and expected result, and any parameters — so the user reviews the real artifact before anything is written to ADO. Use a **compact line format**, not a markdown table: tables cost many more tokens for no extra information, and this matches the `read-testcase` output style (`action → expected`). For every case show:
 
 - The **title**, with the destination **Plan/Suite**, **priority**, **linked work item**, and a **confidence** tag on the same header line.
+- A **Tags** line right under the header: level · purpose (· `smoke` when it applies) · `gen:manual-tests@<version>` — exactly what will land in `System.Tags`.
 - One line per step: `N. Action → Expected Result` (1-based). When the expected result holds several assertions, show them as indented `- ` lines under the step line — exactly what will land in ADO. A step with no distinct assertion still gets a light expected result — never blank.
 - A compact **Params** block only when the case is data-driven (see below).
 - A one-line **Why** note whenever confidence is below High, naming the assumption or missing detail behind it.
@@ -115,6 +125,7 @@ Use this exact layout:
 
 ```
 [UI] Login with invalid password shows error   [<project> · plan "<plan>"/suite "<suite>" · P2 · TestedBy #482 · Confidence: Med]
+  Tags  e2e · negative · gen:manual-tests@1.0
   1. Navigate to the login page → Login form with Company, User and Password is displayed
   2. Enter @company, @user and @password → Credentials are entered in the form
   3. Click the Login button →
@@ -125,13 +136,18 @@ Use this exact layout:
   Why Med  Error text "Error: Invalid user" taken from app convention; the story doesn't specify the exact message
 
 [API] POST /api/login with invalid password returns 401   [<project> · plan "<plan>"/suite "<suite>" · P2 · TestedBy #482 · Confidence: High]
+  Tags  api · negative · gen:manual-tests@1.0
   1. Obtain the base URL and a valid existing username → Prerequisites ready
   2. Send POST /api/login with the valid username and a wrong password →
        - Status code is 401 Unauthorized
        - Body contains error code "INVALID_CREDENTIALS" and no token field
 
+Coverage: no boundary case — AC3's 50-character password limit has no case. Draft one?
+
 Create these now?
 ```
+
+**Coverage sweep:** before presenting, sweep the source once more for purposes without a case — a numeric or length limit with no `boundary` case, an error criterion with no `negative` case, a fixed bug with no `regression` case. Report each gap as a one-line `Coverage:` note under the preview (as in the layout above) and ask whether to draft it. Never auto-draft the missing case and never skip the gap silently — the user decides.
 
 **Parameters / data-driven cases:** when the same steps repeat with only the data changing (e.g. invalid username, invalid password, invalid company), write **one** test case using `@name` tokens for the varying values plus a small table of value sets — not near-duplicate cases. Follow the user's preference if they'd rather have separate cases.
 
@@ -148,7 +164,7 @@ Use this when the user wants to change an existing case rather than make a new o
 Find the test case(s) as described in Step 1, then:
 
 1. **Read the current steps.** `mcp__azure-devops__wit_get_work_item` (id, `expand: "all"`) → parse `Microsoft.VSTS.TCM.Steps`. The steps XML uses `<step type="ValidateStep">` (has an expected result) or `type="ActionStep">` (action only); each `<parameterizedString>` holds action then expected result, wrapped in `<P>` tags you must strip. (This is the same format `read-testcase` parses.)
-2. **Determine the new step list**, applying the same drafting rules and template as create. Re-ground against the current story / spec — don't edit blind.
+2. **Determine the new step list**, applying the same drafting rules and template as create. Re-ground against the current story / spec — don't edit blind. ADO already tracks what changed: fetch the story's revision history with `mcp__azure-devops__wit_list_work_item_revisions` and compare the revisions since the test case was created (the case's own created date marks the generation point), so the update touches only what the source actually changed instead of re-deriving everything.
 3. **Present a before → after diff** and wait for approval. `testplan_update_test_case_steps` **replaces the entire step list**, so always show the full new set, not just the delta, to make accidental drops obvious:
 
 ```
@@ -160,7 +176,7 @@ Full new step list:
 Apply this update?
 ```
 
-4. **Apply** with `mcp__azure-devops__testplan_update_test_case_steps` (id, the full formatted `steps` string). When any expected result needs a bullet list, skip that tool (single-line text only) and write the steps XML directly via `wit_update_work_item`, following the same bulleted format used when creating. Title/priority/other fields are not changed by either steps tool — if those need editing, use `wit_update_work_item` on the specific fields and call it out.
+4. **Apply** with `mcp__azure-devops__testplan_update_test_case_steps` (id, the full formatted `steps` string). When any expected result needs a bullet list, skip that tool (single-line text only) and write the steps XML directly via `wit_update_work_item`, following the same bulleted format used when creating. Title/priority/other fields are not changed by either steps tool — if those need editing, use `wit_update_work_item` on the specific fields and call it out. When the update changes what the case covers (e.g. it gains boundary assertions) refresh the purpose tag, and always refresh the `gen:` tag to the current skill version — both via `System.Tags` on `wit_update_work_item`.
 5. **Report** the updated ID and what changed.
 
 Because the update overwrites all steps, never call it with a partial list you derived from memory — always start from the freshly read current steps in step 1.
@@ -177,12 +193,15 @@ Run through this silently before presenting the draft/diff for approval, and onc
 - [ ] No extra `|` inside any action/expected-result text — `|` is the tool-input delimiter (Step 5), not part of the preview's `→` format
 - [ ] No assertion-only "Observe/Inspect/Verify" steps; multi-assertion expected results written as bullets (steps XML via `wit_update_work_item`)
 - [ ] Journeys are positive-scenario only, negative scenarios split into their own (parameterized) cases; cleanup postcondition present when the case creates data
+- [ ] Every case has its Tags line in the preview — level (`api`/`e2e`/`performance`), one purpose (`user-journey`/`negative`/`boundary`/`regression`; `smoke` only on critical paths), `gen:manual-tests@<version>` — and tags reach ADO only after approval
+- [ ] Coverage sweep done — purpose gaps reported as `Coverage:` lines and asked, never auto-drafted or silently skipped
+- [ ] Every expected result is falsifiable — it names the concrete observation that would make a tester fail the step (no "works correctly" results)
 - [ ] Destination plan + suite resolved (plan/suite created on request when none exists) — create mode
 - [ ] Draft (create) or before→after diff (update) presented and user approved before any write
 
 ## Step 5: Create, wire up, and report
 
-Once approved, create each test case in Azure DevOps with `mcp__azure-devops__testplan_create_test_case` (`project`, `title`, `steps`, `testsWorkItemId` to link it to the source story/bug — follow the tool's own format instructions for `steps`), capture the returned ID, then add it to the suite with `mcp__azure-devops__testplan_add_test_cases_to_suite` (`project`, `planId`, `suiteId`, `testCaseIds`).
+Once approved, create each test case in Azure DevOps with `mcp__azure-devops__testplan_create_test_case` (`project`, `title`, `steps`, `testsWorkItemId` to link it to the source story/bug — follow the tool's own format instructions for `steps`), capture the returned ID, then add it to the suite with `mcp__azure-devops__testplan_add_test_cases_to_suite` (`project`, `planId`, `suiteId`, `testCaseIds`). Then write the approved tags to each created case: set `System.Tags` via `wit_update_work_item` with the semicolon-separated list from the preview, e.g. `e2e; negative; gen:manual-tests@1.0`.
 
 For bulleted expected results (the tool only accepts one line per step), create the case with the plain string first, then read it back with `wit_get_work_item` to see the generated `Microsoft.VSTS.TCM.Steps` XML. Edit **only** that step's expected-result `parameterizedString` — keep every id, the `type` (`ValidateStep` has an expected result, `ActionStep` doesn't), and the surrounding tags exactly as read — then write it back with `wit_update_work_item` (op `replace`). The HTML inside each `parameterizedString` must be XML-escaped, one `&lt;P&gt;- …&lt;/P&gt;` per assertion — never paste raw, unescaped `<P>` tags, or the field becomes malformed. Verified working shape for one step:
 
