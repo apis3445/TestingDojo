@@ -550,6 +550,17 @@
                 "packages": {},
                 "requests": {}
               }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
             }
           ],
           "protocolProfileBehavior": {
@@ -1142,7 +1153,7 @@
               "script": {
                 "exec": [
                   "const server151Chars = \"a\".repeat(151);",
-                  "pm.environment.set(\"server151Chars\", server151Chars);"
+                  "pm.collectionVariables.set(\"server151Chars\", server151Chars);"
                 ],
                 "type": "text/javascript",
                 "packages": {},
@@ -1167,11 +1178,16 @@
                 "key": "Accept-Language",
                 "value": "{{language}}",
                 "type": "text"
+              },
+              {
+                "key": "X-UI-Lang",
+                "value": "{{language}}",
+                "type": "text"
               }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"Id\": 1,\n    \"Key\": 1,\n    \"Name\": \"{{server151Chars}}\",\n    \"Active\": true\n}",
+              "raw": "{\n    \"Id\": 10,\n    \"Key\": 1,\n    \"Name\": \"123\",\n    \"Active\": true,\n    \"Url\": \"http://www.google.com\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1886,6 +1902,10 @@
     },
     {
       "key": "AccessToken",
+      "value": ""
+    },
+    {
+      "key": "server151Chars",
       "value": ""
     }
   ]
