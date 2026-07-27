@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from '../fixtures';
 import { faker } from '@faker-js/faker';
 import { ServersPage } from '../pages/ServersPage';
 import { AnnotationType } from '../utils/AnnotationType';
@@ -9,9 +9,9 @@ test.describe('Servers', () => {
     let id = 0;
     test.use({ storageState: '.auth/admin.json' });
 
-    test.afterEach(async ({ page }) => {
+    test.afterEach(async ({ page, locale }) => {
         //Delete the server created after each test 
-        const serverPage = new ServerPage(page);
+        const serverPage = new ServerPage(page, locale);
         if (id > 0) {
             test.info().annotations.push({
                 type: AnnotationType.PostCondition,
@@ -27,15 +27,15 @@ test.describe('Servers', () => {
             { type: AnnotationType.Description, description: 'An admin user can add a server' },
             { type: AnnotationType.Precondition, description: 'A valid admin username and password is logged' },
         ],
-    }, async ({ page }) => {
+    }, async ({ page, locale }) => {
         await page.screencast.start({ path: 'server.webm' });
         await page.screencast.showActions({ position: 'top-right' });
         await page.screencast.showChapter('Adding a new Server', {
             description: 'An admin user can add a server',
             duration: 1000,
         });
-        const serversPage = new ServersPage(page);
-        const serverPage = new ServerPage(page);
+        const serversPage = new ServersPage(page, locale);
+        const serverPage = new ServerPage(page, locale);
         await serversPage.goTo();
         //Add server with a random data from faker
         const key = faker.number.int({ min: 999_000, max: 999_999 });
@@ -65,9 +65,9 @@ test.describe('Servers', () => {
             { type: AnnotationType.Description, description: 'An admin user can edit a server' },
             { type: AnnotationType.Precondition, description: 'A valid admin username and password is logged' },
         ],
-    }, async ({ page }) => {
-        const serversPage = new ServersPage(page);
-        const addServerPage = new ServerPage(page);
+    }, async ({ page, locale }) => {
+        const serversPage = new ServersPage(page, locale);
+        const addServerPage = new ServerPage(page, locale);
         const key = faker.number.int({ min: 999_000, max: 999_998 });
         await serversPage.goTo();
         //Create and server by api to test edit to remove dependencies for the create with UI
@@ -99,8 +99,8 @@ test.describe('Servers', () => {
             { type: AnnotationType.Description, description: 'An admin user can edit a server' },
             { type: AnnotationType.Precondition, description: 'A valid admin username and password is logged' },
         ],
-    }, async ({ page }) => {
-        const serversPage = new ServersPage(page);
+    }, async ({ page, locale }) => {
+        const serversPage = new ServersPage(page, locale);
         await serversPage.goTo();
          const key = faker.number.int({ min: 999_000, max: 999_998 });
         //Create and server by api to test edit to remove dependencies for the create with UI

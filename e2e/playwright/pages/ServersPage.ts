@@ -21,20 +21,20 @@ export class ServersPage extends BasePage {
     readonly filter: InputText;
     serverApi: ServerApi;
 
-    constructor(page: Page) {
-        super(page, 'Servers');
-        this.title = new Heading(page, 'Servers');
-        this.add = new Button(page, 'Add');
-        this.delete = new Button(page, 'Delete');
-        this.exportToExcel = new Button(page, 'Excel');
-        this.exportToPDF = new Button(page, 'PDF');
+    constructor(page: Page, locale?: string) {
+        super(page, 'Servers', locale);
+        this.title = new Heading(page, this.localeInfo.servers.title);
+        this.add = new Button(page, this.localeInfo.servers.add);
+        this.delete = new Button(page, this.localeInfo.servers.delete);
+        this.exportToExcel = new Button(page, this.localeInfo.servers.exportToExcel);
+        this.exportToPDF = new Button(page, this.localeInfo.servers.exportToPDF);
         this.table = new Grid(page);
         this.confirmDialog = new ConfirmDialog(page);
-        this.save = new Button(page, 'Save');
-        this.cancel = new Button(page, 'Cancel');
+        this.save = new Button(page, this.localeInfo.servers.save);
+        this.cancel = new Button(page, this.localeInfo.servers.cancel);
         this.filter = new InputText(
             page,
-            '[placeholder="Search..."]',
+            `[placeholder="${this.localeInfo.servers.searchPlaceholder}"]`,
             false,
         );
         this.serverApi = new ServerApi(page);

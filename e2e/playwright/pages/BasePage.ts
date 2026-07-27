@@ -1,4 +1,4 @@
-import { Page, test, expect, Dialog } from '@playwright/test';
+import { Page, test, expect } from '@playwright/test';
 import { Menu } from '../components/Menu';
 import enUS from '../data/en-US.json';
 import esMX from '../data/es-MX.json';

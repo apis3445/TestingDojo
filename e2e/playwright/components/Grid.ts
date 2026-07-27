@@ -1,6 +1,5 @@
 import { Locator, Page } from '@playwright/test';
 import { BaseComponent } from './BaseComponent';
-import { table } from 'console';
 
 export class Grid extends BaseComponent {
 

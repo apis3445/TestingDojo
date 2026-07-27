@@ -25,5 +25,15 @@
     },
     "companies": {
         "title": "Unternehmen"
+    },
+    "servers": {
+        "title": "Server",
+        "add": "Hinzufügen",
+        "delete": "Löschen",
+        "exportToExcel": "Excel",
+        "exportToPDF": "PDF",
+        "save": "Speichern",
+        "cancel": "Abbrechen",
+        "searchPlaceholder": "Suchen..."
     }
 }

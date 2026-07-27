@@ -25,5 +25,15 @@
     },
     "companies": {
             "title": "会社"
+    },
+    "servers": {
+        "title": "サーバー",
+        "add": "追加",
+        "delete": "削除",
+        "exportToExcel": "Excel",
+        "exportToPDF": "PDF",
+        "save": "保存",
+        "cancel": "キャンセル",
+        "searchPlaceholder": "検索..."
     }
 }

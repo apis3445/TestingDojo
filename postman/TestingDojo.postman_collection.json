@@ -1,7 +1,7 @@
 {
   "info": {
     "_postman_id": "cdf08318-6fff-48af-a18d-ba4d2e2ec21f",
-    "name": "Abi Testing Dojo",
+    "name": "TestingDojo",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "1273809",
     "_collection_link": "https://go.postman.co/collection/1273809-cdf08318-6fff-48af-a18d-ba4d2e2ec21f?source=collection_link"
@@ -490,7 +490,13 @@
               ]
             },
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "X-UI-Lang",
+                "value": "ja",
+                "type": "text"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "",
@@ -578,7 +584,13 @@
               ]
             },
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "X-UI-Lang",
+                "value": "ja",
+                "type": "text"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "",
@@ -1187,7 +1199,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"Id\": 10,\n    \"Key\": 1,\n    \"Name\": \"123\",\n    \"Active\": true,\n    \"Url\": \"http://www.google.com\"\n}",
+              "raw": "{\n    \"Id\": 1,\n    \"Key\": 10,\n    \"Name\": \"{{server151Chars}}\",\n    \"Active\": true\n}",
               "options": {
                 "raw": {
                   "language": "json"
