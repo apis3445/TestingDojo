@@ -246,10 +246,12 @@
                 {
                   "listen": "test",
                   "script": {
-                    "type": "text/javascript",
                     "exec": [
-                      "utils.CheckRequired(\"Company\");"
-                    ]
+                      "utils.CheckRequired(\"Company\",\"Company is required.\");"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
                   }
                 }
               ],
@@ -1193,13 +1195,13 @@
               },
               {
                 "key": "X-UI-Lang",
-                "value": "{{language}}",
+                "value": "en",
                 "type": "text"
               }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"Id\": 1,\n    \"Key\": 10,\n    \"Name\": \"{{server151Chars}}\",\n    \"Active\": true\n}",
+              "raw": "{\n    \"Id\": 10,\n    \"Key\": 1,\n    \"Name\": \"{{server151Chars}}\",\n    \"Active\": true\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1871,9 +1873,10 @@
           "        pm.expect(response.length).to.be.eql(length)",
           "    });",
           "  },",
-          "  CheckRequired: function(fieldName) {",
+          "  CheckRequired: function(fieldName, errorMessage) {",
           "    pm.test(\"Error field is \" + fieldName, function () {",
           "        const jsonData = pm.response.json();",
+          "        pm.expect(jsonData.errors).to.have.property(fieldName);",
           "        pm.expect(jsonData.errors).to.have.property(fieldName);",
           "    });",
           "    pm.test(fieldName + \" error message is Required\", function () {",
@@ -1897,27 +1900,11 @@
       "value": ""
     },
     {
-      "key": "serverKey",
-      "value": ""
-    },
-    {
-      "key": "serverName",
-      "value": ""
-    },
-    {
-      "key": "serverUrl",
-      "value": ""
-    },
-    {
-      "key": "serverId",
+      "key": "server151Chars",
       "value": ""
     },
     {
       "key": "AccessToken",
-      "value": ""
-    },
-    {
-      "key": "server151Chars",
       "value": ""
     }
   ]
