@@ -6,13 +6,15 @@ namespace APINet.RestAssured;
 
 public class ServerTests : TestBase
 {
+    private const string ServersEndpoint = "api/server";
+
    [Test]
    public async Task GetServers_WithValidAdminUser_ReturnsServers()
     {
         var response = Given()
             .Header("Authorization", $"Bearer {AuthToken}")
         .When()
-            .Get($"{AuthUrl}/api/Server")
+            .Get($"{AuthUrl}/{ServersEndpoint}")
         .Then()
             .StatusCode(200)
         .DeserializeTo<List<Server>>();
@@ -26,7 +28,7 @@ public class ServerTests : TestBase
         var response = Given()
             .Header("Authorization", $"Bearer {AuthToken}")
         .When()
-            .Get($"{AuthUrl}/api/Server/1")
+            .Get($"{AuthUrl}/{ServersEndpoint}/1")
         .Then()
             .StatusCode(200)
         .DeserializeTo<Server>();
@@ -41,7 +43,7 @@ public class ServerTests : TestBase
         Given()
             .Header("Authorization", $"Bearer {AuthToken}")
         .When()
-            .Get($"{AuthUrl}/api/Server/0")
+            .Get($"{AuthUrl}/{ServersEndpoint}/0")
         .Then()
             .StatusCode(404);
     }
@@ -56,7 +58,7 @@ public class ServerTests : TestBase
             .ContentType("application/json")
             .Body(newServer)
         .When()
-            .Post($"{AuthUrl}/api/Server")
+            .Post($"{AuthUrl}/{ServersEndpoint}")
         .Then()
             .StatusCode(201)
         .DeserializeTo<Server>();
@@ -90,7 +92,7 @@ public class ServerTests : TestBase
             .ContentType("application/json")
             .Body(invalidServer)
         .When()
-            .Post($"{AuthUrl}/api/Server")
+            .Post($"{AuthUrl}/{ServersEndpoint}")
         .Then()
             .StatusCode(400)
             .And().Body("$.errors.Key[0]", Is.EqualTo("The server key already exists, please add another key"))
@@ -119,14 +121,14 @@ public class ServerTests : TestBase
                 .ContentType("application/json")
                 .Body(updated)
             .When()
-                .Put($"{AuthUrl}/api/Server/{created.Id}")
+                .Put($"{AuthUrl}/{ServersEndpoint}/{created.Id}")
             .Then()
                 .StatusCode(204);
 
             var fetched = Given()
                 .Header("Authorization", $"Bearer {AuthToken}")
             .When()
-                .Get($"{AuthUrl}/api/Server/{created.Key}")
+                .Get($"{AuthUrl}/{ServersEndpoint}/{created.Key}")
             .Then()
                 .StatusCode(200)
             .DeserializeTo<Server>();
@@ -160,7 +162,7 @@ public class ServerTests : TestBase
                 .ContentType("application/json")
                 .Body(mismatched)
             .When()
-                .Put($"{AuthUrl}/api/Server/{created.Id}")
+                .Put($"{AuthUrl}/{ServersEndpoint}/{created.Id}")
             .Then()
                 .StatusCode(400);
         }
@@ -178,7 +180,7 @@ public class ServerTests : TestBase
         Given()
             .Header("Authorization", $"Bearer {AuthToken}")
         .When()
-            .Delete($"{AuthUrl}/api/Server/{created.Id}")
+            .Delete($"{AuthUrl}/{ServersEndpoint}/{created.Id}")
         .Then()
             .StatusCode(200);
     }
@@ -189,7 +191,7 @@ public class ServerTests : TestBase
         Given()
             .Header("Authorization", $"Bearer {AuthToken}")
         .When()
-            .Delete($"{AuthUrl}/api/Server/0")
+            .Delete($"{AuthUrl}/{ServersEndpoint}/0")
         .Then()
             .StatusCode(404);
     }
@@ -199,7 +201,7 @@ public class ServerTests : TestBase
     {
         Given()
         .When()
-            .Get($"{AuthUrl}/api/Server")
+            .Get($"{AuthUrl}/{ServersEndpoint}")
         .Then()
             .StatusCode(401);
     }
@@ -226,7 +228,7 @@ public class ServerTests : TestBase
         Given()
             .Header("Authorization", $"Bearer {loginResponse?.AccessToken}")
         .When()
-            .Get($"{AuthUrl}/api/Server")
+            .Get($"{AuthUrl}/{ServersEndpoint}")
         .Then()
             .StatusCode(403);
     }
@@ -250,7 +252,7 @@ public class ServerTests : TestBase
             .ContentType("application/json")
             .Body(server)
         .When()
-            .Post($"{AuthUrl}/api/Server")
+            .Post($"{AuthUrl}/{ServersEndpoint}")
         .Then()
             .StatusCode(201)
         .DeserializeTo<Server>()!;
@@ -261,6 +263,6 @@ public class ServerTests : TestBase
         Given()
             .Header("Authorization", $"Bearer {AuthToken}")
         .When()
-            .Delete($"{AuthUrl}/api/Server/{id}");
+            .Delete($"{AuthUrl}/{ServersEndpoint}/{id}");
     }
 }

@@ -60,7 +60,6 @@ Tests follow a **Page Object Model** with a shared component library:
 - **`components/`** — UI component wrappers extend `BaseComponent`. Components locate elements by ARIA role (`byRole=true`) or CSS selector, and wrap every action in `test.step()` for the report timeline.
 - **`utils/AnnotationType.ts`** — Enum with three values (`Precondition`, `PostCondition`, `Description`) used exclusively in spec annotation arrays. Never used inside page objects or components.
 
-Every interaction (click, fill, navigation) is wrapped in `test.step()` directly — there is no `addStep()` wrapper. `test.info().annotations.push()` is only used in spec annotation arrays for `Precondition`, `PostCondition`, and `Description`.
 
 **Environment:** `BASE_URL` and credentials are read from `e2e/playwright/.env` (see that file for variable names). On CI the `BASE_URL` env var must be set externally; `workers` is forced to 1 and retries to 2.
 
