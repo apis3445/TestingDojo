@@ -122,7 +122,12 @@ test.describe('Servers', () => {
         await serversPage.goTo();
         await serversPage.filter.fill(key.toString());
         await serversPage.table.clickInDeleteByKey(key);
-        await serversPage.confirmDialog.checkDialog('Confirm deletion', `Are you sure you want to delete this item? This action cannot be undone.`, 'Yes', 'No');
+        await serversPage.confirmDialog.checkDialog(
+            serversPage.localeInfo.confirmDialog.deleteTitle,
+            serversPage.localeInfo.confirmDialog.deleteMessage,
+            serversPage.localeInfo.confirmDialog.confirm,
+            serversPage.localeInfo.confirmDialog.cancel,
+        );
         await serversPage.confirmDialog.confirm();
         await serversPage.checkSuccessMessage();
         await serversPage.filter.fill(key.toString());

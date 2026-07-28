@@ -39,5 +39,11 @@
         "save": "Guardar",
         "cancel": "Cancelar",
         "searchPlaceholder": "Buscar..."
+    },
+    "confirmDialog": {
+        "deleteTitle": "Confirmar eliminación",
+        "deleteMessage": "¿Está seguro de que desea eliminar este elemento? Esta acción no se puede deshacer.",
+        "confirm": "Sí",
+        "cancel": "No"
     }
 }
