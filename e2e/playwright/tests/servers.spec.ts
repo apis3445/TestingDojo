@@ -17,7 +17,13 @@ test.describe('Servers', () => {
                 type: AnnotationType.PostCondition,
                 description: `Delete the server with API request with id: ${id}`,
             });
-            await serverPage.serverApi.deleteServer(id);
+            try {
+                await serverPage.serverApi.deleteServer(id);
+            } catch (e) {
+                // swallow errors in cleanup to avoid masking test failures
+            } finally {
+                id = 0;
+            }
         }
     });
 
@@ -82,6 +88,7 @@ test.describe('Servers', () => {
         const newUrl = faker.internet.url();
         //Go to page again to get the server created by api
         await serversPage.goTo();
+         await serversPage.filter.fill(key.toString());
         await serversPage.table.clickInEditByKey(key);
         await expect(addServerPage.name.locator).toHaveValue(server.Name);
         await addServerPage.name.fill(newName);
@@ -113,6 +120,7 @@ test.describe('Servers', () => {
         id = await serversPage.createServer(server);
          //Go to page again to get the server created by api
         await serversPage.goTo();
+        await serversPage.filter.fill(key.toString());
         await serversPage.table.clickInDeleteByKey(key);
         await serversPage.confirmDialog.checkDialog('Confirm deletion', `Are you sure you want to delete this item? This action cannot be undone.`, 'Yes', 'No');
         await serversPage.confirmDialog.confirm();
