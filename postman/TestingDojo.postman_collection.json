@@ -868,21 +868,16 @@
             {
               "listen": "prerequest",
               "script": {
+                "type": "text/javascript",
                 "exec": [
-                  "const _ = require('lodash');",
-                  "",
                   "const randomName = pm.variables.replaceIn('{{$randomProductName}}');",
                   "const randomUrl = pm.variables.replaceIn('{{$randomUrl}}');",
-                  "const randomKey =  _.random(2, 999); ",
+                  "const randomKey = Math.floor(Math.random() * (999 - 2 + 1)) + 2;",
                   "",
                   "pm.collectionVariables.set(\"serverKey\", randomKey);",
                   "pm.collectionVariables.set(\"serverName\", randomName);",
-                  "pm.collectionVariables.set(\"serverUrl\", randomUrl);",
-                  ""
-                ],
-                "type": "text/javascript",
-                "packages": {},
-                "requests": {}
+                  "pm.collectionVariables.set(\"serverUrl\", randomUrl);"
+                ]
               }
             }
           ],
