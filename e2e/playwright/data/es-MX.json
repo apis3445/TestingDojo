@@ -28,6 +28,9 @@
     },
     "servers": {
         "title": "Servidores",
+        "key": "Clave",
+        "name": "Nombre",
+        "url": "URL",
         "add": "Agregar",
         "edit": "Editar",
         "delete": "Eliminar",

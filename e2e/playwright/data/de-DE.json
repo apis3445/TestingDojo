@@ -28,6 +28,9 @@
     },
     "servers": {
         "title": "Server",
+        "key": "Serverschlüssel",
+        "name": "Servername",
+        "url": "Server-URL",
         "add": "Hinzufügen",
         "edit": "Bearbeiten",
         "delete": "Löschen",

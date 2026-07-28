@@ -79,7 +79,7 @@ export class ServersPage extends BasePage {
      * @param url url for the server
      */
     async checkRow(key: number, name: string, url: string) {
-        let row = await this.table.getRowByKey(key);
+        let row = await this.table.getRowByKey(key, this.localeInfo.servers.key);
         let assertDescription = `Server with the key: "${key}" exists in the table`;
         await test.step(
             assertDescription,
@@ -91,14 +91,14 @@ export class ServersPage extends BasePage {
                 await test.step(
                     assertDescription,
                     async () => {
-                        expect(rowValues.Name, assertDescription).toBe(name);
+                        expect(rowValues[this.localeInfo.servers.name], assertDescription).toBe(name);
                     },
                 );
                 assertDescription = `The server url for the key: "${key}" is: "${url}"`;
                 await test.step(
                     assertDescription,
                     async () => {
-                        expect(rowValues.URL, assertDescription).toBe(url);
+                        expect(rowValues[this.localeInfo.servers.url], assertDescription).toBe(url);
                     },
                 );
             },
