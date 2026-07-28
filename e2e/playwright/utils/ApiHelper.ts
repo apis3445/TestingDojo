@@ -17,7 +17,7 @@ export class ApiHelper {
      */
     async createRequest(baseURL: string, token?: string) {
         if (!token)
-            token = await this.page.evaluate('localStorage["token"]');
+            token = await this.page.localStorage.getItem('token')??'';
         const apiRequest: APIRequestContext = await request.newContext({
             baseURL: baseURL,
             extraHTTPHeaders: {

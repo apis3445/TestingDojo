@@ -22,5 +22,28 @@
     },
     "notFound": {
         "title": "Seite nicht gefunden"
+    },
+    "companies": {
+        "title": "Unternehmen"
+    },
+    "servers": {
+        "title": "Server",
+        "key": "Serverschlüssel",
+        "name": "Servername",
+        "url": "Server-URL",
+        "add": "Hinzufügen",
+        "edit": "Bearbeiten",
+        "delete": "Löschen",
+        "exportToExcel": "Excel",
+        "exportToPDF": "PDF",
+        "save": "Speichern",
+        "cancel": "Abbrechen",
+        "searchPlaceholder": "Suchen..."
+    },
+    "confirmDialog": {
+        "deleteTitle": "Löschen bestätigen",
+        "deleteMessage": "Möchten Sie dieses Element wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+        "confirm": "Ja",
+        "cancel": "Nein"
     }
 }

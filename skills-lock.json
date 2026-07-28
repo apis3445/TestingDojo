@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "conduktor": {
+      "source": "conduktor/skills",
+      "sourceType": "github",
+      "skillPath": "skills/conduktor/SKILL.md",
+      "computedHash": "139b6714a177244e94afef934728b2cbdd86f25c94bb67cddbda8ec3a20a4fc4"
+    }
+  }
+}

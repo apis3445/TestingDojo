@@ -11,7 +11,7 @@
   <ItemGroup>
     <PackageReference Include="RestAssured.Net" Version="5.0.0" />
     <PackageReference Include="RestSharp" Version="114.0.0" />
-    <PackageReference Include="TUnit" Version="1.58.0" />
+    <PackageReference Include="TUnit" Version="1.61.38" />
   </ItemGroup>
 
   <!-- Copy all appsettings files to the output/test directory -->

@@ -41,6 +41,7 @@ adminLogin.webm
 # narrower future edit to that pattern can't silently start tracking secrets
 .env
 e2e/playwright/.env
+e2e/playwright/.snapshots
 e2e/playwright/.env.*
 !e2e/playwright/.env.example
 
@@ -49,3 +50,4 @@ e2e/playwright/.env.*
 
 # Claude Code local state — machine-specific, keyed by absolute project path
 .claude/projects/
+server.webm

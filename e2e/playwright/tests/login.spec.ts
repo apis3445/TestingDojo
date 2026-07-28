@@ -13,6 +13,7 @@ test.describe('Valid login', () => {
       { type: AnnotationType.Precondition, description: 'A valid admin username and password should exist' },
     ],
   }, async ({ page, locale }) => {
+    
     await page.screencast.start({ path: 'adminLogin.webm' });
     await page.screencast.showActions({ position: 'top' });
 
