@@ -136,7 +136,6 @@
                 {
                   "listen": "test",
                   "script": {
-                    "type": "text/javascript",
                     "exec": [
                       "//Date functions",
                       "const moment = require(\"moment\")",
@@ -154,7 +153,7 @@
                       "    const decodeSegment = (seg) => {",
                       "        const base64 = seg.replace(/-/g, '+').replace(/_/g, '/');",
                       "        const padded = base64 + '='.repeat((4 - base64.length % 4) % 4);",
-                      "        return JSON.parse(atob(padded));",
+                      "        return JSON.parse(require('atob')(padded));",
                       "    };",
                       "    pm.expect(() => decodeSegment(parts[0]), 'header must decode to JSON').to.not.throw();",
                       "    pm.expect(() => decodeSegment(parts[1]), 'payload must decode to JSON').to.not.throw();",
@@ -203,9 +202,11 @@
                       "});",
                       "",
                       "// 5. Store the AccessToken in a collection variable for future use",
-                      "pm.collectionVariables.set(\"AccessToken\", jsonData.AccessToken);",
-                      ""
-                    ]
+                      "pm.collectionVariables.set(\"AccessToken\", jsonData.AccessToken);"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
                   }
                 }
               ],
