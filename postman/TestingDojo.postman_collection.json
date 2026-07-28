@@ -136,6 +136,7 @@
                 {
                   "listen": "test",
                   "script": {
+                    "type": "text/javascript",
                     "exec": [
                       "//Date functions",
                       "const moment = require(\"moment\")",
@@ -203,10 +204,7 @@
                       "",
                       "// 5. Store the AccessToken in a collection variable for future use",
                       "pm.collectionVariables.set(\"AccessToken\", jsonData.AccessToken);"
-                    ],
-                    "type": "text/javascript",
-                    "packages": {},
-                    "requests": {}
+                    ]
                   }
                 }
               ],
@@ -1310,6 +1308,7 @@
             {
               "listen": "test",
               "script": {
+                "type": "text/javascript",
                 "exec": [
                   "utils.Status400();",
                   "",
@@ -1317,10 +1316,7 @@
                   "pm.test(\"Response body contains \" + errorMessage, function () {",
                   "    pm.expect(pm.response.text()).to.include(errorMessage);",
                   "});"
-                ],
-                "type": "text/javascript",
-                "packages": {},
-                "requests": {}
+                ]
               }
             },
             {
@@ -1392,12 +1388,10 @@
             {
               "listen": "test",
               "script": {
+                "type": "text/javascript",
                 "exec": [
                   "utils.StatusOk();"
-                ],
-                "type": "text/javascript",
-                "packages": {},
-                "requests": {}
+                ]
               }
             },
             {
@@ -1475,12 +1469,10 @@
             {
               "listen": "test",
               "script": {
+                "type": "text/javascript",
                 "exec": [
                   "utils.Status404();"
-                ],
-                "type": "text/javascript",
-                "packages": {},
-                "requests": {}
+                ]
               }
             },
             {
