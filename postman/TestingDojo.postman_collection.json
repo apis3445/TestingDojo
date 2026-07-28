@@ -287,10 +287,12 @@
                 {
                   "listen": "test",
                   "script": {
-                    "type": "text/javascript",
                     "exec": [
-                      "utils.CheckRequired(\"UserName\");"
-                    ]
+                      "utils.CheckRequired(\"UserName\",\"UserName is required.\");"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
                   }
                 }
               ],
@@ -326,10 +328,12 @@
                 {
                   "listen": "test",
                   "script": {
-                    "type": "text/javascript",
                     "exec": [
-                      "utils.CheckRequired(\"Password\");"
-                    ]
+                      "utils.CheckRequired(\"Password\", \"Password is required.\");"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
                   }
                 }
               ],
@@ -1201,7 +1205,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"Id\": 10,\n    \"Key\": 1,\n    \"Name\": \"{{server151Chars}}\",\n    \"Active\": true\n}",
+              "raw": "{\n    \"Id\": 1,\n    \"Key\": 1,\n    \"Name\": \"{{server151Chars}}\",\n    \"Active\": true\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1877,11 +1881,10 @@
           "    pm.test(\"Error field is \" + fieldName, function () {",
           "        const jsonData = pm.response.json();",
           "        pm.expect(jsonData.errors).to.have.property(fieldName);",
-          "        pm.expect(jsonData.errors).to.have.property(fieldName);",
           "    });",
           "    pm.test(fieldName + \" error message is Required\", function () {",
           "        const jsonData = pm.response.json();",
-          "        pm.expect(jsonData.errors[fieldName][0]).to.eql(\"Required\");",
+          "        pm.expect(jsonData.errors[fieldName][0]).to.eql(errorMessage);",
           "    });",
           "  },",
           "  CheckResponseTime: function(minSeconds = 1) {",
@@ -1900,11 +1903,27 @@
       "value": ""
     },
     {
-      "key": "server151Chars",
+      "key": "AccessToken",
       "value": ""
     },
     {
-      "key": "AccessToken",
+      "key": "serverKey",
+      "value": ""
+    },
+    {
+      "key": "serverName",
+      "value": ""
+    },
+    {
+      "key": "serverUrl",
+      "value": ""
+    },
+    {
+      "key": "serverId",
+      "value": ""
+    },
+    {
+      "key": "server151Chars",
       "value": ""
     }
   ]
