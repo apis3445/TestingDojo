@@ -1237,8 +1237,6 @@
               "listen": "prerequest",
               "script": {
                 "exec": [
-                  "const _ = require('lodash');",
-                  "",
                   "const randomName = pm.variables.replaceIn('{{$randomProductName}}');",
                   "const randomUrl = pm.variables.replaceIn('{{$randomUrl}}');",
                   "const randomKey =  _.random(2, 999); ",
@@ -1323,8 +1321,6 @@
               "listen": "prerequest",
               "script": {
                 "exec": [
-                  "const _ = require('lodash');",
-                  "",
                   "const randomName = pm.variables.replaceIn('{{$randomProductName}}');",
                   "const randomUrl = pm.variables.replaceIn('{{$randomUrl}}');",
                   "const randomKey =  _.random(2, 999); ",
@@ -1398,8 +1394,6 @@
               "listen": "prerequest",
               "script": {
                 "exec": [
-                  "const _ = require('lodash');",
-                  "",
                   "const randomName = pm.variables.replaceIn('{{$randomProductName}}');",
                   "const randomUrl = pm.variables.replaceIn('{{$randomUrl}}');",
                   "const randomKey =  _.random(2, 999); ",
@@ -1479,8 +1473,6 @@
               "listen": "prerequest",
               "script": {
                 "exec": [
-                  "const _ = require('lodash');",
-                  "",
                   "const randomName = pm.variables.replaceIn('{{$randomProductName}}');",
                   "const randomUrl = pm.variables.replaceIn('{{$randomUrl}}');",
                   "const randomKey =  _.random(2, 999); ",
