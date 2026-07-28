@@ -95,9 +95,9 @@ public class ServerTests : TestBase
             .Post($"{AuthUrl}/{ServersEndpoint}")
         .Then()
             .StatusCode(400)
-            .And().Body("$.errors.Key[0]", Is.EqualTo("The server key already exists, please add another key"))
-            .And().Body("$.errors.Url[0]", Is.EqualTo("Required"))
-            .And().Body("$.errors.Name[0]", Is.EqualTo("StringLength"));
+            .And().Body("$.errors.Key[0]", Is.EqualTo("This server key is already in use. Please choose a different one."))
+            .And().Body("$.errors.Url[0]", Is.EqualTo("Url is required."))
+            .And().Body("$.errors.Name[0]", Is.EqualTo("Name must be at most 150 characters."));
     }
 
     [Test]

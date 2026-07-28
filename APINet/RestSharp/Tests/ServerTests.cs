@@ -76,9 +76,9 @@ public class ServerTests : TestBase
             response.Content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         await Assert.That(response.StatusCode).IsEqualTo(400);
-        await Assert.That(problem?.Errors["Key"][0]).IsEqualTo("The server key already exists, please add another key");
-        await Assert.That(problem?.Errors["Url"][0]).IsEqualTo("Required");
-        await Assert.That(problem?.Errors["Name"][0]).IsEqualTo("StringLength");
+        await Assert.That(problem?.Errors["Key"][0]).IsEqualTo("This server key is already in use. Please choose a different one.");
+        await Assert.That(problem?.Errors["Url"][0]).IsEqualTo("Url is required.");
+        await Assert.That(problem?.Errors["Name"][0]).IsEqualTo("Name must be at most 150 characters.");
     }
 
     [Test]
