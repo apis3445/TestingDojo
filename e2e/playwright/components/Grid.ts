@@ -5,16 +5,18 @@ export class Grid extends BaseComponent {
 
     columnsText: string[];
     columnSelector = 'th';
-    editButtonSelector = '[aria-label="Edit"]';
-    deleteButtonSelector = '[aria-label="Delete"]';
+    editButtonSelector: string;
+    deleteButtonSelector: string;
     rowSelector = 'tbody > tr';
     cellSelector = 'td';
     element: Locator;
 
-    constructor(page: Page, selector = 'table') {
+    constructor(page: Page, selector = 'table', editLabel = 'Edit', deleteLabel = 'Delete') {
         super(page, selector, 'table', false);
         this.columnsText = [];
         this.element = this.page.locator(selector);
+        this.editButtonSelector = `[aria-label="${editLabel}"]`;
+        this.deleteButtonSelector = `[aria-label="${deleteLabel}"]`;
     }
 
     /**

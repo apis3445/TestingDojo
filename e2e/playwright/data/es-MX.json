@@ -29,6 +29,7 @@
     "servers": {
         "title": "Servidores",
         "add": "Agregar",
+        "edit": "Editar",
         "delete": "Eliminar",
         "exportToExcel": "Excel",
         "exportToPDF": "PDF",

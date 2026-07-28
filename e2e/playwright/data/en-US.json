@@ -29,6 +29,7 @@
     "servers": {
         "title": "Servers",
         "add": "Add",
+        "edit": "Edit",
         "delete": "Delete",
         "exportToExcel": "Excel",
         "exportToPDF": "PDF",

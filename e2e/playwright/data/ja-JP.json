@@ -29,6 +29,7 @@
     "servers": {
         "title": "サーバー",
         "add": "追加",
+        "edit": "編集",
         "delete": "削除",
         "exportToExcel": "Excel",
         "exportToPDF": "PDF",

@@ -28,7 +28,7 @@ export class ServersPage extends BasePage {
         this.delete = new Button(page, this.localeInfo.servers.delete);
         this.exportToExcel = new Button(page, this.localeInfo.servers.exportToExcel);
         this.exportToPDF = new Button(page, this.localeInfo.servers.exportToPDF);
-        this.table = new Grid(page);
+        this.table = new Grid(page, undefined, this.localeInfo.servers.edit, this.localeInfo.servers.delete);
         this.confirmDialog = new ConfirmDialog(page);
         this.save = new Button(page, this.localeInfo.servers.save);
         this.cancel = new Button(page, this.localeInfo.servers.cancel);
