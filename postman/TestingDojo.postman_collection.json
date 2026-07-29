@@ -246,7 +246,7 @@
                   "listen": "test",
                   "script": {
                     "exec": [
-                      "utils.CheckRequired(\"Company\",\"Company is required.\");"
+                      "utils.CheckRequired(\"Company\");"
                     ],
                     "type": "text/javascript",
                     "packages": {},
@@ -287,7 +287,7 @@
                   "listen": "test",
                   "script": {
                     "exec": [
-                      "utils.CheckRequired(\"UserName\",\"UserName is required.\");"
+                      "utils.CheckRequired(\"UserName\");"
                     ],
                     "type": "text/javascript",
                     "packages": {},
@@ -328,7 +328,7 @@
                   "listen": "test",
                   "script": {
                     "exec": [
-                      "utils.CheckRequired(\"Password\", \"Password is required.\");"
+                      "utils.CheckRequired(\"Password\");"
                     ],
                     "type": "text/javascript",
                     "packages": {},
@@ -1056,7 +1056,7 @@
           "response": []
         },
         {
-          "name": "Server_WithValidKey_ReturnsServerInfo Copy",
+          "name": "Server_WithInValidKey_Returns404",
           "event": [
             {
               "listen": "test",
@@ -1142,17 +1142,17 @@
                   "const errors = response.errors;",
                   "const expectedServerDuplicatedError = \"This server key is already in use. Please choose a different one.\"",
                   "pm.test(\"Contains server key duplicated error\", function() {",
-                  "    pm.expect(errors[\"Key\"][0]).to.eql(expectedServerDuplicatedError)",
+                  "   utils.CheckErrorMessage(\"Key\", expectedServerDuplicatedError)",
                   "})",
                   "",
                   "const expectedRequiredUrl = \"Url is required.\"",
                   "pm.test(\"Contains require url error\", function() {",
-                  "    pm.expect(errors[\"Url\"][0]).to.eql(expectedRequiredUrl)",
+                  "    utils.CheckErrorMessage(\"Url\", expectedRequiredUrl)",
                   "})",
                   "",
                   "const expectedNameLength = \"Name must be at most 150 characters.\"",
                   "pm.test(\"Contains a name length error url error\", function() {",
-                  "    pm.expect(errors[\"Name\"][0]).to.eql(expectedNameLength)",
+                  "    utils.CheckErrorMessage(\"Name\", expectedNameLength)",
                   "})"
                 ],
                 "type": "text/javascript",
@@ -1239,7 +1239,9 @@
                 "exec": [
                   "const randomName = pm.variables.replaceIn('{{$randomProductName}}');",
                   "const randomUrl = pm.variables.replaceIn('{{$randomUrl}}');",
-                  "const randomKey =  _.random(2, 999); ",
+                  "const min = 2;",
+                  "const max = 999;",
+                  "const randomKey = Math.floor(Math.random() * (max - min + 1)) + min;",
                   "",
                   "pm.collectionVariables.set(\"serverKey\", randomKey);",
                   "pm.collectionVariables.set(\"serverName\", randomName);",
@@ -1306,28 +1308,21 @@
             {
               "listen": "test",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "utils.Status400();",
                   "",
-                  "const errorMessage = 'The id in the route does not match the id in the payload.'",
-                  "pm.test(\"Response body contains \" + errorMessage, function () {",
-                  "    pm.expect(pm.response.text()).to.include(errorMessage);",
-                  "});"
-                ]
+                  "const errorMessage = 'Key must be between 1 and 999999.'",
+                  "utils.CheckErrorMessage(\"Key\", errorMessage)"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             },
             {
               "listen": "prerequest",
               "script": {
                 "exec": [
-                  "const randomName = pm.variables.replaceIn('{{$randomProductName}}');",
-                  "const randomUrl = pm.variables.replaceIn('{{$randomUrl}}');",
-                  "const randomKey =  _.random(2, 999); ",
-                  "",
-                  "pm.collectionVariables.set(\"serverKey\", randomKey);",
-                  "pm.collectionVariables.set(\"serverName\", randomName);",
-                  "pm.collectionVariables.set(\"serverUrl\", randomUrl);",
                   ""
                 ],
                 "type": "text/javascript",
@@ -1353,11 +1348,16 @@
                 "key": "Accept-Language",
                 "value": "{{language}}",
                 "type": "text"
+              },
+              {
+                "key": "X-UI-Lang",
+                "value": "en",
+                "type": "text"
               }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"Id\": {{serverId}},\n    \"Key\": {{serverKey}},\n    \"Name\": \"{{serverName}}\",\n    \"Url\": \"{{serverUrl}}\",\n    \"Active\": true\n}",
+              "raw": "{\n    \"Id\": 1,\n    \"Key\": 0,\n    \"Name\": \"server\",\n    \"Url\": \"url\",\n    \"Active\": true\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1365,14 +1365,14 @@
               }
             },
             "url": {
-              "raw": "{{AuthAPI}}/api/Server/0",
+              "raw": "{{AuthAPI}}/api/Server/1",
               "host": [
                 "{{AuthAPI}}"
               ],
               "path": [
                 "api",
                 "Server",
-                "0"
+                "1"
               ]
             }
           },
@@ -1384,23 +1384,18 @@
             {
               "listen": "test",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "utils.StatusOk();"
-                ]
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             },
             {
               "listen": "prerequest",
               "script": {
                 "exec": [
-                  "const randomName = pm.variables.replaceIn('{{$randomProductName}}');",
-                  "const randomUrl = pm.variables.replaceIn('{{$randomUrl}}');",
-                  "const randomKey =  _.random(2, 999); ",
-                  "",
-                  "pm.collectionVariables.set(\"serverKey\", randomKey);",
-                  "pm.collectionVariables.set(\"serverName\", randomName);",
-                  "pm.collectionVariables.set(\"serverUrl\", randomUrl);",
                   ""
                 ],
                 "type": "text/javascript",
@@ -1428,15 +1423,6 @@
                 "type": "text"
               }
             ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n        \"Key\": {{serverKey}},\n        \"Name\": \"{{serverName}}\",\n        \"Url\": \"{{serverUrl}}\",\n        \"Active\": true\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
             "url": {
               "raw": "{{AuthAPI}}/api/Server/:serverId",
               "host": [
@@ -1463,23 +1449,18 @@
             {
               "listen": "test",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "utils.Status404();"
-                ]
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             },
             {
               "listen": "prerequest",
               "script": {
                 "exec": [
-                  "const randomName = pm.variables.replaceIn('{{$randomProductName}}');",
-                  "const randomUrl = pm.variables.replaceIn('{{$randomUrl}}');",
-                  "const randomKey =  _.random(2, 999); ",
-                  "",
-                  "pm.collectionVariables.set(\"serverKey\", randomKey);",
-                  "pm.collectionVariables.set(\"serverName\", randomName);",
-                  "pm.collectionVariables.set(\"serverUrl\", randomUrl);",
                   ""
                 ],
                 "type": "text/javascript",
@@ -1507,15 +1488,6 @@
                 "type": "text"
               }
             ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n        \"Key\": {{serverKey}},\n        \"Name\": \"{{serverName}}\",\n        \"Url\": \"{{serverUrl}}\",\n        \"Active\": true\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
             "url": {
               "raw": "{{AuthAPI}}/api/Server/0",
               "host": [
@@ -1857,13 +1829,23 @@
           "        pm.expect(response.length).to.be.eql(length)",
           "    });",
           "  },",
-          "  CheckRequired: function(fieldName, errorMessage) {",
-          "    pm.test(\"Error field is \" + fieldName, function () {",
-          "        const jsonData = pm.response.json();",
+          "  CheckRequired: function(fieldName) {",
+          "    const jsonData = pm.response.json();",
+          "    pm.test(\"Error field is \" + fieldName, function () {  ",
           "        pm.expect(jsonData.errors).to.have.property(fieldName);",
           "    });",
+          "   ",
           "    pm.test(fieldName + \" error message is Required\", function () {",
-          "        const jsonData = pm.response.json();",
+          "        pm.expect(jsonData.errors[fieldName][0]).to.eql(fieldName+ \" is required.\");",
+          "    });",
+          "  },",
+          "  CheckErrorMessage: function(fieldName, errorMessage) {",
+          "     const jsonData = pm.response.json();",
+          "    pm.test(\"Error field is \" + fieldName, function () {  ",
+          "        pm.expect(jsonData.errors).to.have.property(fieldName);",
+          "    });",
+          "   ",
+          "    pm.test(fieldName + \" has error message: \" + errorMessage, function () {",
           "        pm.expect(jsonData.errors[fieldName][0]).to.eql(errorMessage);",
           "    });",
           "  },",
@@ -1883,7 +1865,7 @@
       "value": ""
     },
     {
-      "key": "AccessToken",
+      "key": "server151Chars",
       "value": ""
     },
     {
@@ -1899,11 +1881,11 @@
       "value": ""
     },
     {
-      "key": "serverId",
+      "key": "AccessToken",
       "value": ""
     },
     {
-      "key": "server151Chars",
+      "key": "serverId",
       "value": ""
     }
   ]

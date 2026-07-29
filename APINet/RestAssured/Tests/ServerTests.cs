@@ -1,3 +1,4 @@
+using APINet.Data;
 using APINet.Models;
 using NHamcrest;
 using static RestAssured.Dsl;
@@ -51,7 +52,7 @@ public class ServerTests : TestBase
     [Test]
     public async Task CreateServer_WithValidInfo_Returns201()
     {
-        var newServer = RandomServer();
+        var newServer = ServerTestData.RandomServer();
 
         var response = Given()
             .Header("Authorization", $"Bearer {AuthToken}")
@@ -103,7 +104,7 @@ public class ServerTests : TestBase
     [Test]
     public async Task UpdateServer_WithValidInfo_Returns204()
     {
-        var created = CreateServer(RandomServer());
+        var created = CreateServer(ServerTestData.RandomServer());
 
         try
         {
@@ -144,7 +145,7 @@ public class ServerTests : TestBase
     [Test]
     public void UpdateServer_WithMismatchedId_Returns400()
     {
-        var created = CreateServer(RandomServer());
+        var created = CreateServer(ServerTestData.RandomServer());
 
         try
         {
@@ -175,7 +176,7 @@ public class ServerTests : TestBase
     [Test]
     public void DeleteServer_WithValidId_Returns200()
     {
-        var created = CreateServer(RandomServer());
+        var created = CreateServer(ServerTestData.RandomServer());
 
         Given()
             .Header("Authorization", $"Bearer {AuthToken}")
@@ -231,18 +232,6 @@ public class ServerTests : TestBase
             .Get($"{AuthUrl}/{ServersEndpoint}")
         .Then()
             .StatusCode(403);
-    }
-
-    private static Server RandomServer()
-    {
-        var key = Random.Shared.Next(999_000, 999_999);
-        return new Server
-        {
-            Key = key,
-            Name = $"Server {key}",
-            Url = $"https://example-{key}.contoso.com",
-            Active = true
-        };
     }
 
     private static Server CreateServer(Server server)
