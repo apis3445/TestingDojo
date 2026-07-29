@@ -1142,17 +1142,17 @@
                   "const errors = response.errors;",
                   "const expectedServerDuplicatedError = \"This server key is already in use. Please choose a different one.\"",
                   "pm.test(\"Contains server key duplicated error\", function() {",
-                  "   utils.CheckErroMessage(\"Key\", expectedServerDuplicatedError)",
+                  "   utils.CheckErrorMessage(\"Key\", expectedServerDuplicatedError)",
                   "})",
                   "",
                   "const expectedRequiredUrl = \"Url is required.\"",
                   "pm.test(\"Contains require url error\", function() {",
-                  "    utils.CheckErroMessage(\"Url\", expectedRequiredUrl)",
+                  "    utils.CheckErrorMessage(\"Url\", expectedRequiredUrl)",
                   "})",
                   "",
                   "const expectedNameLength = \"Name must be at most 150 characters.\"",
                   "pm.test(\"Contains a name length error url error\", function() {",
-                  "    utils.CheckErroMessage(\"Name\", expectedNameLength)",
+                  "    utils.CheckErrorMessage(\"Name\", expectedNameLength)",
                   "})"
                 ],
                 "type": "text/javascript",
@@ -1312,7 +1312,7 @@
                   "utils.Status400();",
                   "",
                   "const errorMessage = 'Key must be between 1 and 999999.'",
-                  ""
+                  "utils.CheckErrorMessage(\"Key\", errorMessage)"
                 ],
                 "type": "text/javascript",
                 "packages": {},
@@ -1880,7 +1880,7 @@
           "        pm.expect(jsonData.errors[fieldName][0]).to.eql(fieldName+ \" is required.\");",
           "    });",
           "  },",
-          "  CheckErroMessage: function(fieldName, errorMessage) {",
+          "  CheckErrorMessage: function(fieldName, errorMessage) {",
           "     const jsonData = pm.response.json();",
           "    pm.test(\"Error field is \" + fieldName, function () {  ",
           "        pm.expect(jsonData.errors).to.have.property(fieldName);",
@@ -1919,6 +1919,10 @@
     },
     {
       "key": "serverUrl",
+      "value": ""
+    },
+    {
+      "key": "AccessToken",
       "value": ""
     },
     {
