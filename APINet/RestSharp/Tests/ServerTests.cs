@@ -1,3 +1,4 @@
+using APINet.Data;
 using APINet.Models;
 using System.Text.Json;
 
@@ -40,7 +41,7 @@ public class ServerTests : TestBase
     public async Task CreateServer_WithValidInfo_Returns201()
     {
         var client = ApiClient.Create(Configuration, AuthToken, useAuthUrl: true);
-        var newServer = RandomServer();
+        var newServer = ServerTestData.RandomServer();
 
         var response = await client.PostAsync<Server>("/api/Server", newServer);
 
@@ -85,7 +86,7 @@ public class ServerTests : TestBase
     public async Task UpdateServer_WithValidInfo_Returns204()
     {
         var client = ApiClient.Create(Configuration, AuthToken, useAuthUrl: true);
-        var created = await CreateServerAsync(client, RandomServer());
+        var created = await CreateServerAsync(client, ServerTestData.RandomServer());
 
         try
         {
@@ -116,7 +117,7 @@ public class ServerTests : TestBase
     public async Task UpdateServer_WithMismatchedId_Returns400()
     {
         var client = ApiClient.Create(Configuration, AuthToken, useAuthUrl: true);
-        var created = await CreateServerAsync(client, RandomServer());
+        var created = await CreateServerAsync(client, ServerTestData.RandomServer());
 
         try
         {
@@ -142,7 +143,7 @@ public class ServerTests : TestBase
     public async Task DeleteServer_WithValidId_Returns200()
     {
         var client = ApiClient.Create(Configuration, AuthToken, useAuthUrl: true);
-        var created = await CreateServerAsync(client, RandomServer());
+        var created = await CreateServerAsync(client, ServerTestData.RandomServer());
 
         var response = await client.DeleteAsync($"/api/Server/{created.Id}");
 
@@ -183,18 +184,6 @@ public class ServerTests : TestBase
         var response = await client.GetAsync("/api/Server");
 
         await Assert.That(response.StatusCode).IsEqualTo(403);
-    }
-
-    private static Server RandomServer()
-    {
-        var key = Random.Shared.Next(999_000, 999_999);
-        return new Server
-        {
-            Key = key,
-            Name = $"Server {key}",
-            Url = $"https://example-{key}.contoso.com",
-            Active = true
-        };
     }
 
     private static async Task<Server> CreateServerAsync(ApiClient client, Server server)
