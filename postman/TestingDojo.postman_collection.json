@@ -1323,15 +1323,6 @@
               "listen": "prerequest",
               "script": {
                 "exec": [
-                  "const _ = require('lodash');",
-                  "",
-                  "const randomName = pm.variables.replaceIn('{{$randomProductName}}');",
-                  "const randomUrl = pm.variables.replaceIn('{{$randomUrl}}');",
-                  "const randomKey =  _.random(2, 999); ",
-                  "",
-                  "pm.collectionVariables.set(\"serverKey\", randomKey);",
-                  "pm.collectionVariables.set(\"serverName\", randomName);",
-                  "pm.collectionVariables.set(\"serverUrl\", randomUrl);",
                   ""
                 ],
                 "type": "text/javascript",
@@ -1366,7 +1357,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"Id\": 1,\n    \"Key\": 0,\n    \"Name\": \"{{serverName}}\",\n    \"Url\": \"{{serverUrl}}\",\n    \"Active\": true\n}",
+              "raw": "{\n    \"Id\": 1,\n    \"Key\": 0,\n    \"Name\": \"server\",\n    \"Url\": \"url\",\n    \"Active\": true\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1405,13 +1396,6 @@
               "listen": "prerequest",
               "script": {
                 "exec": [
-                  "const randomName = pm.variables.replaceIn('{{$randomProductName}}');",
-                  "const randomUrl = pm.variables.replaceIn('{{$randomUrl}}');",
-                  "const randomKey =  _.random(2, 999); ",
-                  "",
-                  "pm.collectionVariables.set(\"serverKey\", randomKey);",
-                  "pm.collectionVariables.set(\"serverName\", randomName);",
-                  "pm.collectionVariables.set(\"serverUrl\", randomUrl);",
                   ""
                 ],
                 "type": "text/javascript",
@@ -1439,15 +1423,6 @@
                 "type": "text"
               }
             ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n        \"Key\": {{serverKey}},\n        \"Name\": \"{{serverName}}\",\n        \"Url\": \"{{serverUrl}}\",\n        \"Active\": true\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
             "url": {
               "raw": "{{AuthAPI}}/api/Server/:serverId",
               "host": [
@@ -1486,13 +1461,6 @@
               "listen": "prerequest",
               "script": {
                 "exec": [
-                  "const randomName = pm.variables.replaceIn('{{$randomProductName}}');",
-                  "const randomUrl = pm.variables.replaceIn('{{$randomUrl}}');",
-                  "const randomKey =  _.random(2, 999); ",
-                  "",
-                  "pm.collectionVariables.set(\"serverKey\", randomKey);",
-                  "pm.collectionVariables.set(\"serverName\", randomName);",
-                  "pm.collectionVariables.set(\"serverUrl\", randomUrl);",
                   ""
                 ],
                 "type": "text/javascript",
@@ -1520,15 +1488,6 @@
                 "type": "text"
               }
             ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n        \"Key\": {{serverKey}},\n        \"Name\": \"{{serverName}}\",\n        \"Url\": \"{{serverUrl}}\",\n        \"Active\": true\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
             "url": {
               "raw": "{{AuthAPI}}/api/Server/0",
               "host": [
