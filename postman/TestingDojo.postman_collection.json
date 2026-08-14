@@ -1543,7 +1543,6 @@
               "    } else {",
               "        const jsonData = response.json();",
               "        pm.collectionVariables.set(\"AccessTokenAdmin\", jsonData.AccessToken);",
-              "        console.log(\"AccessTokenAdmin set successfully\");",
               "    }",
               "});"
             ]
@@ -2197,7 +2196,6 @@
               "    } else {",
               "        const jsonData = response.json();",
               "        pm.environment.set(\"AccessToken\", jsonData.AccessToken);",
-              "        console.log(\"AccessToken set successfully\");",
               "    }",
               "});"
             ]
@@ -2237,15 +2235,17 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "// Zod schema validation",
-                  "const { z } = pm.require('npm:zod');",
+                  "// JSON schema validation",
+                  "const itemSchema = {",
+                  "    type: \"object\",",
+                  "    required: [\"Amount\", \"AverageDaysPastDue\"],",
+                  "    properties: {",
+                  "        Amount: { type: \"number\" },",
+                  "        AverageDaysPastDue: { type: \"number\" }",
+                  "    }",
+                  "};",
                   "",
-                  "const itemSchema = z.object({",
-                  "    Amount: z.number(),",
-                  "    AverageDaysPastDue: z.number()",
-                  "});",
-                  "",
-                  "utils.CheckZodSchema(itemSchema);",
+                  "utils.CheckJsonSchema(itemSchema);",
                   "",
                   "const response = pm.response.json()",
                   "const totalAmount = response.Amount;",
@@ -2263,11 +2263,7 @@
                   ""
                 ],
                 "type": "text/javascript",
-                "packages": {
-                  "npm:zod": {
-                    "id": "npm:zod"
-                  }
-                },
+                "packages": {},
                 "requests": {}
               }
             }
@@ -2373,17 +2369,19 @@
                 "exec": [
                   "utils.CheckLength(5)",
                   "",
-                  "// Zod schema validation",
-                  "const { z } = pm.require('npm:zod');",
+                  "// JSON schema validation",
+                  "const itemSchema = {",
+                  "    type: \"object\",",
+                  "    required: [\"ClientId\", \"Client\", \"Total\", \"DaysOverdue\"],",
+                  "    properties: {",
+                  "        ClientId: { type: \"number\" },",
+                  "        Client: { type: \"string\" },",
+                  "        Total: { type: \"number\" },",
+                  "        DaysOverdue: { type: \"number\" }",
+                  "    }",
+                  "};",
                   "",
-                  "const itemSchema = z.object({",
-                  "    ClientId: z.number(),",
-                  "    Client: z.string(),",
-                  "    Total: z.number(),",
-                  "    DaysOverdue: z.number()",
-                  "});",
-                  "",
-                  "utils.CheckArrayZodSchema(itemSchema);",
+                  "utils.CheckArrayJsonSchema(itemSchema);",
                   "",
                   "var template = `",
                   "<canvas id=\"myChart\" height=\"200\"></canvas>",
@@ -2430,11 +2428,7 @@
                   "pm.collectionVariables.set(\"Total\",response[0].Total);"
                 ],
                 "type": "text/javascript",
-                "packages": {
-                  "npm:zod": {
-                    "id": "npm:zod"
-                  }
-                },
+                "packages": {},
                 "requests": {}
               }
             }
@@ -2465,24 +2459,26 @@
                 "exec": [
                   "utils.ArrayAbove0('Invoices')",
                   "",
-                  "const { z } = pm.require('npm:zod');",
+                  "const itemSchema = {",
+                  "    type: \"object\",",
+                  "    required: [\"InvoiceId\", \"InvoiceDate\", \"ClientName\", \"Type\", \"Balance\", \"Paid\", \"DueDate\", \"DaysOverdue\", \"ClientId\", \"Total\", \"InvoiceNumber\", \"LastPaymentDate\"],",
+                  "    properties: {",
+                  "        InvoiceId: { type: \"integer\" },",
+                  "        InvoiceDate: { type: \"string\" },",
+                  "        ClientName: { type: \"string\" },",
+                  "        Type: { type: \"string\" },",
+                  "        Balance: { type: \"number\" },",
+                  "        Paid: { type: \"number\" },",
+                  "        DueDate: { type: \"string\" },",
+                  "        DaysOverdue: { type: \"integer\" },",
+                  "        ClientId: { type: \"integer\" },",
+                  "        Total: { type: \"number\" },",
+                  "        InvoiceNumber: { type: \"string\" },",
+                  "        LastPaymentDate: { type: [\"string\", \"null\"] }",
+                  "    }",
+                  "};",
                   "",
-                  "const itemSchema = z.object({",
-                  "    InvoiceId: z.number().int(),",
-                  "    InvoiceDate: z.string().datetime({ offset: true }),",
-                  "    ClientName: z.string(),",
-                  "    Type: z.string(),",
-                  "    Balance: z.number(),",
-                  "    Paid: z.number(),",
-                  "    DueDate: z.string().datetime({ offset: true }),",
-                  "    DaysOverdue: z.number().int(),",
-                  "    ClientId: z.number().int(),",
-                  "    Total: z.number(),",
-                  "    InvoiceNumber: z.string(),",
-                  "    LastPaymentDate: z.string().datetime({ offset: true }).nullable()",
-                  "});",
-                  "",
-                  "utils.CheckArrayZodSchema(itemSchema);",
+                  "utils.CheckArrayJsonSchema(itemSchema);",
                   "",
                   "const response = pm.response.json();",
                   "",
@@ -2495,11 +2491,7 @@
                   "});"
                 ],
                 "type": "text/javascript",
-                "packages": {
-                  "npm:zod": {
-                    "id": "npm:zod"
-                  }
-                },
+                "packages": {},
                 "requests": {}
               }
             }
@@ -2542,17 +2534,19 @@
                 "exec": [
                   "utils.CheckLength(5)",
                   "",
-                  "// Zod schema validation",
-                  "const { z } = pm.require('npm:zod');",
+                  "// JSON schema validation",
+                  "const itemSchema = {",
+                  "    type: \"object\",",
+                  "    required: [\"ClientId\", \"Client\", \"Total\", \"DaysOverdue\"],",
+                  "    properties: {",
+                  "        ClientId: { type: \"number\" },",
+                  "        Client: { type: \"string\" },",
+                  "        Total: { type: \"number\" },",
+                  "        DaysOverdue: { type: \"number\" }",
+                  "    }",
+                  "};",
                   "",
-                  "const itemSchema = z.object({",
-                  "    ClientId: z.number(),",
-                  "    Client: z.string(),",
-                  "    Total: z.number(),",
-                  "    DaysOverdue: z.number()",
-                  "});",
-                  "",
-                  "utils.CheckArrayZodSchema(itemSchema);",
+                  "utils.CheckArrayJsonSchema(itemSchema);",
                   "",
                   "var template = `",
                   "<canvas id=\"myChart\" height=\"200\"></canvas>",
@@ -2587,11 +2581,7 @@
                   "});"
                 ],
                 "type": "text/javascript",
-                "packages": {
-                  "npm:zod": {
-                    "id": "npm:zod"
-                  }
-                },
+                "packages": {},
                 "requests": {}
               }
             }
@@ -2634,19 +2624,21 @@
                 "exec": [
                   "utils.CheckLength(5)",
                   "",
-                  "// Zod schema validation",
-                  "const { z } = pm.require('npm:zod');",
+                  "// JSON schema validation",
+                  "const itemSchema = {",
+                  "    type: \"object\",",
+                  "    required: [\"ClientId\", \"ClientName\", \"NextToExpire\", \"Limit1\", \"Limit2\", \"Limit3\"],",
+                  "    properties: {",
+                  "        ClientId: { type: \"number\" },",
+                  "        ClientName: { type: \"string\" },",
+                  "        NextToExpire: { type: \"number\" },",
+                  "        Limit1: { type: \"number\" },",
+                  "        Limit2: { type: \"number\" },",
+                  "        Limit3: { type: \"number\" }",
+                  "    }",
+                  "};",
                   "",
-                  "const itemSchema = z.object({",
-                  "    ClientId: z.number(),",
-                  "    ClientName: z.string(),",
-                  "    NextToExpire: z.number(),",
-                  "    Limit1: z.number(),",
-                  "    Limit2: z.number(),",
-                  "    Limit3: z.number()",
-                  "});",
-                  "",
-                  "utils.CheckArrayZodSchema(itemSchema);",
+                  "utils.CheckArrayJsonSchema(itemSchema);",
                   "",
                   "var template = `",
                   "<div style=\"width:100%;height:350px;padding:10px;box-sizing:border-box;\">",
@@ -2684,11 +2676,7 @@
                   "});"
                 ],
                 "type": "text/javascript",
-                "packages": {
-                  "npm:zod": {
-                    "id": "npm:zod"
-                  }
-                },
+                "packages": {},
                 "requests": {}
               }
             }
@@ -2720,24 +2708,22 @@
                 "exec": [
                   "utils.CheckLengthLessOrEqual(10);",
                   "",
-                  "// Zod schema validation",
-                  "const { z } = pm.require('npm:zod');",
+                  "// JSON schema validation",
+                  "const itemSchema = {",
+                  "    type: \"object\",",
+                  "    required: [\"ClientId\", \"Client\", \"Total\", \"DaysOverdue\"],",
+                  "    properties: {",
+                  "        ClientId: { type: \"number\" },",
+                  "        Client: { type: \"string\" },",
+                  "        Total: { type: \"number\" },",
+                  "        DaysOverdue: { type: \"number\" }",
+                  "    }",
+                  "};",
                   "",
-                  "const itemSchema = z.object({",
-                  "    ClientId: z.number(),",
-                  "    Client: z.string(),",
-                  "    Total: z.number(),",
-                  "    DaysOverdue: z.number()",
-                  "});",
-                  "",
-                  "utils.CheckArrayZodSchema(itemSchema);"
+                  "utils.CheckArrayJsonSchema(itemSchema);"
                 ],
                 "type": "text/javascript",
-                "packages": {
-                  "npm:zod": {
-                    "id": "npm:zod"
-                  }
-                },
+                "packages": {},
                 "requests": {}
               }
             }
@@ -2768,24 +2754,22 @@
                 "exec": [
                   "utils.CheckLengthLessOrEqual(10);",
                   "",
-                  "// Zod schema validation",
-                  "const { z } = pm.require('npm:zod');",
+                  "// JSON schema validation",
+                  "const itemSchema = {",
+                  "    type: \"object\",",
+                  "    required: [\"ClientId\", \"Client\", \"Total\", \"DaysOverdue\"],",
+                  "    properties: {",
+                  "        ClientId: { type: \"number\" },",
+                  "        Client: { type: \"string\" },",
+                  "        Total: { type: \"number\" },",
+                  "        DaysOverdue: { type: \"number\" }",
+                  "    }",
+                  "};",
                   "",
-                  "const itemSchema = z.object({",
-                  "    ClientId: z.number(),",
-                  "    Client: z.string(),",
-                  "    Total: z.number(),",
-                  "    DaysOverdue: z.number()",
-                  "});",
-                  "",
-                  "utils.CheckArrayZodSchema(itemSchema);"
+                  "utils.CheckArrayJsonSchema(itemSchema);"
                 ],
                 "type": "text/javascript",
-                "packages": {
-                  "npm:zod": {
-                    "id": "npm:zod"
-                  }
-                },
+                "packages": {},
                 "requests": {}
               }
             }
@@ -2816,24 +2800,22 @@
                 "exec": [
                   "utils.CheckLengthLessOrEqual(10);",
                   "",
-                  "// Zod schema validation",
-                  "const { z } = pm.require('npm:zod');",
+                  "// JSON schema validation",
+                  "const itemSchema = {",
+                  "    type: \"object\",",
+                  "    required: [\"ClientId\", \"Client\", \"Total\", \"DaysOverdue\"],",
+                  "    properties: {",
+                  "        ClientId: { type: \"number\" },",
+                  "        Client: { type: \"string\" },",
+                  "        Total: { type: \"number\" },",
+                  "        DaysOverdue: { type: \"number\" }",
+                  "    }",
+                  "};",
                   "",
-                  "const itemSchema = z.object({",
-                  "    ClientId: z.number(),",
-                  "    Client: z.string(),",
-                  "    Total: z.number(),",
-                  "    DaysOverdue: z.number()",
-                  "});",
-                  "",
-                  "utils.CheckArrayZodSchema(itemSchema);"
+                  "utils.CheckArrayJsonSchema(itemSchema);"
                 ],
                 "type": "text/javascript",
-                "packages": {
-                  "npm:zod": {
-                    "id": "npm:zod"
-                  }
-                },
+                "packages": {},
                 "requests": {}
               }
             }
@@ -2864,24 +2846,22 @@
                 "exec": [
                   "utils.CheckLengthLessOrEqual(10);",
                   "",
-                  "// Zod schema validation",
-                  "const { z } = pm.require('npm:zod');",
+                  "// JSON schema validation",
+                  "const itemSchema = {",
+                  "    type: \"object\",",
+                  "    required: [\"ClientId\", \"Client\", \"Total\", \"DaysOverdue\"],",
+                  "    properties: {",
+                  "        ClientId: { type: \"number\" },",
+                  "        Client: { type: \"string\" },",
+                  "        Total: { type: \"number\" },",
+                  "        DaysOverdue: { type: \"number\" }",
+                  "    }",
+                  "};",
                   "",
-                  "const itemSchema = z.object({",
-                  "    ClientId: z.number(),",
-                  "    Client: z.string(),",
-                  "    Total: z.number(),",
-                  "    DaysOverdue: z.number()",
-                  "});",
-                  "",
-                  "utils.CheckArrayZodSchema(itemSchema);"
+                  "utils.CheckArrayJsonSchema(itemSchema);"
                 ],
                 "type": "text/javascript",
-                "packages": {
-                  "npm:zod": {
-                    "id": "npm:zod"
-                  }
-                },
+                "packages": {},
                 "requests": {}
               }
             }
@@ -2980,11 +2960,7 @@
       "listen": "test",
       "script": {
         "type": "text/javascript",
-        "packages": {
-          "npm:zod": {
-            "id": "npm:zod"
-          }
-        },
+        "packages": {},
         "requests": {},
         "exec": [
           "utils = {",
@@ -3069,39 +3045,18 @@
           "        pm.expect(pm.response.responseTime).to.be.below(minSeconds * 1000)",
           "    })",
           "  },",
-          "  CheckZodSchema: function(itemSchema) {",
-          "    const response = pm.response.json();",
-          "",
-          "    // Validate data safely",
-          "    const validation = itemSchema.safeParse(response);",
-          "",
-          "    pm.test(\"Response matches Zod schema\", () => {",
-          "        pm.expect(validation.success).to.be.true;",
+          "  CheckJsonSchema: function(itemSchema) {",
+          "    pm.test(\"Response matches JSON schema\", function() {",
+          "        pm.response.to.have.jsonSchema(itemSchema);",
           "    });",
-          "",
-          "    // Log helpful details if validation fails",
-          "    if (!validation.success) {",
-          "        console.error(\"Zod Validation Failures:\", JSON.stringify(validation.error.format(), null, 2));",
-          "    }",
           "  },",
-          "  CheckArrayZodSchema: function(itemSchema) {",
-          "    const { z } = pm.require('npm:zod');",
-          "    // Wrap in z.array so the whole response array is validated",
-          "    const responseSchema = z.array(itemSchema);",
+          "  CheckArrayJsonSchema: function(itemSchema) {",
+          "    // Wrap in an array schema so the whole response array is validated",
+          "    const responseSchema = { type: \"array\", items: itemSchema };",
           "",
-          "    const response = pm.response.json();",
-          "",
-          "    // Validate data safely",
-          "    const validation = responseSchema.safeParse(response);",
-          "",
-          "    pm.test(\"Response matches Zod schema\", () => {",
-          "        pm.expect(validation.success).to.be.true;",
+          "    pm.test(\"Response matches JSON schema\", function() {",
+          "        pm.response.to.have.jsonSchema(responseSchema);",
           "    });",
-          "",
-          "    // Log helpful details if validation fails",
-          "    if (!validation.success) {",
-          "        console.error(\"Zod Validation Failures:\", JSON.stringify(validation.error.format(), null, 2));",
-          "    }",
           "  }",
           "};"
         ]

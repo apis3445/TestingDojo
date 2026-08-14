@@ -22,6 +22,13 @@ export class VisualHelper {
         });
     }
 
+    /**
+     * Check element snapshot
+     * @param element Element to check the snapshot
+     * @param snapshotName Name of the snapshot
+     * @param timeout Max timeout
+     * @param maxDiffPixels Max number of differing pixels allowed
+     */
     async checkElementSnapshot(element: Locator, snapshotName: string, timeout = 5_000, maxDiffPixels = 100) {
         const stepDescription = 'Compare snapshot: ' + snapshotName + ' with maxDiffPixels: ' + maxDiffPixels;
         await test.step(stepDescription, async () => {
