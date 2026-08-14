@@ -1,11 +1,11 @@
 import { Page, test, expect } from '@playwright/test';
 import { Menu } from '../components/Menu';
+import { Alert } from '../components/Alert';
+import { ConfirmDialog } from '../components/ConfirmDialog';
 import enUS from '../data/en-US.json';
 import esMX from '../data/es-MX.json';
 import deDE from '../data/de-DE.json';
 import jaJP from '../data/ja-JP.json';
-import { Alert } from '../components/Alert';
-import { ConfirmDialog } from '../components/ConfirmDialog';
 
 export type Role = 'admin' | 'normal';
 export type LocaleData = typeof enUS;
@@ -23,12 +23,13 @@ export class BasePage {
 
     public menu: Menu;
     public localeInfo: LocaleData;
+    public locale: string;
     public screencastOverlay = false;
     protected baseURL: string;
+    protected apiURL: string;
     public message: Alert;
     public confirmDialog: ConfirmDialog;
     
-
     /**
      * @param page - Playwright Page instance injected by the test fixture.
      * @param keyPage - Logical name for this page (e.g. `'Login'`, `'Dashboard'`). Used for step descriptions in the HTML report.
@@ -37,6 +38,8 @@ export class BasePage {
      */
     constructor(protected readonly page: Page, public readonly keyPage: string, locale = process.env.LOCALE ?? 'en-US') {
         this.baseURL = process.env.BASE_URL ?? ''; // Read from .env (local) or CI environment variable — never hardcoded
+        this.apiURL = process.env.API_URL ?? ''; // Read from .env (local) or CI environment variable — never hardcoded
+        this.locale = locale;
         this.localeInfo = locales[locale] ?? enUS; // Loads the JSON file for the active locale; defaults to English if unknown
         this.menu = new Menu(page);
         this.message = new Alert(page, 'Success message');

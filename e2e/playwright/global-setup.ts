@@ -17,8 +17,7 @@ async function globalSetup() {
     if (process.env.IS_AGENT) {
         return;
     }
-
-
+    
     await fs.mkdir(authFolder, { recursive: true });
 
     const browser = await chromium.launch();

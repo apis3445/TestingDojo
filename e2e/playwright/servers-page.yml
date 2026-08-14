@@ -1,0 +1,266 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e6]: This is a dummy website for Testing Practice
+    - text:  
+  - complementary [ref=e7]:
+    - generic [ref=e8]:
+      - link "Abi's Testing Dojo" [ref=e9] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e10]: 
+        - generic [ref=e11]: Abi's Testing Dojo
+      - button "Toggle sidebar" [ref=e12] [cursor=pointer]:
+        - generic [ref=e13]: 
+    - navigation "Main navigation" [ref=e14]:
+      - list [ref=e15]:
+        - listitem [ref=e16]:
+          - button " Accounts Receivable " [ref=e18] [cursor=pointer]:
+            - generic [ref=e19]: 
+            - generic [ref=e20]: Accounts Receivable
+            - generic [ref=e21]: 
+        - listitem [ref=e22]:
+          - button " Security " [ref=e24] [cursor=pointer]:
+            - generic [ref=e25]: 
+            - generic [ref=e26]: Security
+            - generic [ref=e27]: 
+        - listitem [ref=e28]:
+          - button " Config " [ref=e30] [cursor=pointer]:
+            - generic [ref=e31]: 
+            - generic [ref=e32]: Config
+            - generic [ref=e33]: 
+    - button "User menu" [ref=e36] [cursor=pointer]:
+      - generic [ref=e38]: 
+      - generic [ref=e39]: Northwind
+      - generic [ref=e40]: 
+  - main [ref=e41]:
+    - generic [ref=e42]:
+      - navigation "breadcrumb" [ref=e44]:
+        - list [ref=e45]:
+          - listitem [ref=e46]:
+            - link "Security" [ref=e48] [cursor=pointer]:
+              - /url: /security/servers
+            - text: ">"
+          - listitem [ref=e49]:
+            - generic [ref=e51]: Servers
+      - combobox "Language" [ref=e53] [cursor=pointer]:
+        - generic:
+          - generic: 🇺🇸
+          - generic: English
+        - generic: 
+    - generic [ref=e55]:
+      - heading "Servers" [level=1] [ref=e57]
+      - generic [ref=e58]:
+        - generic [ref=e61]:
+          - generic [ref=e63]:
+            - generic: 
+            - textbox "Search..." [ref=e64]
+          - generic [ref=e66]:
+            - button "+ Add New" [ref=e67] [cursor=pointer]:
+              - generic [ref=e68]: +
+              - generic [ref=e69]: Add New
+            - button " Excel" [ref=e70] [cursor=pointer]:
+              - generic [ref=e71]: 
+              - generic [ref=e72]: Excel
+            - button " PDF" [ref=e73] [cursor=pointer]:
+              - generic [ref=e74]: 
+              - generic [ref=e75]: PDF
+        - generic [ref=e76]:
+          - table [ref=e78]:
+            - rowgroup [ref=e79]:
+              - row "Key Name URL Active Actions" [ref=e80]:
+                - columnheader "Key" [ref=e81] [cursor=pointer]:
+                  - generic [ref=e83]: Key
+                - columnheader "Name" [ref=e84] [cursor=pointer]:
+                  - generic [ref=e86]: Name
+                - columnheader "URL" [ref=e87] [cursor=pointer]:
+                  - generic [ref=e89]: URL
+                - columnheader "Active" [ref=e90] [cursor=pointer]:
+                  - generic [ref=e92]: Active
+                - columnheader "Actions" [ref=e93]:
+                  - generic [ref=e95]: Actions
+            - rowgroup [ref=e96]:
+              - row "1 Server Demo https://abi-testing-dojo-ar-demo.azurewebsites.net/api/ Yes Edit Delete" [ref=e97]:
+                - cell "1" [ref=e98]
+                - cell "Server Demo" [ref=e99]:
+                  - link "Server Demo" [ref=e100] [cursor=pointer]:
+                    - /url: /security/servers/1/companies
+                - cell "https://abi-testing-dojo-ar-demo.azurewebsites.net/api/" [ref=e101]
+                - cell "Yes" [ref=e102]:
+                  - generic [ref=e103]:
+                    - checkbox [checked] [disabled] [ref=e104] [cursor=pointer]
+                    - generic [ref=e105]: "Yes"
+                - cell "Edit Delete" [ref=e106]:
+                  - generic [ref=e107]:
+                    - button "Edit" [ref=e108] [cursor=pointer]:
+                      - generic [ref=e109]: 
+                    - button "Delete" [ref=e110] [cursor=pointer]:
+                      - generic [ref=e111]: 
+              - row "24222 RA-Server-5654 https://example5654.contoso.com Yes Edit Delete" [ref=e112]:
+                - cell "24222" [ref=e113]
+                - cell "RA-Server-5654" [ref=e114]:
+                  - link "RA-Server-5654" [ref=e115] [cursor=pointer]:
+                    - /url: /security/servers/24222/companies
+                - cell "https://example5654.contoso.com" [ref=e116]
+                - cell "Yes" [ref=e117]:
+                  - generic [ref=e118]:
+                    - checkbox [checked] [disabled] [ref=e119] [cursor=pointer]
+                    - generic [ref=e120]: "Yes"
+                - cell "Edit Delete" [ref=e121]:
+                  - generic [ref=e122]:
+                    - button "Edit" [ref=e123] [cursor=pointer]:
+                      - generic [ref=e124]: 
+                    - button "Delete" [ref=e125] [cursor=pointer]:
+                      - generic [ref=e126]: 
+              - row "484206 RA-Server-2965 https://example2965.contoso.com Yes Edit Delete" [ref=e127]:
+                - cell "484206" [ref=e128]
+                - cell "RA-Server-2965" [ref=e129]:
+                  - link "RA-Server-2965" [ref=e130] [cursor=pointer]:
+                    - /url: /security/servers/484206/companies
+                - cell "https://example2965.contoso.com" [ref=e131]
+                - cell "Yes" [ref=e132]:
+                  - generic [ref=e133]:
+                    - checkbox [checked] [disabled] [ref=e134] [cursor=pointer]
+                    - generic [ref=e135]: "Yes"
+                - cell "Edit Delete" [ref=e136]:
+                  - generic [ref=e137]:
+                    - button "Edit" [ref=e138] [cursor=pointer]:
+                      - generic [ref=e139]: 
+                    - button "Delete" [ref=e140] [cursor=pointer]:
+                      - generic [ref=e141]: 
+              - row "509528 RA-Server-7317 https://example7317.contoso.com Yes Edit Delete" [ref=e142]:
+                - cell "509528" [ref=e143]
+                - cell "RA-Server-7317" [ref=e144]:
+                  - link "RA-Server-7317" [ref=e145] [cursor=pointer]:
+                    - /url: /security/servers/509528/companies
+                - cell "https://example7317.contoso.com" [ref=e146]
+                - cell "Yes" [ref=e147]:
+                  - generic [ref=e148]:
+                    - checkbox [checked] [disabled] [ref=e149] [cursor=pointer]
+                    - generic [ref=e150]: "Yes"
+                - cell "Edit Delete" [ref=e151]:
+                  - generic [ref=e152]:
+                    - button "Edit" [ref=e153] [cursor=pointer]:
+                      - generic [ref=e154]: 
+                    - button "Delete" [ref=e155] [cursor=pointer]:
+                      - generic [ref=e156]: 
+              - row "943573 RA-Server-9612 https://example9612.contoso.com Yes Edit Delete" [ref=e157]:
+                - cell "943573" [ref=e158]
+                - cell "RA-Server-9612" [ref=e159]:
+                  - link "RA-Server-9612" [ref=e160] [cursor=pointer]:
+                    - /url: /security/servers/943573/companies
+                - cell "https://example9612.contoso.com" [ref=e161]
+                - cell "Yes" [ref=e162]:
+                  - generic [ref=e163]:
+                    - checkbox [checked] [disabled] [ref=e164] [cursor=pointer]
+                    - generic [ref=e165]: "Yes"
+                - cell "Edit Delete" [ref=e166]:
+                  - generic [ref=e167]:
+                    - button "Edit" [ref=e168] [cursor=pointer]:
+                      - generic [ref=e169]: 
+                    - button "Delete" [ref=e170] [cursor=pointer]:
+                      - generic [ref=e171]: 
+              - row "725109 RA-Server-7130 https://example7130.contoso.com Yes Edit Delete" [ref=e172]:
+                - cell "725109" [ref=e173]
+                - cell "RA-Server-7130" [ref=e174]:
+                  - link "RA-Server-7130" [ref=e175] [cursor=pointer]:
+                    - /url: /security/servers/725109/companies
+                - cell "https://example7130.contoso.com" [ref=e176]
+                - cell "Yes" [ref=e177]:
+                  - generic [ref=e178]:
+                    - checkbox [checked] [disabled] [ref=e179] [cursor=pointer]
+                    - generic [ref=e180]: "Yes"
+                - cell "Edit Delete" [ref=e181]:
+                  - generic [ref=e182]:
+                    - button "Edit" [ref=e183] [cursor=pointer]:
+                      - generic [ref=e184]: 
+                    - button "Delete" [ref=e185] [cursor=pointer]:
+                      - generic [ref=e186]: 
+              - row "965 Refined Frozen Chair http://ariel.info Yes Edit Delete" [ref=e187]:
+                - cell "965" [ref=e188]
+                - cell "Refined Frozen Chair" [ref=e189]:
+                  - link "Refined Frozen Chair" [ref=e190] [cursor=pointer]:
+                    - /url: /security/servers/965/companies
+                - cell "http://ariel.info" [ref=e191]
+                - cell "Yes" [ref=e192]:
+                  - generic [ref=e193]:
+                    - checkbox [checked] [disabled] [ref=e194] [cursor=pointer]
+                    - generic [ref=e195]: "Yes"
+                - cell "Edit Delete" [ref=e196]:
+                  - generic [ref=e197]:
+                    - button "Edit" [ref=e198] [cursor=pointer]:
+                      - generic [ref=e199]: 
+                    - button "Delete" [ref=e200] [cursor=pointer]:
+                      - generic [ref=e201]: 
+              - row "987 Rustic Soft Pants http://buster.net Yes Edit Delete" [ref=e202]:
+                - cell "987" [ref=e203]
+                - cell "Rustic Soft Pants" [ref=e204]:
+                  - link "Rustic Soft Pants" [ref=e205] [cursor=pointer]:
+                    - /url: /security/servers/987/companies
+                - cell "http://buster.net" [ref=e206]
+                - cell "Yes" [ref=e207]:
+                  - generic [ref=e208]:
+                    - checkbox [checked] [disabled] [ref=e209] [cursor=pointer]
+                    - generic [ref=e210]: "Yes"
+                - cell "Edit Delete" [ref=e211]:
+                  - generic [ref=e212]:
+                    - button "Edit" [ref=e213] [cursor=pointer]:
+                      - generic [ref=e214]: 
+                    - button "Delete" [ref=e215] [cursor=pointer]:
+                      - generic [ref=e216]: 
+              - row "830 Licensed Frozen Hat https://ernest.org Yes Edit Delete" [ref=e217]:
+                - cell "830" [ref=e218]
+                - cell "Licensed Frozen Hat" [ref=e219]:
+                  - link "Licensed Frozen Hat" [ref=e220] [cursor=pointer]:
+                    - /url: /security/servers/830/companies
+                - cell "https://ernest.org" [ref=e221]
+                - cell "Yes" [ref=e222]:
+                  - generic [ref=e223]:
+                    - checkbox [checked] [disabled] [ref=e224] [cursor=pointer]
+                    - generic [ref=e225]: "Yes"
+                - cell "Edit Delete" [ref=e226]:
+                  - generic [ref=e227]:
+                    - button "Edit" [ref=e228] [cursor=pointer]:
+                      - generic [ref=e229]: 
+                    - button "Delete" [ref=e230] [cursor=pointer]:
+                      - generic [ref=e231]: 
+              - row "433958 RA-Server-6048 https://example6048.contoso.com Yes Edit Delete" [ref=e232]:
+                - cell "433958" [ref=e233]
+                - cell "RA-Server-6048" [ref=e234]:
+                  - link "RA-Server-6048" [ref=e235] [cursor=pointer]:
+                    - /url: /security/servers/433958/companies
+                - cell "https://example6048.contoso.com" [ref=e236]
+                - cell "Yes" [ref=e237]:
+                  - generic [ref=e238]:
+                    - checkbox [checked] [disabled] [ref=e239] [cursor=pointer]
+                    - generic [ref=e240]: "Yes"
+                - cell "Edit Delete" [ref=e241]:
+                  - generic [ref=e242]:
+                    - button "Edit" [ref=e243] [cursor=pointer]:
+                      - generic [ref=e244]: 
+                    - button "Delete" [ref=e245] [cursor=pointer]:
+                      - generic [ref=e246]: 
+          - generic [ref=e248]:
+            - generic [ref=e249]:
+              - generic [ref=e250]: Show
+              - combobox "Rows per page:" [ref=e251] [cursor=pointer]:
+                - option "10"
+                - option "20" [selected]
+                - option "50"
+                - option "100"
+              - generic [ref=e252]: per page
+              - generic [ref=e253]: Showing 1–10 of 10
+            - navigation "Pagination" [ref=e254]:
+              - generic [ref=e255]:
+                - button "First page" [disabled]:
+                  - generic: 
+                - button "Previous page" [disabled]:
+                  - generic: 
+                - button "Go to page 1" [ref=e256] [cursor=pointer]: "1"
+                - button "Next page" [disabled]:
+                  - generic: 
+                - button "Last page" [disabled]:
+                  - generic: 
+    - generic [ref=e258]:
+      - text: Made with
+      - generic [ref=e259]: 
+      - text: to practice testing by Abi
+  - generic: 

@@ -1,57 +1,25 @@
-import { Locator, Page } from '@playwright/test';
-import { BaseComponent } from './BaseComponent';
+import { Page } from '@playwright/test';
+import { Table } from './Table';
+import { Paginator } from './Paginator';
 
-export class Grid extends BaseComponent {
+export class Grid extends Table {
 
-    columnsText: string[];
-    columnSelector = 'th';
     editButtonSelector: string;
     deleteButtonSelector: string;
-    rowSelector = 'tbody > tr';
-    cellSelector = 'td';
-    element: Locator;
+    paginator: Paginator;
 
-    constructor(page: Page, selector = 'table', editLabel = 'Edit', deleteLabel = 'Delete') {
-        super(page, selector, 'table', false);
-        this.columnsText = [];
-        this.element = this.page.locator(selector);
+    constructor(
+        page: Page,
+        selector = 'table',
+        editLabel = 'Edit',
+        deleteLabel = 'Delete',
+        paginationLabel = 'Pagination',
+        nextPageLabel = 'Next page',
+    ) {
+        super(page, selector);
         this.editButtonSelector = `[aria-label="${editLabel}"]`;
         this.deleteButtonSelector = `[aria-label="${deleteLabel}"]`;
-    }
-
-    /**
-     * Get the rows of the table as an array of record <string, string>
-     * @returns The rows in the table as an array of record with the header as properties and the row data as the value
-     */
-    async getRowsValues(): Promise<Record<string, string>[]> {
-        return await this.addStep('Get all the rows in the table', async () => {
-            const rows: Record<string, string>[] = [];
-            const totalRows = await this.getTotalRows();
-            await this.getColumnsHeaders();
-
-            //Starts in 1 to exclude header
-            for (let i = 0; i < totalRows; i++) {
-                let rowValues: Record<string, string> = {};
-                const row = this.page.locator(this.rowSelector).nth(i);
-                rowValues = await this.getRowValues(row);
-                rows.push(rowValues);
-            }
-            return rows;
-        });
-    }
-
-    /**
-     * Get rows values as an object finding the row with the key column
-     * @param key Key to find the row
-     * @param keyColumnTitle Key column header title
-     * @returns 
-     */
-    async getRowValuesByKey(key: number, keyColumnTitle = 'Key') {
-        return await this.addStep(`Get the row values for the key: "${key}" in the column: "${keyColumnTitle}"`, async () => {
-            const row = await this.getRowByKey(key, keyColumnTitle);
-            const rowValues = await this.getRowValues(row);
-            return rowValues;
-        });
+        this.paginator = new Paginator(page, paginationLabel, nextPageLabel);
     }
 
     async clickInEditByKey(keyValue: number): Promise<void> {
@@ -68,69 +36,19 @@ export class Grid extends BaseComponent {
         });
     }
 
-    async getColumnsHeaders(): Promise<string[]> {
-        return await this.addStep('Get the columns headers of the table', async () => {
-            const gridColumns = await this.page.locator(this.columnSelector).allInnerTexts();
-            this.columnsText = [];
-            for (let i = 0; i < gridColumns.length; i++) {
-                const columnHeader = gridColumns[i].trim();
-                if (columnHeader != '' && columnHeader != 'Actions') {
-                    // Webkit adds '\n' so we need to remove 
-                    this.columnsText.push(columnHeader.replace(/\n/g, ''));
-                }
-            }
-            return this.columnsText;
-        });
-    }
-    async getColumnIndex(columnHeader: string): Promise<number> {
-        await this.getColumnsHeaders();
-        const idIndex = this.columnsText.indexOf(columnHeader);
-        return idIndex;
-    }
-    async getRowByColumnIndex(value: string, index: number): Promise<Locator | null> {
-        return await this.addStep(`Get the row with the value: "${value}" in the column: "${index}"`, async () => {
-            const rows = this.page.locator(this.rowSelector);
-            const totalRows = await rows.count();
-            for (let i = 0; i < totalRows; i++) {
-                const row = rows.nth(i);
-                const cellValue = await row.locator(this.cellSelector).nth(index).innerText();
-                if (cellValue == value)
-                    return row;
-            }
-            return null;
-        });
-    }
-    async getTotalRows(): Promise<number> {
-        return await this.addStep('Get total of rows in the table', async () => {
-            const totalRows = await this.page.locator(this.rowSelector).count();
-            return totalRows;
-        });
-    }
-    async getRowByKey(key: number, keyColumnTitle = 'Key'): Promise<Locator | null> {
-        return await this.addStep(`Get the row with the "${key}" in the column: "${keyColumnTitle}"`, async () => {
-            const index = await this.getColumnIndex(keyColumnTitle);
-            const row = await this.getRowByColumnIndex(key.toString(), index);
-            return row;
-        });
-    }
     /**
-     * Get row values in a object from a row
-     * @param row Row to get value
-     * @returns row values as object
+     * Get every row's values across all pages, walking the paginator forward from whatever page
+     * is currently shown, so grids with more rows than fit on one page aren't silently under-checked.
      */
-    async getRowValues(row: Locator | null) {
-        return await this.addStep('Get the row values', async () => {
-            const rowValues: Record<string, string> = {};
-            const columnValues = await row?.locator(this.cellSelector).allInnerTexts();
-            for (let i = 0; i < columnValues!.length; i++) {
-                if (columnValues) {
-                    let columnValue = columnValues[i].trim();
-                    if (columnValue != '') {
-                        rowValues[this.columnsText[i]] = columnValue;
-                    }
-                }
+    async getAllRowsValues(): Promise<Record<string, string | number>[]> {
+        return await this.addStep('Get all row values across every page', async () => {
+            const rows: Record<string, string | number>[] = [];
+            rows.push(...await this.getRowsValues());
+            while (await this.paginator.hasNextPage()) {
+                await this.paginator.goToNextPage();
+                rows.push(...await this.getRowsValues());
             }
-            return rowValues;
+            return rows;
         });
     }
 }

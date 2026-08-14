@@ -28,7 +28,14 @@ export class ServersPage extends BasePage {
         this.delete = new Button(page, this.localeInfo.servers.delete);
         this.exportToExcel = new Button(page, this.localeInfo.servers.exportToExcel);
         this.exportToPDF = new Button(page, this.localeInfo.servers.exportToPDF);
-        this.table = new Grid(page, undefined, this.localeInfo.servers.edit, this.localeInfo.servers.delete);
+        this.table = new Grid(
+            page,
+            undefined,
+            this.localeInfo.servers.edit,
+            this.localeInfo.servers.delete,
+            this.localeInfo.paginator.navigationLabel,
+            this.localeInfo.paginator.nextPage,
+        );
         this.confirmDialog = new ConfirmDialog(page);
         this.save = new Button(page, this.localeInfo.servers.save);
         this.cancel = new Button(page, this.localeInfo.servers.cancel);
@@ -70,6 +77,43 @@ export class ServersPage extends BasePage {
                 return id;
             },
         );
+    }
+
+    /**
+     * Go to the servers page and return the servers from the API response that loads it.
+     */
+    async goToServers(): Promise<Server[]> {
+        return await test.step('Get servers from API', async () => {
+            const responsePromise = this.serverApi.waitForGetServers();
+            await this.goTo();
+            const response = await responsePromise;
+            return await response.json() as Server[];
+        });
+    }
+
+    /**
+     * Check that the grid shows exactly the given servers (by Key/Name/Url/Active), across all pages.
+     * @param servers expected servers (e.g. from getServersFromApi())
+     */
+    async checkGridMatchesServers(servers: Server[]): Promise<void> {
+        await test.step('Check grid matches the servers from the API', async () => {
+            const keyHeader = this.localeInfo.servers.key;
+            const nameHeader = this.localeInfo.servers.name;
+            const urlHeader = this.localeInfo.servers.url;
+            const activeHeader = this.localeInfo.servers.active;
+            const yesLabel = this.localeInfo.servers.yes;
+            const noLabel = this.localeInfo.servers.no;
+
+            const actual = await this.table.getAllRowsValues();
+            const expected = servers.map((server) => ({
+                [keyHeader]: server.Key,
+                [nameHeader]: server.Name,
+                [urlHeader]: server.Url,
+                [activeHeader]: server.Active ? yesLabel : noLabel,
+            }));
+
+            expect(actual, 'Grid rows should match the servers returned by the API').toStrictEqual(expected);
+        });
     }
 
     /**

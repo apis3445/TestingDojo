@@ -87,13 +87,17 @@ export class ApiHelper {
      * @param description Description for the HTML reporter
      * @param url API URL to mock
      * @param jsonData JSON that will be returned
+     * @param status HTTP status code to return (defaults to 200)
      */
-    async mockApi(description: string, url: string, jsonData: any) {
+    async mockApi(description: string, url: string, jsonData: any, status = 200) {
         await test.step(description, async () => {
             await this.page.route(`**${url}`, async route => {
-                await route.fulfill({ body: JSON.stringify(jsonData) });
+                await route.fulfill({
+                    status: status,
+                    contentType: 'application/json',
+                    body: JSON.stringify(jsonData),
+                });
             });
         });
     }
-
 } 

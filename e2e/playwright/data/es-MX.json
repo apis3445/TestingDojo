@@ -31,6 +31,9 @@
         "key": "Clave",
         "name": "Nombre",
         "url": "URL",
+        "active": "Activo",
+        "yes": "Sí",
+        "no": "No",
         "add": "Agregar",
         "edit": "Editar",
         "delete": "Eliminar",
@@ -45,5 +48,27 @@
         "deleteMessage": "¿Está seguro de que desea eliminar este elemento? Esta acción no se puede deshacer.",
         "confirm": "Sí",
         "cancel": "No"
+    },
+    "dashboard": {
+        "top5DebtChartTitle": "Top 5 clientes con mayor deuda",
+        "detailedReportTitle": "Reporte Detallado de Cuentas por Cobrar",
+        "activeFilterLabel": "Filtro activo",
+        "activeFilterDescription": "Top 5 con mayor saldo - Cliente n.° {clientId}",
+        "clearFilterButton": "Limpiar filtro",
+        "summaryExpirationChartTitle": "Resumen de ventas por vencimiento",
+        "legend30DaysLabel": "30 días",
+        "top10ChartTitle": "Top 10 ({label})",
+        "top10FilterDescription": "Top 10 ({label}) - Cliente n.° {clientId}",
+        "top5DelayFilterDescription": "Top 5 con mayor atraso - Cliente n.° {clientId}",
+        "tableHeaders": {
+            "number": "#",
+            "client": "Cliente",
+            "total": "Total",
+            "delay": "Retraso"
+        }
+    },
+    "paginator": {
+        "navigationLabel": "Paginación",
+        "nextPage": "Página siguiente"
     }
 }

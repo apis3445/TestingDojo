@@ -31,6 +31,9 @@
         "key": "Key",
         "name": "Name",
         "url": "URL",
+        "active": "Active",
+        "yes": "Yes",
+        "no": "No",
         "add": "Add",
         "edit": "Edit",
         "delete": "Delete",
@@ -45,5 +48,27 @@
         "deleteMessage": "Are you sure you want to delete this item? This action cannot be undone.",
         "confirm": "Yes",
         "cancel": "No"
+    },
+    "dashboard": {
+        "top5DebtChartTitle": "Top 5 customers with the highest debt",
+        "detailedReportTitle": "Detailed Accounts Receivable Report",
+        "activeFilterLabel": "Active Filter",
+        "activeFilterDescription": "Top 5 Highest Balances - Client #{clientId}",
+        "clearFilterButton": "Clear Filter",
+        "summaryExpirationChartTitle": "Sales summary by expiration",
+        "legend30DaysLabel": "30 Days",
+        "top10ChartTitle": "Top 10 ({label})",
+        "top10FilterDescription": "Top 10 ({label}) - Client #{clientId}",
+        "top5DelayFilterDescription": "Top 5 Longest Overdue - Client #{clientId}",
+        "tableHeaders": {
+            "number": "#",
+            "client": "Client",
+            "total": "Total",
+            "delay": "Delay"
+        }
+    },
+    "paginator": {
+        "navigationLabel": "Pagination",
+        "nextPage": "Next page"
     }
 }

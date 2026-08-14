@@ -51,3 +51,5 @@ e2e/playwright/.env.*
 # Claude Code local state — machine-specific, keyed by absolute project path
 .claude/projects/
 server.webm
+e2e/playwright/.playwright-mcp/
+e2e/playwright/.playwright-cli/
