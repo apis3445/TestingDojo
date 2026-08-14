@@ -74,11 +74,21 @@ export class GroupedGrid extends Grid {
             await this.expandGroup(groupName);
             await this.getColumnsHeaders();
             const itemCount = await this.getGroupItemCount(groupName);
-            const childRows = this.getGroupRow(groupName).locator(`xpath=following-sibling::tr[position() <= ${itemCount}]`);
-            const rows = await childRows.all();
+
+            const allRows = this.locator.locator(this.rowSelector);
+            const totalRows = await allRows.count();
+            let groupIndex = -1;
+            for (let i = 0; i < totalRows; i++) {
+                const isGroupRow = await allRows.nth(i).locator('.group-label', { hasText: groupName }).count();
+                if (isGroupRow > 0) {
+                    groupIndex = i;
+                    break;
+                }
+            }
+
             const values: Record<string, string | number>[] = [];
-            for (const row of rows) {
-                values.push(await this.getRowValues(row));
+            for (let i = groupIndex + 1; i <= groupIndex + itemCount; i++) {
+                values.push(await this.getRowValues(allRows.nth(i)));
             }
             return values;
         });

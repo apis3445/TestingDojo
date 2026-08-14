@@ -23,6 +23,7 @@ export class DashboardPage extends BasePage {
     readonly detailedReportTitle: Heading;
     readonly activeFilter: ActiveFilter;
     readonly top10Chart: Canvas;
+    readonly top10ChartCard: Canvas;
     readonly top5CustomersByDays: Table;
     protected visualHelper = new VisualHelper(this.page);
     protected apiHelper: ApiHelper;
@@ -31,13 +32,14 @@ export class DashboardPage extends BasePage {
         super(page, 'Dashboard', locale);
         const noByRole = false;
         this.title = new Heading(page, '#title', noByRole);
-        this.top5 = new Canvas(page, '#top5');
-        this.top5Debt = new Canvas(page, '#top5-debt canvas');
-        this.summaryExpiration = new Canvas(page,'#summary-expiration');
+        this.top5 = new Canvas(page, '#top5', 'Top 5 customers by range of delay days chart');
+        this.top5Debt = new Canvas(page, '#top5-debt canvas', 'Top 5 customers with the highest debt chart');
+        this.summaryExpiration = new Canvas(page, '#summary-expiration', 'Sales summary by expiration chart');
         this.detailedReportGrid = new GroupedGrid(page, 'table.premium-table');
         this.detailedReportTitle = new Heading(page, this.localeInfo.dashboard.detailedReportTitle);
         this.activeFilter = new ActiveFilter(page);
-        this.top10Chart = new Canvas(page, '#client');
+        this.top10Chart = new Canvas(page, '#client', 'Top 10 chart');
+        this.top10ChartCard = new Canvas(page, '#client-detail-chart', 'Top 10 chart card');
         this.top5CustomersByDays = new Table(page, '#top5-delay table');
         this.apiHelper = new ApiHelper(page, this.apiURL);
     }
@@ -170,10 +172,9 @@ export class DashboardPage extends BasePage {
         await this.visualHelper.checkPageSnapshot(`dashboard-${this.locale}${nameSuffix}.png`, 10_000);
     }
 
-    public async checkTop10Chart(name: string, timeout = 5_000, maxDiffPixelsRatio = 100) {
-        const top10ChartCard = this.page.locator("#client-detail-chart");
+    public async checkTop10Chart(name: string, timeout = 5_000, maxDiffPixels = 100) {
         const snapshotName = `dashboard-${this.locale}${name}.png`;
-        await this.visualHelper.checkElementSnapshot(top10ChartCard, snapshotName, timeout, maxDiffPixelsRatio);
+        await this.visualHelper.checkElementSnapshot(this.top10ChartCard.locator, snapshotName, timeout, maxDiffPixels);
     }
 
     /**
@@ -181,11 +182,13 @@ export class DashboardPage extends BasePage {
      */
     async mockSummary() {
         const stepDescription = 'Modify the summary with fixed data';
-        await this.apiHelper.mockApi(
-            stepDescription,
-            '/api/collection/summary',
-            summary,
-        );
+        await test.step(stepDescription, async () => {
+            await this.apiHelper.mockApi(
+                stepDescription,
+                '/api/collection/summary',
+                summary,
+            );
+        });
     }
 
     /**
@@ -193,11 +196,13 @@ export class DashboardPage extends BasePage {
    */
     async mockSummaryExpiration() {
         const stepDescription = 'Modify the "Sumary Expiration" with fixed data';
-        await this.apiHelper.mockApi(
-            stepDescription,
-            '/api/collection/due-date-summary',
-            summaryExpiration,
-        );
+        await test.step(stepDescription, async () => {
+            await this.apiHelper.mockApi(
+                stepDescription,
+                '/api/collection/due-date-summary',
+                summaryExpiration,
+            );
+        });
     }
 
     /**
@@ -205,11 +210,13 @@ export class DashboardPage extends BasePage {
    */
     async mockTop5Delay() {
         const stepDescription = 'Modify the "Top 5 delay" with fixed data';
-        await this.apiHelper.mockApi(
-            stepDescription,
-            '/api/collection/top-5-avg-days',
-            top5Delay,
-        );
+        await test.step(stepDescription, async () => {
+            await this.apiHelper.mockApi(
+                stepDescription,
+                '/api/collection/top-5-avg-days',
+                top5Delay,
+            );
+        });
     }
 
     /**
@@ -217,11 +224,13 @@ export class DashboardPage extends BasePage {
    */
     async mockTop5Total() {
         const stepDescription = 'Modify the "Top 5 total" with fixed data';
-        await this.apiHelper.mockApi(
-            stepDescription,
-            '/api/collection/top-5-total',
-            top5Total,
-        );
+        await test.step(stepDescription, async () => {
+            await this.apiHelper.mockApi(
+                stepDescription,
+                '/api/collection/top-5-total',
+                top5Total,
+            );
+        });
     }
 
     /**
@@ -229,11 +238,13 @@ export class DashboardPage extends BasePage {
    */
     async mockTop5Type() {
         const stepDescription = 'Modify the "Top 5 type" with fixed data';
-        await this.apiHelper.mockApi(
-            stepDescription,
-            '/api/collection/top-5-type',
-            top5Type,
-        );
+        await test.step(stepDescription, async () => {
+            await this.apiHelper.mockApi(
+                stepDescription,
+                '/api/collection/top-5-type',
+                top5Type,
+            );
+        });
     }
 
     /**
@@ -241,22 +252,26 @@ export class DashboardPage extends BasePage {
    */
     async mockTop10Limit1() {
         const stepDescription = 'Modify the "Top 10 (30 Days)" with fixed data';
-        await this.apiHelper.mockApi(
-            stepDescription,
-            '/api/collection/top-10-limit-1',
-            top10Limit1,
-        );
+        await test.step(stepDescription, async () => {
+            await this.apiHelper.mockApi(
+                stepDescription,
+                '/api/collection/top-10-limit-1',
+                top10Limit1,
+            );
+        });
     }
 
     /**
    * Mock all apis for dashboard
    */
     async mockAllApis() {
-        await this.mockSummary();
-        await this.mockSummaryExpiration();
-        await this.mockTop5Delay();
-        await this.mockTop5Total();
-        await this.mockTop5Type();
-        await this.mockTop10Limit1();
+        await test.step('Mock all apis for dashboard', async () => {
+            await this.mockSummary();
+            await this.mockSummaryExpiration();
+            await this.mockTop5Delay();
+            await this.mockTop5Total();
+            await this.mockTop5Type();
+            await this.mockTop10Limit1();
+        });
     }
 }

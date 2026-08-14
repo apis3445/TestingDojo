@@ -24,14 +24,14 @@ export class Grid extends Table {
 
     async clickInEditByKey(keyValue: number): Promise<void> {
         await this.addStep(`Click in the edit table for the row with the key: "${keyValue}"`, async () => {
-            const row = this.page.getByRole('row', { name: keyValue.toString() });
+            const row = this.locator.getByRole('row', { name: keyValue.toString() });
             await row?.locator(this.editButtonSelector).click();
         });
     }
 
     async clickInDeleteByKey(keyValue: number): Promise<void> {
         await this.addStep(`Click in the delete table for the row with the key: "${keyValue}"`, async () => {
-            const row = this.page.getByRole('row', { name: keyValue.toString() });
+            const row = this.locator.getByRole('row', { name: keyValue.toString() });
             await row?.locator(this.deleteButtonSelector).click();
         });
     }

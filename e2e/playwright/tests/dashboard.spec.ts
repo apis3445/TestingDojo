@@ -1,6 +1,8 @@
 import { expect, test } from '../fixtures';
 import { DashboardPage } from '../pages/DashboardPage';
 import top5Delay from '../data/mocks/top5Delay.json';
+import top5Total from '../data/mocks/top5Total.json';
+import top10Limit1 from '../data/mocks/top10Limit1.json';
 
 test.describe('Check Dashboard', () => {
     let dashboardPage: DashboardPage;
@@ -24,8 +26,8 @@ test.describe('Check Dashboard', () => {
     test('Should go to client detail when clicking a "Top 5 customers with the highest debt" segment', {
         tag: ['@Dashboard'],
     }, async () => {
-        const client = 'Jorge Peréz Mendieta';
-        
+        const client = top5Total[0].Client;
+
         const clientId = await dashboardPage.clickTop5DebtSegment(client);
         const filterDescription = dashboardPage.localeInfo.dashboard.activeFilterDescription.replace('{clientId}', String(clientId));
 
@@ -36,7 +38,7 @@ test.describe('Check Dashboard', () => {
     test('Should go to client detail when clicking a "Top 5 customers by days of delay" row', {
         tag: ['@Dashboard'],
     }, async () => {
-        const client = 'Electronics Depot';
+        const client = top5Delay[0].Client;
         const headers = dashboardPage.localeInfo.dashboard.tableHeaders;
         await dashboardPage.top5CustomersByDays.checkHeaders([headers.number, headers.client, headers.total, headers.delay]);
         await test.step('Check "Top 5 customers by days of delay" table rows match the API data', async () => {
@@ -60,7 +62,7 @@ test.describe('Check Dashboard', () => {
     test('Should show and navigate from the "Top 10" chart when clicking an expiration legend item', {
         tag: ['@Dashboard'],
     }, async () => {
-        const client = 'Sea Atlantic Ltda.';
+        const client = top10Limit1[0].Client;
         await dashboardPage.clickExpirationLegend(dashboardPage.localeInfo.dashboard.legend30DaysLabel);
         const top10ChartTitle = dashboardPage.localeInfo.dashboard.top10ChartTitle.replace('{label}', dashboardPage.localeInfo.dashboard.legend30DaysLabel);
         await expect(dashboardPage.top10Chart.locator, `Should show the "${top10ChartTitle}" chart`).toBeVisible();

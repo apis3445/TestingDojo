@@ -7,12 +7,10 @@ export class Table extends BaseComponent {
     columnSelector = 'th';
     cellSelector = 'td';
     rowSelector = 'tbody > tr';
-    element: Locator;
 
     constructor(page: Page, selector = 'table') {
         super(page, selector, 'table', false);
         this.columnsText = [];
-        this.element = this.page.locator(selector);
     }
 
     async getTotalRows(): Promise<number> {
@@ -126,7 +124,9 @@ export class Table extends BaseComponent {
     async getRowValuesByName(rowName: string): Promise<Record<string, string | number>> {
         return await this.addStep(`Get values for "${rowName}" row`, async () => {
             await this.getColumnsHeaders();
-            const row = this.getRowByButton(rowName).locator('xpath=ancestor::tr');
+            const row = this.locator
+                .locator(this.rowSelector)
+                .filter({ has: this.page.getByRole('button', { name: rowName }) });
             return await this.getRowValues(row);
         });
     }
@@ -170,7 +170,9 @@ export class Table extends BaseComponent {
     }
 
     async checkHeaders(expectedHeaders: string[]) {
-        const actualHeaders = await this.getColumnsHeaders();
-        expect(actualHeaders, 'Table headers should match the expected values').toEqual(expectedHeaders);
+        await this.addStep(`Check headers match: ${expectedHeaders.join(', ')}`, async () => {
+            const actualHeaders = await this.getColumnsHeaders();
+            expect(actualHeaders, 'Table headers should match with:' + expectedHeaders.join(', ')).toEqual(expectedHeaders);
+        });
     }
 }
