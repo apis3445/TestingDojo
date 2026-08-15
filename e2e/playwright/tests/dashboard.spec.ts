@@ -20,7 +20,6 @@ test.describe('Check Dashboard', () => {
         tag: ['@VisualTesting', '@Dashboard'],
     }, async () => {
         await dashboardPage.checkPageSnapshot();
-
     });
 
     test('Should go to client detail when clicking a "Top 5 customers with the highest debt" segment', {
