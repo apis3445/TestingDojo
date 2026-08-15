@@ -1,0 +1,50 @@
+[
+    {
+        "ClientId": 3,
+        "Client": "Sea Atlantic Ltda.",
+        "Total": 9913.36,
+        "DaysOverdue": 0
+    },
+    {
+        "ClientId": 1,
+        "Client": "Centro Comercial Moctezuma",
+        "Total": 7231.44,
+        "DaysOverdue": 0
+    },
+    {
+        "ClientId": 17,
+        "Client": "Jorge Peréz Mendieta",
+        "Total": 6586.48,
+        "DaysOverdue": 0
+    },
+    {
+        "ClientId": 14,
+        "Client": "Ferretería Especializada",
+        "Total": 4640,
+        "DaysOverdue": 0
+    },
+    {
+        "ClientId": 15,
+        "Client": "Axis Software",
+        "Total": 3480,
+        "DaysOverdue": 0
+    },
+    {
+        "ClientId": 19,
+        "Client": "Diseño Web Barcelona",
+        "Total": 2668,
+        "DaysOverdue": 0
+    },
+    {
+        "ClientId": 2,
+        "Client": "Richard Corp",
+        "Total": 1116,
+        "DaysOverdue": 0
+    },
+    {
+        "ClientId": 13,
+        "Client": "Fábrica de Pinturas",
+        "Total": 1116,
+        "DaysOverdue": 0
+    }
+]

@@ -31,6 +31,9 @@
         "key": "Serverschlüssel",
         "name": "Servername",
         "url": "Server-URL",
+        "active": "Aktiv Status",
+        "yes": "Ja",
+        "no": "Nein",
         "add": "Hinzufügen",
         "edit": "Bearbeiten",
         "delete": "Löschen",
@@ -45,5 +48,27 @@
         "deleteMessage": "Möchten Sie dieses Element wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
         "confirm": "Ja",
         "cancel": "Nein"
+    },
+    "dashboard": {
+        "top5DebtChartTitle": "Top 5 Kunden mit den höchsten Schulden",
+        "detailedReportTitle": "Detaillierter Debitorenbuchhaltungsbericht",
+        "activeFilterLabel": "Aktiver Filter",
+        "activeFilterDescription": "Top 5 höchste Salden - Kunde Nr. {clientId}",
+        "clearFilterButton": "Filter zurücksetzen",
+        "summaryExpirationChartTitle": "Verkaufsübersicht nach Fälligkeit",
+        "legend30DaysLabel": "30 Tage",
+        "top10ChartTitle": "Top 10 ({label})",
+        "top10FilterDescription": "Top 10 ({label}) - Kunde Nr. {clientId}",
+        "top5DelayFilterDescription": "Top 5 am längsten überfällig - Kunde Nr. {clientId}",
+        "tableHeaders": {
+            "number": "#",
+            "client": "Kunde",
+            "total": "Gesamt",
+            "delay": "Verzögerung"
+        }
+    },
+    "paginator": {
+        "navigationLabel": "Seitennummerierung",
+        "nextPage": "Nächste Seite"
     }
 }

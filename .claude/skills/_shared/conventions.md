@@ -97,6 +97,8 @@ Write assertions in the spec, so each test states clearly what it verifies — i
 
 One-off expectations stay inline in the spec; don't wrap every `expect` in a method.
 
+**One concern per method/step.** Don't test two unrelated things in the same method or the same `test.step` — e.g. don't bundle "check the active filter banner" and "check the detailed grid" into one `checkClientFilterAndGrid()`; split into a filter step and a separate grid step, each with its own `test.step`/`expect`. A failure then points at exactly what broke instead of a vague catch-all step name, and each method/step name stays accurate to what it actually checks. This applies inside the spec too: prefer several `test.step()` blocks, one per concern, over one step wrapping several unrelated assertions.
+
 ## Test data
 
 Generate test data with `@faker-js/faker` — never hardcode values or build "unique" ones by concatenating `Date.now()`:
@@ -133,29 +135,36 @@ API classes go in `e2e/playwright/api/`. See `api/LoginApi.ts` as a reference im
 
 **Never hardcode a value you found in the browser or a DOM snapshot** (a specific company name, a specific key) — it breaks the moment test data changes and proves nothing if the UI silently renders stale or wrong data. Instead, capture the real response the page's own network call returns while it loads.
 
-The **Page Object** owns this, never the spec directly — same division as every other page method: the page exposes a method for its own screen, the spec supplies *when* to trigger it. Bundle the existing `ApiHelper.waitForResponse` with the trigger action in a `Promise.all`, the same shape `Grid.export()` uses to bundle a trigger with `page.waitForEvent` (see `playwright-component/SKILL.md`):
+The **Page Object** owns this, never the spec directly — same division as every other page method: the page exposes a method for its own screen that navigates itself and returns the parsed response. Don't reach for `Promise.all` with a `navigate` callback — start the wait, trigger the action, then await the wait, the same sequential shape `goTo()` already uses for its own readiness check:
 
 ```typescript
 // ServersPage.ts
-private readonly apiHelper = new ApiHelper(this.page, process.env.AUTH_URL ?? '');
+public async goTo() {
+    await test.step(`Go to the servers page`, async () => {
+        const waitForServersPromise = this.serverApi.waitForGetServers();
+        await this.page.goto(this.baseURL + '/security/servers');
+        await waitForServersPromise;
+        await this.title.locator.waitFor({ timeout: 30_000 });
+    });
+}
 
-async getServersFromApi(navigate: () => Promise<void>): Promise<Server[]> {
-    const [response] = await Promise.all([
-        this.apiHelper.waitForResponse('/api/server'),
-        navigate(),
-    ]);
-    return await response.json() as Server[];
+async goToServers(): Promise<Server[]> {
+    return await test.step('Get servers from API', async () => {
+        const responsePromise = this.serverApi.waitForGetServers();
+        await this.goTo();
+        const response = await responsePromise;
+        return await response.json() as Server[];
+    });
 }
 ```
 
 ```typescript
 // spec
-const servers = await serversPage.getServersFromApi(() =>
-    dashboardPage.menu.openItem(dashboardPage.localeInfo.breadcrumb.security, dashboardPage.localeInfo.servers.title));
+const servers = await serversPage.goToServers();
 const targetServer = servers[0];
 
-await serversPage.search.fill(targetServer.Name);
-await expect(serversPage.grid.rows).toHaveCount(1);
+await serversPage.filter.fill(targetServer.Name);
+await expect(serversPage.table.locator).toContainText(targetServer.Name);
 ```
 
 Confirm the endpoint and JSON field casing from the **real** response — don't assume it matches the OpenAPI schema names (backends may serialize PascalCase even when the spec lists lowercase properties, as seen in `LoginApi`'s `LoginResponse`). Only call the API directly with no `trigger`/`Promise.all` (like `LoginApi.login()`) when there's no page navigation to piggyback on — e.g. precondition/postcondition setup before any page loads.

@@ -746,12 +746,15 @@
               "listen": "test",
               "script": {
                 "exec": [
+                  "// Test that the status code is 200",
+                  "utils.StatusOk();",
+                  "",
                   "const schema = {",
                   "    type: \"array\",",
                   "    minItems: 1,",
                   "    additionalProperties: false,",
                   "    items: {",
-                  "        required: [\"Id\",\"Key\", \"Name\", \"Url\", \"Active\"],",
+                  "        required: [\"Id\", \"Key\", \"Name\", \"Url\", \"Active\"],",
                   "        properties: {",
                   "            \"Id\": {",
                   "                \"type\": \"integer\"",
@@ -776,9 +779,6 @@
                   "        }",
                   "    }",
                   "}",
-                  "",
-                  "// Test that the status code is 200",
-                  "utils.StatusOk();",
                   "",
                   "// Compare the jsonSchema",
                   "pm.test(\"Valid schema\", ()=>{",
@@ -840,10 +840,6 @@
                   "const serverName = pm.collectionVariables.get(\"serverName\")",
                   "const serverUrl = pm.collectionVariables.get(\"serverUrl\")",
                   "",
-                  "pm.test(\"Server key is: \" + serverKey, function() {",
-                  "    pm.expect(response.Key).to.eq(serverKey)",
-                  "})",
-                  "",
                   "pm.test(\"Server name is: \" + serverName, function() {",
                   "    pm.expect(response.Name).to.eq(serverName)",
                   "})",
@@ -866,7 +862,6 @@
             {
               "listen": "prerequest",
               "script": {
-                "type": "text/javascript",
                 "exec": [
                   "const randomName = pm.variables.replaceIn('{{$randomProductName}}');",
                   "const randomUrl = pm.variables.replaceIn('{{$randomUrl}}');",
@@ -875,7 +870,10 @@
                   "pm.collectionVariables.set(\"serverKey\", randomKey);",
                   "pm.collectionVariables.set(\"serverName\", randomName);",
                   "pm.collectionVariables.set(\"serverUrl\", randomUrl);"
-                ]
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             }
           ],
@@ -1545,7 +1543,6 @@
               "    } else {",
               "        const jsonData = response.json();",
               "        pm.collectionVariables.set(\"AccessTokenAdmin\", jsonData.AccessToken);",
-              "        console.log(\"AccessTokenAdmin set successfully\");",
               "    }",
               "});"
             ]
@@ -1621,7 +1618,7 @@
           "response": []
         },
         {
-          "name": "Servers_withoutJwt_Returns401",
+          "name": "Servers_WithoutToken_Returns401",
           "request": {
             "method": "GET",
             "header": [],
@@ -1633,6 +1630,463 @@
               "path": [
                 "api",
                 "Server"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Top5Total_WithoutToken_Returns401",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{DataAPI}}/api/collection/top-5-total",
+              "host": [
+                "{{DataAPI}}"
+              ],
+              "path": [
+                "api",
+                "collection",
+                "top-5-total"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Top5AvgDays_WithoutToken_Returns401",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{DataAPI}}/api/collection/top-5-avg-days",
+              "host": [
+                "{{DataAPI}}"
+              ],
+              "path": [
+                "api",
+                "collection",
+                "top-5-avg-days"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Top5Type_WithoutToken_Returns401",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{DataAPI}}/api/collection/top-5-type",
+              "host": [
+                "{{DataAPI}}"
+              ],
+              "path": [
+                "api",
+                "collection",
+                "top-5-type"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Summary_WithoutToken_Returns401",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{DataAPI}}/api/collection/summary",
+              "host": [
+                "{{DataAPI}}"
+              ],
+              "path": [
+                "api",
+                "collection",
+                "summary"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DueDateSummary_WithoutToken_Returns401",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{DataAPI}}/api/collection/due-date-summary",
+              "host": [
+                "{{DataAPI}}"
+              ],
+              "path": [
+                "api",
+                "collection",
+                "due-date-summary"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Detailed_WithoutToken_returns401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{DataAPI}}/api/collection/detailed/1",
+              "host": [
+                "{{DataAPI}}"
+              ],
+              "path": [
+                "api",
+                "collection",
+                "detailed",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Top10ToExpire_WithoutToken_Returns401",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{DataAPI}}/api/collection/top-10-to-expire",
+              "host": [
+                "{{DataAPI}}"
+              ],
+              "path": [
+                "api",
+                "collection",
+                "top-10-to-expire"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "top-10-limit-1_WithoutToken_Returns401",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{DataAPI}}/api/collection/top-10-limit-1",
+              "host": [
+                "{{DataAPI}}"
+              ],
+              "path": [
+                "api",
+                "collection",
+                "top-10-limit-1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "top-10-limit-2_WithoutToken_Returns401",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{DataAPI}}/api/collection/top-10-limit-2",
+              "host": [
+                "{{DataAPI}}"
+              ],
+              "path": [
+                "api",
+                "collection",
+                "top-10-limit-2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "top-10-limit-3_WithoutToken_Returns401",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{DataAPI}}/api/collection/top-10-limit-3",
+              "host": [
+                "{{DataAPI}}"
+              ],
+              "path": [
+                "api",
+                "collection",
+                "top-10-limit-3"
               ]
             }
           },
@@ -1669,7 +2123,7 @@
       "name": "403 Forbidden",
       "item": [
         {
-          "name": "Servers_withNormalUser_Returns403",
+          "name": "Servers_WithNormalUser_Returns403",
           "event": [
             {
               "listen": "prerequest",
@@ -1742,7 +2196,6 @@
               "    } else {",
               "        const jsonData = response.json();",
               "        pm.environment.set(\"AccessToken\", jsonData.AccessToken);",
-              "        console.log(\"AccessToken set successfully\");",
               "    }",
               "});"
             ]
@@ -1756,6 +2209,736 @@
             "requests": {},
             "exec": [
               "utils.Status403()"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "item": [
+        {
+          "name": "Summary_WithValidUser_ReturnsGlobalSummary",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// JSON schema validation",
+                  "const itemSchema = {",
+                  "    type: \"object\",",
+                  "    required: [\"Amount\", \"AverageDaysPastDue\"],",
+                  "    properties: {",
+                  "        Amount: { type: \"number\" },",
+                  "        AverageDaysPastDue: { type: \"number\" }",
+                  "    }",
+                  "};",
+                  "",
+                  "utils.CheckJsonSchema(itemSchema);",
+                  "",
+                  "const response = pm.response.json()",
+                  "const totalAmount = response.Amount;",
+                  "",
+                  "pm.test(\"Amount is greater or equal to 0\", function() {",
+                  "    pm.expect(totalAmount).to.greaterThanOrEqual(0)",
+                  "})",
+                  "",
+                  "pm.test(\"AverageDaysPastDue is greater or equal to 0\", function() {",
+                  "    pm.expect(response.AverageDaysPastDue).to.greaterThanOrEqual(0)",
+                  "})",
+                  "",
+                  "pm.collectionVariables.set(\"totalAmount\", totalAmount)",
+                  "",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{DataAPI}}/api/collection/summary",
+              "host": [
+                "{{DataAPI}}"
+              ],
+              "path": [
+                "api",
+                "collection",
+                "summary"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DueDateSummary_WithValidUser_ReturnsGlobalDueDataSummary",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json()",
+                  "",
+                  "const limit1 = +response.Limit1;",
+                  "const limit2 = +response.Limit2;",
+                  "const limit3 = +response.Limit3;",
+                  "",
+                  "const percentage1 = +response.LimitPercentage1;",
+                  "const percentage2 = +response.LimitPercentage2;",
+                  "const percentage3 = +response.LimitPercentage3;",
+                  "const percentageToExpire = +response.PercentageToExpire;",
+                  "const totalPercentage = percentage1 + percentage2 + percentage3 + percentageToExpire;",
+                  "",
+                  "const total = limit1 + limit2 + limit3;",
+                  "const expectedTotal = +pm.collectionVariables.get(\"totalAmount\");",
+                  "",
+                  "pm.test(\"Total of limits should be equal to: \" + total, function () {",
+                  "    pm.expect(total).to.equal(expectedTotal);",
+                  "});",
+                  "",
+                  "pm.test(\"Percentage sum should be 100\", function () {",
+                  "    pm.expect(totalPercentage).to.equal(100);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{DataAPI}}/api/collection/due-date-summary",
+              "host": [
+                "{{DataAPI}}"
+              ],
+              "path": [
+                "api",
+                "collection",
+                "due-date-summary"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Top5Total_WithValidUser_ReturnsTop5ClientsWithTheBiggestDebt",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "utils.CheckLength(5)",
+                  "",
+                  "// JSON schema validation",
+                  "const itemSchema = {",
+                  "    type: \"object\",",
+                  "    required: [\"ClientId\", \"Client\", \"Total\", \"DaysOverdue\"],",
+                  "    properties: {",
+                  "        ClientId: { type: \"number\" },",
+                  "        Client: { type: \"string\" },",
+                  "        Total: { type: \"number\" },",
+                  "        DaysOverdue: { type: \"number\" }",
+                  "    }",
+                  "};",
+                  "",
+                  "utils.CheckArrayJsonSchema(itemSchema);",
+                  "",
+                  "var template = `",
+                  "<canvas id=\"myChart\" height=\"200\"></canvas>",
+                  "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js\"></script> ",
+                  "<script>",
+                  "var ctx = document.getElementById('myChart');",
+                  "pm.getData(function (err, value) {",
+                  "    var myChart = new Chart(ctx, {",
+                  "\t    type: 'bar', // Changed chart type to bar",
+                  "    \tdata: {",
+                  "    \t    labels: value.response.map(item => item.Client), // Used map to extract 'Client' values",
+                  "    \t\tdatasets: [{ ",
+                  "\t    \t\tlabel: [],",
+                  "\t\t\t\t\tbackgroundColor: [\"#003f5c\", \"#58508d\", \"#bc5090\", \"#ff6361\", \"#ffa600\"],",
+                  "\t    \t\tborderWidth: 1,",
+                  "\t    \t\tdata: value.response.map(item => item.Total) // Used map to extract 'Total' values",
+                  "\t    \t}]",
+                  "    \t},",
+                  "         options: {",
+                  "\t\t\t\t\t legend: { display: false },",
+                  "            title: {",
+                  "                display: true,",
+                  "                text: 'Top 5 Total'",
+                  "            },",
+                  "            scales: {",
+                  "                yAxes: [{",
+                  "                    ticks: {",
+                  "                        beginAtZero: true",
+                  "                    }",
+                  "                }]",
+                  "            }",
+                  "        }",
+                  "    });",
+                  "});",
+                  "</script>`;",
+                  "",
+                  "const response = pm.response.json();",
+                  "",
+                  "pm.visualizer.set(template,{",
+                  "    response: response",
+                  "});",
+                  "",
+                  "pm.collectionVariables.set(\"ClientId\", response[0].ClientId);",
+                  "pm.collectionVariables.set(\"Total\",response[0].Total);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{DataAPI}}/api/collection/top-5-total",
+              "host": [
+                "{{DataAPI}}"
+              ],
+              "path": [
+                "api",
+                "collection",
+                "top-5-total"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Detailed_WithValidUser_ReturnsInvoicePaymentInfo",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "utils.ArrayAbove0('Invoices')",
+                  "",
+                  "const itemSchema = {",
+                  "    type: \"object\",",
+                  "    required: [\"InvoiceId\", \"InvoiceDate\", \"ClientName\", \"Type\", \"Balance\", \"Paid\", \"DueDate\", \"DaysOverdue\", \"ClientId\", \"Total\", \"InvoiceNumber\", \"LastPaymentDate\"],",
+                  "    properties: {",
+                  "        InvoiceId: { type: \"integer\" },",
+                  "        InvoiceDate: { type: \"string\" },",
+                  "        ClientName: { type: \"string\" },",
+                  "        Type: { type: \"string\" },",
+                  "        Balance: { type: \"number\" },",
+                  "        Paid: { type: \"number\" },",
+                  "        DueDate: { type: \"string\" },",
+                  "        DaysOverdue: { type: \"integer\" },",
+                  "        ClientId: { type: \"integer\" },",
+                  "        Total: { type: \"number\" },",
+                  "        InvoiceNumber: { type: \"string\" },",
+                  "        LastPaymentDate: { type: [\"string\", \"null\"] }",
+                  "    }",
+                  "};",
+                  "",
+                  "utils.CheckArrayJsonSchema(itemSchema);",
+                  "",
+                  "const response = pm.response.json();",
+                  "",
+                  "const overdueTotal = response",
+                  "    .reduce((sum, invoice) => sum + invoice.Total, 0);",
+                  "",
+                  "const expectedTotal = +pm.collectionVariables.get(\"Total\");",
+                  "pm.test(\"Total balance is: \" + expectedTotal, () => {",
+                  "    pm.expect(overdueTotal).to.equal(expectedTotal);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{DataAPI}}/api/collection/detailed/{{ClientId}}",
+              "host": [
+                "{{DataAPI}}"
+              ],
+              "path": [
+                "api",
+                "collection",
+                "detailed",
+                "{{ClientId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Top5AvgDays_WithValidUser_ReturnsTop5ClientsWithMoreDelayedDays",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "utils.CheckLength(5)",
+                  "",
+                  "// JSON schema validation",
+                  "const itemSchema = {",
+                  "    type: \"object\",",
+                  "    required: [\"ClientId\", \"Client\", \"Total\", \"DaysOverdue\"],",
+                  "    properties: {",
+                  "        ClientId: { type: \"number\" },",
+                  "        Client: { type: \"string\" },",
+                  "        Total: { type: \"number\" },",
+                  "        DaysOverdue: { type: \"number\" }",
+                  "    }",
+                  "};",
+                  "",
+                  "utils.CheckArrayJsonSchema(itemSchema);",
+                  "",
+                  "var template = `",
+                  "<canvas id=\"myChart\" height=\"200\"></canvas>",
+                  "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js\"></script> ",
+                  "<script>",
+                  "var ctx = document.getElementById('myChart');",
+                  "pm.getData(function (err, value) {",
+                  "    var myChart = new Chart(ctx, {",
+                  "        type: 'pie',",
+                  "        data: {",
+                  "            labels: value.response.map(item => item.Client),",
+                  "            datasets: [{ ",
+                  "                label: [],",
+                  "                backgroundColor: [\"#003f5c\", \"#58508d\", \"#bc5090\", \"#ff6361\", \"#ffa600\"],",
+                  "                borderWidth: 1,",
+                  "                data: value.response.map(item => item.DaysOverdue)",
+                  "            }]",
+                  "        },",
+                  "        options: {",
+                  "            legend: { display: true },",
+                  "            title: {",
+                  "                display: true,",
+                  "                text: 'Top 5 Delay'",
+                  "            }",
+                  "        }",
+                  "    });",
+                  "});",
+                  "</script>`;",
+                  "",
+                  "pm.visualizer.set(template, {",
+                  "    response: pm.response.json()",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{DataAPI}}/api/collection/top-5-avg-days",
+              "host": [
+                "{{DataAPI}}"
+              ],
+              "path": [
+                "api",
+                "collection",
+                "top-5-avg-days"
+              ]
+            },
+            "description": "Returns the 5 clients with more days of delayed debt"
+          },
+          "response": []
+        },
+        {
+          "name": "Top5Type_WithValidUser_ReturnsTheTop5ClientsDebtsByDaysPeriod",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "utils.CheckLength(5)",
+                  "",
+                  "// JSON schema validation",
+                  "const itemSchema = {",
+                  "    type: \"object\",",
+                  "    required: [\"ClientId\", \"ClientName\", \"NextToExpire\", \"Limit1\", \"Limit2\", \"Limit3\"],",
+                  "    properties: {",
+                  "        ClientId: { type: \"number\" },",
+                  "        ClientName: { type: \"string\" },",
+                  "        NextToExpire: { type: \"number\" },",
+                  "        Limit1: { type: \"number\" },",
+                  "        Limit2: { type: \"number\" },",
+                  "        Limit3: { type: \"number\" }",
+                  "    }",
+                  "};",
+                  "",
+                  "utils.CheckArrayJsonSchema(itemSchema);",
+                  "",
+                  "var template = `",
+                  "<div style=\"width:100%;height:350px;padding:10px;box-sizing:border-box;\">",
+                  "  <canvas id=\"myChart\"></canvas>",
+                  "</div>",
+                  "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js\"></script>",
+                  "<script>",
+                  "var ctx = document.getElementById('myChart');",
+                  "pm.getData(function (err, value) {",
+                  "    var myChart = new Chart(ctx, {",
+                  "        type: 'bar',",
+                  "        data: {",
+                  "            labels: value.response.map(function(item) { return item.ClientName; }),",
+                  "            datasets: [",
+                  "                { label: 'Next to Expire', backgroundColor: \"#003f5c\", borderWidth: 1, data: value.response.map(function(item) { return item.NextToExpire; }) },",
+                  "                { label: '30 Days',        backgroundColor: \"#58508d\", borderWidth: 1, data: value.response.map(function(item) { return item.Limit1; }) },",
+                  "                { label: '60 Days',        backgroundColor: \"#bc5090\", borderWidth: 1, data: value.response.map(function(item) { return item.Limit2; }) },",
+                  "                { label: '>60 Days',       backgroundColor: \"#ff6361\", borderWidth: 1, data: value.response.map(function(item) { return item.Limit3; }) }",
+                  "            ]",
+                  "        },",
+                  "        options: {",
+                  "            maintainAspectRatio: false,",
+                  "            title: { display: true, text: 'Top 5 Debts by Period' },",
+                  "            scales: {",
+                  "                xAxes: [{ stacked: false }],",
+                  "                yAxes: [{ ticks: { beginAtZero: true } }]",
+                  "            }",
+                  "        }",
+                  "    });",
+                  "});",
+                  "<\\/script>`;",
+                  "",
+                  "pm.visualizer.set(template, {",
+                  "    response: pm.response.json()",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{DataAPI}}/api/collection/top-5-type",
+              "host": [
+                "{{DataAPI}}"
+              ],
+              "path": [
+                "api",
+                "collection",
+                "top-5-type"
+              ]
+            },
+            "description": "Returns the 5 clients with the biggest debt grouped by the period limit:\n\n- Next To Expire\n    \n- 30 Days\n    \n- 60 Days\n    \n- More than 60 days"
+          },
+          "response": []
+        },
+        {
+          "name": "Top10ToExpire_WithValidUser_ReturnsTop10ClientsBiggestDebt",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "utils.CheckLengthLessOrEqual(10);",
+                  "",
+                  "// JSON schema validation",
+                  "const itemSchema = {",
+                  "    type: \"object\",",
+                  "    required: [\"ClientId\", \"Client\", \"Total\", \"DaysOverdue\"],",
+                  "    properties: {",
+                  "        ClientId: { type: \"number\" },",
+                  "        Client: { type: \"string\" },",
+                  "        Total: { type: \"number\" },",
+                  "        DaysOverdue: { type: \"number\" }",
+                  "    }",
+                  "};",
+                  "",
+                  "utils.CheckArrayJsonSchema(itemSchema);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{DataAPI}}/api/collection/top-10-to-expire",
+              "host": [
+                "{{DataAPI}}"
+              ],
+              "path": [
+                "api",
+                "collection",
+                "top-10-to-expire"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Top10Limit1_WithValidUser_ReturnsTop10ClientsBiggestDebtWithin30Days",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "utils.CheckLengthLessOrEqual(10);",
+                  "",
+                  "// JSON schema validation",
+                  "const itemSchema = {",
+                  "    type: \"object\",",
+                  "    required: [\"ClientId\", \"Client\", \"Total\", \"DaysOverdue\"],",
+                  "    properties: {",
+                  "        ClientId: { type: \"number\" },",
+                  "        Client: { type: \"string\" },",
+                  "        Total: { type: \"number\" },",
+                  "        DaysOverdue: { type: \"number\" }",
+                  "    }",
+                  "};",
+                  "",
+                  "utils.CheckArrayJsonSchema(itemSchema);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{DataAPI}}/api/collection/top-10-limit-1",
+              "host": [
+                "{{DataAPI}}"
+              ],
+              "path": [
+                "api",
+                "collection",
+                "top-10-limit-1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Top10Limit2_WithValidUser_ReturnsTop10ClientsBiggestDebtWithin60Days",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "utils.CheckLengthLessOrEqual(10);",
+                  "",
+                  "// JSON schema validation",
+                  "const itemSchema = {",
+                  "    type: \"object\",",
+                  "    required: [\"ClientId\", \"Client\", \"Total\", \"DaysOverdue\"],",
+                  "    properties: {",
+                  "        ClientId: { type: \"number\" },",
+                  "        Client: { type: \"string\" },",
+                  "        Total: { type: \"number\" },",
+                  "        DaysOverdue: { type: \"number\" }",
+                  "    }",
+                  "};",
+                  "",
+                  "utils.CheckArrayJsonSchema(itemSchema);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{DataAPI}}/api/collection/top-10-limit-2",
+              "host": [
+                "{{DataAPI}}"
+              ],
+              "path": [
+                "api",
+                "collection",
+                "top-10-limit-2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Top10Limit3_WithValidUser_ReturnsTop10ClientsBiggestDebtMore60Days",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "utils.CheckLengthLessOrEqual(10);",
+                  "",
+                  "// JSON schema validation",
+                  "const itemSchema = {",
+                  "    type: \"object\",",
+                  "    required: [\"ClientId\", \"Client\", \"Total\", \"DaysOverdue\"],",
+                  "    properties: {",
+                  "        ClientId: { type: \"number\" },",
+                  "        Client: { type: \"string\" },",
+                  "        Total: { type: \"number\" },",
+                  "        DaysOverdue: { type: \"number\" }",
+                  "    }",
+                  "};",
+                  "",
+                  "utils.CheckArrayJsonSchema(itemSchema);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{DataAPI}}/api/collection/top-10-limit-3",
+              "host": [
+                "{{DataAPI}}"
+              ],
+              "path": [
+                "api",
+                "collection",
+                "top-10-limit-3"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{AccessTokenAdmin}}",
+            "type": "string"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              "// Login as Admin and store the AccessToken",
+              "const loginUrl = pm.environment.get(\"AuthAPI\") + \"/api/users/login\";",
+              "",
+              "const loginBody = {",
+              "    Company: pm.environment.get(\"company\"),",
+              "    UserName: pm.environment.get(\"userNameAdmin\"),",
+              "    Password: pm.environment.get(\"passwordAdmin\"),",
+              "    Language: pm.environment.get(\"language\")",
+              "};",
+              "",
+              "pm.sendRequest({",
+              "    url: loginUrl,",
+              "    method: \"POST\",",
+              "    header: { \"Content-Type\": \"application/json\" },",
+              "    body: {",
+              "        mode: \"raw\",",
+              "        raw: JSON.stringify(loginBody)",
+              "    }",
+              "}, function (err, response) {",
+              "    if (err) {",
+              "        console.error(\"Login failed:\", err);",
+              "    } else {",
+              "        const jsonData = response.json();",
+              "        pm.collectionVariables.set(\"AccessTokenAdmin\", jsonData.AccessToken);",
+              "    }",
+              "});"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              "utils.StatusOk()"
             ]
           }
         }
@@ -1777,6 +2960,7 @@
       "listen": "test",
       "script": {
         "type": "text/javascript",
+        "packages": {},
         "requests": {},
         "exec": [
           "utils = {",
@@ -1829,6 +3013,13 @@
           "        pm.expect(response.length).to.be.eql(length)",
           "    });",
           "  },",
+          "  CheckLengthLessOrEqual: function(length) {",
+          "    var response = pm.response.json();",
+          "    pm.test(\"Returns \" + length + \" results or less\" , function() ",
+          "    {",
+          "        pm.expect(response.length).to.be.lessThanOrEqual(length)",
+          "    });",
+          "  },",
           "  CheckRequired: function(fieldName) {",
           "    const jsonData = pm.response.json();",
           "    pm.test(\"Error field is \" + fieldName, function () {  ",
@@ -1853,6 +3044,19 @@
           "    pm.test(\"Response time should be below \"+ minSeconds +\" second(s)\", function() {",
           "        pm.expect(pm.response.responseTime).to.be.below(minSeconds * 1000)",
           "    })",
+          "  },",
+          "  CheckJsonSchema: function(itemSchema) {",
+          "    pm.test(\"Response matches JSON schema\", function() {",
+          "        pm.response.to.have.jsonSchema(itemSchema);",
+          "    });",
+          "  },",
+          "  CheckArrayJsonSchema: function(itemSchema) {",
+          "    // Wrap in an array schema so the whole response array is validated",
+          "    const responseSchema = { type: \"array\", items: itemSchema };",
+          "",
+          "    pm.test(\"Response matches JSON schema\", function() {",
+          "        pm.response.to.have.jsonSchema(responseSchema);",
+          "    });",
           "  }",
           "};"
         ]
@@ -1865,7 +3069,15 @@
       "value": ""
     },
     {
-      "key": "server151Chars",
+      "key": "ClientId",
+      "value": ""
+    },
+    {
+      "key": "Total",
+      "value": ""
+    },
+    {
+      "key": "AccessToken",
       "value": ""
     },
     {
@@ -1881,7 +3093,11 @@
       "value": ""
     },
     {
-      "key": "AccessToken",
+      "key": "server151Chars",
+      "value": ""
+    },
+    {
+      "key": "totalAmount",
       "value": ""
     },
     {

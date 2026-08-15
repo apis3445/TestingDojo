@@ -7,6 +7,7 @@ import { Server } from '../api/Server';
 
 test.describe('Servers', () => {
     let id = 0;
+    
     test.use({ storageState: '.auth/admin.json' });
 
     test.afterEach(async ({ page, locale }) => {
@@ -20,9 +21,7 @@ test.describe('Servers', () => {
             try {
                 await serverPage.serverApi.deleteServer(id);
             } catch (e) {
-                // swallow errors in cleanup to avoid masking test failures
-            } finally {
-                id = 0;
+                console.error(`Error deleting server with id ${id}`);
             }
         }
     });
@@ -31,7 +30,7 @@ test.describe('Servers', () => {
         tag: ['@API'],
         annotation: [
             { type: AnnotationType.Description, description: 'An admin user can add a server' },
-            { type: AnnotationType.Precondition, description: 'A valid admin username and password is logged' },
+            { type: AnnotationType.Precondition, description: 'A valid admin user is logged in' },
         ],
     }, async ({ page, locale }) => {
         await page.screencast.start({ path: 'server.webm' });
@@ -56,7 +55,7 @@ test.describe('Servers', () => {
         await serverPage.saveClick();
         await serversPage.checkSuccessMessage();
         await serversPage.filter.fill(key.toString());
-        await expect(serversPage.table.locator).toContainText(key.toString());
+        await expect(serversPage.table.locator, `Should show the server with key "${key}" after filtering`).toContainText(key.toString());
         await serversPage.checkRow(key, name, url);
         const response = await serversPage.serverApi.getServerByKey(key.toString());
         const responseText = await response.text();
@@ -69,7 +68,7 @@ test.describe('Servers', () => {
         tag: ['@API'],
         annotation: [
             { type: AnnotationType.Description, description: 'An admin user can edit a server' },
-            { type: AnnotationType.Precondition, description: 'A valid admin username and password is logged' },
+            { type: AnnotationType.Precondition, description: 'A valid admin user is logged in' },
         ],
     }, async ({ page, locale }) => {
         const serversPage = new ServersPage(page, locale);
@@ -90,13 +89,13 @@ test.describe('Servers', () => {
         await serversPage.goTo();
          await serversPage.filter.fill(key.toString());
         await serversPage.table.clickInEditByKey(key);
-        await expect(addServerPage.name.locator).toHaveValue(server.Name);
+        await expect(addServerPage.name.locator, `Should load the edit form with the current name "${server.Name}"`).toHaveValue(server.Name);
         await addServerPage.name.fill(newName);
         await addServerPage.url.fill(newUrl);
         await addServerPage.save.click();
         await addServerPage.checkSuccessMessage();
         await serversPage.filter.fill(key.toString());
-        await expect(serversPage.table.locator).toContainText(key.toString());
+        await expect(serversPage.table.locator, `Should show the server with key "${key}" after filtering`).toContainText(key.toString());
         await serversPage.checkRow(key, newName, newUrl);
     });
 
@@ -104,7 +103,7 @@ test.describe('Servers', () => {
         tag: ['@API'],
         annotation: [
             { type: AnnotationType.Description, description: 'An admin user can edit a server' },
-            { type: AnnotationType.Precondition, description: 'A valid admin username and password is logged' },
+            { type: AnnotationType.Precondition, description: 'A valid admin user is logged in' },
         ],
     }, async ({ page, locale }) => {
         const serversPage = new ServersPage(page, locale);
@@ -131,7 +130,19 @@ test.describe('Servers', () => {
         await serversPage.confirmDialog.confirm();
         await serversPage.checkSuccessMessage();
         await serversPage.filter.fill(key.toString());
-        await expect(serversPage.table.locator).not.toContainText(key.toString());
+        await expect(serversPage.table.locator, `Should no longer show the server with key "${key}" after deletion`).not.toContainText(key.toString());
         id = 0;
     })
+
+    test('Should show all servers from the API in the grid', {
+        tag: ['@API'],
+        annotation: [
+            { type: AnnotationType.Description, description: 'The servers grid should show every server returned by the API, across all pages' },
+            { type: AnnotationType.Precondition, description: 'A valid admin user is logged in' },
+        ],
+    }, async ({ page, locale }) => {
+        const serversPage = new ServersPage(page, locale);
+        const servers = await serversPage.goToServers();
+        await serversPage.checkGridMatchesServers(servers);
+    });
 });
