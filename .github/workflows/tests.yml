@@ -95,8 +95,8 @@ jobs:
         with:
           api-key: ${{ secrets.POSTMAN_API_KEY }}
           command: |
-            collection run "1273809-cdf08318-6fff-48af-a18d-ba4d2e2ec21f" \
-              -e "1273809-6dd814a7-aeb2-46d9-a9da-8a9164b22db7" \
+            collection run 1273809-cdf08318-6fff-48af-a18d-ba4d2e2ec21f \
+              -e 1273809-6dd814a7-aeb2-46d9-a9da-8a9164b22db7 \
               --env-var "companyAdmin=${{ vars.COMPANY }}" \
               --env-var "userNameAdmin=${{ secrets.ADMIN_USER }}" \
               --env-var "passwordAdmin=${{ secrets.ADMIN_PASSWORD }}" \

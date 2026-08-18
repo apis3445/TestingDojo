@@ -23,8 +23,8 @@ steps:
       POSTMAN_API_KEY: $(POSTMAN_API_KEY)
 
   - script: |
-      postman collection run "1273809-cdf08318-6fff-48af-a18d-ba4d2e2ec21f" \
-        -e "1273809-6dd814a7-aeb2-46d9-a9da-8a9164b22db7" \
+      postman collection run 1273809-cdf08318-6fff-48af-a18d-ba4d2e2ec21f \
+        -e 1273809-6dd814a7-aeb2-46d9-a9da-8a9164b22db7 \
         --env-var "companyAdmin=$(COMPANY)" \
         --env-var "userNameAdmin=$(ADMIN_USER)" \
         --env-var "passwordAdmin=$(ADMIN_PASSWORD)" \
@@ -56,10 +56,10 @@ steps:
       testRunTitle: Postman – $(Build.BuildNumber)
       failTaskOnFailedTests: true
 
-  - task: UploadPostmanHtmlReport@1
-    displayName: Publish Postman HTML report tab
+  - task: PublishPipelineArtifact@1
+    displayName: Publish Postman HTML report
     condition: always()
     inputs:
-      cwd: $(Build.ArtifactStagingDirectory)
-      tabName: Postman Report
-      
+      targetPath: $(Build.ArtifactStagingDirectory)/newman-report.html
+      artifactName: postman-html-report
+
