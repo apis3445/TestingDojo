@@ -14,12 +14,17 @@ pool:
 steps:
   - checkout: self
 
-  - script: npm install -g newman newman-reporter-junitfull newman-reporter-htmlextra
-    displayName: Install Newman and reporters
+  - script: curl -o- "https://dl-cli.pstmn.io/install/unix.sh" | sh
+    displayName: Install Postman CLI
+
+  - script: postman login --with-api-key "$POSTMAN_API_KEY"
+    displayName: Log in to Postman CLI
+    env:
+      POSTMAN_API_KEY: $(POSTMAN_API_KEY)
 
   - script: |
-      newman run postman/TestingDojo.postman_collection.json \
-        --environment postman/TestingDojoDemo.postman_environment.json \
+      postman collection run "1273809-cdf08318-6fff-48af-a18d-ba4d2e2ec21f" \
+        -e "1273809-6dd814a7-aeb2-46d9-a9da-8a9164b22db7" \
         --env-var "companyAdmin=$(COMPANY)" \
         --env-var "userNameAdmin=$(ADMIN_USER)" \
         --env-var "passwordAdmin=$(ADMIN_PASSWORD)" \
@@ -36,10 +41,9 @@ steps:
         --env-var "name=$(NAME)" \
         --env-var "email=$(EMAIL)" \
         --env-var "companyKey=$(COMPANY_KEY)" \
-        --reporters cli,junitfull,htmlextra \
-        --reporter-junitfull-export $(Build.ArtifactStagingDirectory)/postman-results.xml \
-        --reporter-htmlextra-export $(Build.ArtifactStagingDirectory)/newman-report.html \
-        --reporter-htmlextra-title "Postman – $(Build.BuildNumber)"
+        --reporters cli,junit,html \
+        --reporter-junit-export $(Build.ArtifactStagingDirectory)/postman-results.xml \
+        --reporter-html-export $(Build.ArtifactStagingDirectory)/newman-report.html
     displayName: Run Postman collection
 
   - task: PublishTestResults@2

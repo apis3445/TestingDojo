@@ -86,37 +86,35 @@ jobs:
         run: dotnet run --project APINet/APINet.csproj
 
   postman:
-    name: Postman (Newman)
+    name: Postman (Postman CLI)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-node@v6
-        with:
-          node-version: lts/*
-      - name: Install Newman
-        run: npm install -g newman newman-reporter-junitfull
       - name: Run Postman collection
-        run: |
-          newman run postman/TestingDojo.postman_collection.json \
-            --environment postman/TestingDojoDemo.postman_environment.json \
-            --env-var "companyAdmin=${{ vars.COMPANY }}" \
-            --env-var "userNameAdmin=${{ secrets.ADMIN_USER }}" \
-            --env-var "passwordAdmin=${{ secrets.ADMIN_PASSWORD }}" \
-            --env-var "company=${{ vars.COMPANY }}" \
-            --env-var "userName=${{ secrets.NORMAL_USER }}" \
-            --env-var "password=${{ secrets.NORMAL_PASSWORD }}" \
-            --env-var "AuthAPI=${{ vars.AUTH_URL }}" \
-            --env-var "language=${{ vars.LANGUAGE }}" \
-            --env-var "userIdAdmin=${{ vars.USER_ID_ADMIN }}" \
-            --env-var "nameAdmin=${{ vars.NAME_ADMIN }}" \
-            --env-var "emailAdmin=${{ vars.EMAIL_ADMIN }}" \
-            --env-var "companyKeyAdmin=${{ vars.COMPANY_KEY_ADMIN }}" \
-            --env-var "userId=${{ vars.USER_ID }}" \
-            --env-var "name=${{ vars.NAME }}" \
-            --env-var "email=${{ vars.EMAIL }}" \
-            --env-var "companyKey=${{ vars.COMPANY_KEY }}" \
-            --reporters cli,junitfull \
-            --reporter-junitfull-export results/postman-results.xml
+        uses: postmanlabs/postman-cli-action@v1
+        with:
+          api-key: ${{ secrets.POSTMAN_API_KEY }}
+          command: |
+            collection run "1273809-cdf08318-6fff-48af-a18d-ba4d2e2ec21f" \
+              -e "1273809-6dd814a7-aeb2-46d9-a9da-8a9164b22db7" \
+              --env-var "companyAdmin=${{ vars.COMPANY }}" \
+              --env-var "userNameAdmin=${{ secrets.ADMIN_USER }}" \
+              --env-var "passwordAdmin=${{ secrets.ADMIN_PASSWORD }}" \
+              --env-var "company=${{ vars.COMPANY }}" \
+              --env-var "userName=${{ secrets.NORMAL_USER }}" \
+              --env-var "password=${{ secrets.NORMAL_PASSWORD }}" \
+              --env-var "AuthAPI=${{ vars.AUTH_URL }}" \
+              --env-var "language=${{ vars.LANGUAGE }}" \
+              --env-var "userIdAdmin=${{ vars.USER_ID_ADMIN }}" \
+              --env-var "nameAdmin=${{ vars.NAME_ADMIN }}" \
+              --env-var "emailAdmin=${{ vars.EMAIL_ADMIN }}" \
+              --env-var "companyKeyAdmin=${{ vars.COMPANY_KEY_ADMIN }}" \
+              --env-var "userId=${{ vars.USER_ID }}" \
+              --env-var "name=${{ vars.NAME }}" \
+              --env-var "email=${{ vars.EMAIL }}" \
+              --env-var "companyKey=${{ vars.COMPANY_KEY }}" \
+              --reporters cli,junit \
+              --reporter-junit-export results/postman-results.xml
       - uses: actions/upload-artifact@v7
         if: ${{ !cancelled() }}
         with:
