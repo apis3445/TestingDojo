@@ -1,6 +1,6 @@
 # Postman — API Tests
 
-This project contains REST API tests built in [Postman](https://www.postman.com/) and run from the command line using [Newman](https://github.com/postmanlabs/newman).
+This project contains REST API tests built in [Postman](https://www.postman.com/). Locally they can be run with [Newman](https://github.com/postmanlabs/newman); in CI they run with the [Postman CLI](https://learning.postman.com/docs/postman-cli/postman-cli-overview/), which executes the collection and environment directly from your Postman cloud workspace instead of the local JSON files.
 
 ## What is being tested?
 
@@ -26,7 +26,12 @@ pm.test("Response has access token", () => {
 ```
 
 ### Newman
-Postman's command-line runner. It executes your collection outside of the Postman app — for example in a terminal or in CI — and prints the results. This is what GitHub Actions uses to run the tests automatically.
+Postman's command-line runner. It executes the collection outside of the Postman app by reading the local `TestingDojo.postman_collection.json` / `TestingDojoDemo.postman_environment.json` files. Useful for running the tests locally without opening the desktop app.
+
+### Postman CLI
+Postman's own command-line tool (`postman`), separate from Newman. Instead of reading local files, it authenticates with `postman login --with-api-key` and then runs a collection/environment by their **UID**, pulling the current version straight from the Postman cloud workspace. **This is what CI uses now** — both the GitHub Actions `postman` job (`.github/workflows/tests.yml`, via the `postmanlabs/postman-cli-action`) and the scheduled Azure Pipelines run (`azure-pipelines-postman.yml`).
+
+Because CI runs the cloud copy of the collection/environment by UID, it can drift from the committed JSON files in this folder if changes are made in the Postman app but not re-exported — see [Updating the collection](#updating-the-collection).
 
 ### Collection file
 `TestingDojo.postman_collection.json` — contains all the requests, their bodies, headers, and test scripts. This file is committed to the repo so everyone has the same tests.
@@ -86,6 +91,38 @@ newman run TestingDojo.postman_collection.json \
   --reporters cli,junitfull \
   --reporter-junitfull-export results/postman-results.xml
 ```
+
+---
+
+## Running in CI (Postman CLI)
+
+CI does **not** run Newman against the local JSON files — it runs the [Postman CLI](https://learning.postman.com/docs/postman-cli/postman-cli-overview/) against the collection and environment stored in the Postman cloud workspace, referenced by UID:
+
+```bash
+postman login --with-api-key "$POSTMAN_API_KEY"
+
+postman collection run 1273809-cdf08318-6fff-48af-a18d-ba4d2e2ec21f \
+  -e 1273809-6dd814a7-aeb2-46d9-a9da-8a9164b22db7 \
+  --env-var "companyAdmin=YourCompany" \
+  --env-var "userNameAdmin=admin@example.com" \
+  --env-var "passwordAdmin=secret" \
+  --env-var "company=YourCompany" \
+  --env-var "userName=user@example.com" \
+  --env-var "password=secret" \
+  --reporters cli,junit \
+  --reporter-junit-export results/postman-results.xml
+```
+
+> Don't wrap the collection/environment UIDs in quotes — some CLI wrappers (e.g. the `postmanlabs/postman-cli-action` GitHub Action) split the command string without stripping shell quoting, so quoted UIDs are passed through literally and fail to resolve.
+
+This runs in two pipelines:
+
+| Pipeline | File | Trigger |
+|---|---|---|
+| GitHub Actions — `postman` job | `.github/workflows/tests.yml` | push/PR to `main`/`master`, via `postmanlabs/postman-cli-action` |
+| Azure Pipelines | `azure-pipelines-postman.yml` | daily schedule (`main`), installs the CLI with `curl \| sh` and runs it directly |
+
+Both pipelines authenticate with a `POSTMAN_API_KEY` secret and pass credentials in via `--env-var`, the same way the local Newman commands above do — only the runner and the source of the collection/environment (cloud UID vs. local file) differ.
 
 ---
 
