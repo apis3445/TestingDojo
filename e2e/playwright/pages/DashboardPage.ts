@@ -174,7 +174,10 @@ export class DashboardPage extends BasePage {
 
     public async checkTop10Chart(name: string, timeout = 5_000, maxDiffPixels = 100) {
         const snapshotName = `dashboard-${this.locale}${name}.png`;
-        await this.visualHelper.checkElementSnapshot(this.top10ChartCard.locator, snapshotName, timeout, maxDiffPixels);
+        // The AI assistant chat bubble is fixed to the viewport, not the page: when this element
+        // screenshot scrolls the chart card into view, the bubble's position inside the cropped
+        // image shifts with the resulting scroll offset (which varies by OS/locale), so it must be masked.
+        await this.visualHelper.checkElementSnapshot(this.top10ChartCard.locator, snapshotName, timeout, maxDiffPixels, [this.page.locator('.chat-fab')]);
     }
 
     /**
