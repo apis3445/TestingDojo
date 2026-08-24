@@ -15,12 +15,12 @@
 Error: expect(locator).toHaveScreenshot(expected) failed
 
 Locator: Top 10 chart card
-  2008 pixels (ratio 0.01 of all image pixels) are different.
+  167 pixels (ratio 0.01 of all image pixels) are different.
 
-  Snapshot: dashboard-de-DE-top10-30-days.png
+  Snapshot: dashboard-es-MX-top10-30-days.png
 
 Call log:
-  - Expect "toHaveScreenshot(dashboard-de-DE-top10-30-days.png)" with timeout 5000ms
+  - Expect "toHaveScreenshot(dashboard-es-MX-top10-30-days.png)" with timeout 5000ms
     - verifying given screenshot expectation
   - waiting for locator('#client-detail-chart')
     - locator resolved to <app-card-chart width="300" height="320" id="client-detail-chart" _nghost-ng-c936491877="" _ngcontent-ng-c2859530332="" classtype="card-header-success">…</app-card-chart>
@@ -33,12 +33,12 @@ Call log:
       - element is not stable
     - retrying scroll into view action
     - waiting 20ms
+    2 × waiting for element to be stable
+      - element is not stable
+    - retrying scroll into view action
+      - waiting 100ms
     - waiting for element to be stable
-    - element is not stable
-  - retrying scroll into view action
-    - waiting 100ms
-    - waiting for element to be stable
-  - 21123 pixels (ratio 0.05 of all image pixels) are different.
+  - 167 pixels (ratio 0.01 of all image pixels) are different.
   - waiting 100ms before taking screenshot
   - waiting for locator('#client-detail-chart')
     - locator resolved to <app-card-chart width="300" height="320" id="client-detail-chart" _nghost-ng-c936491877="" _ngcontent-ng-c2859530332="" classtype="card-header-success">…</app-card-chart>
@@ -48,18 +48,8 @@ Call log:
   - fonts loaded
   - attempting scroll into view action
     - waiting for element to be stable
-  - 19158 pixels (ratio 0.05 of all image pixels) are different.
-  - waiting 250ms before taking screenshot
-  - waiting for locator('#client-detail-chart')
-    - locator resolved to <app-card-chart width="300" height="320" id="client-detail-chart" _nghost-ng-c936491877="" _ngcontent-ng-c2859530332="" classtype="card-header-success">…</app-card-chart>
-  - taking element screenshot
-    - disabled all CSS animations
-  - waiting for fonts to load...
-  - fonts loaded
-  - attempting scroll into view action
-    - waiting for element to be stable
   - captured a stable screenshot
-  - 2008 pixels (ratio 0.01 of all image pixels) are different.
+  - 167 pixels (ratio 0.01 of all image pixels) are different.
 
 ```
 
@@ -68,7 +58,7 @@ Call log:
 ```yaml
 - generic [ref=e3]:
   - banner [ref=e4]:
-    - generic [ref=e5]: Dies ist eine Testseite zum Üben von Tests
+    - generic [ref=e5]: Este es un sitio web simulado para practicar pruebas
     - text:  
   - complementary [ref=e7]:
     - generic [ref=e8]:
@@ -80,170 +70,170 @@ Call log:
     - navigation "Main navigation" [ref=e14]:
       - list [ref=e15]:
         - listitem [ref=e16]:
-          - button " Forderungen " [ref=e18] [cursor=pointer]:
+          - button " Cuentas por Cobrar " [ref=e18] [cursor=pointer]:
             - generic [ref=e19]: 
-            - generic [ref=e20]: Forderungen
+            - generic [ref=e20]: Cuentas por Cobrar
             - generic [ref=e21]: 
         - listitem [ref=e22]:
-          - button " Sicherheit " [ref=e24] [cursor=pointer]:
+          - button " Seguridad " [ref=e24] [cursor=pointer]:
             - generic [ref=e25]: 
-            - generic [ref=e26]: Sicherheit
+            - generic [ref=e26]: Seguridad
             - generic [ref=e27]: 
         - listitem [ref=e28]:
-          - button " Konfiguration " [ref=e30] [cursor=pointer]:
+          - button " Configuración " [ref=e30] [cursor=pointer]:
             - generic [ref=e31]: 
-            - generic [ref=e32]: Konfiguration
+            - generic [ref=e32]: Configuración
             - generic [ref=e33]: 
     - button "User menu" [ref=e36] [cursor=pointer]:
       - generic [ref=e37]: 
       - generic [ref=e39]: Northwind
       - generic [ref=e40]: 
   - main [ref=e41]:
-    - combobox "Sprache" [ref=e44] [cursor=pointer]:
+    - combobox "Idioma" [ref=e44] [cursor=pointer]:
       - generic:
-        - generic: 🇩🇪
-        - generic: Deutsch
+        - generic: 🇪🇸
+        - generic: Español
       - generic: 
     - generic [ref=e46]:
-      - heading "Forderungen" [level=1] [ref=e48]
-      - region "Zusammenfassung" [ref=e49]:
+      - heading "Cuentas por cobrar" [level=1] [ref=e48]
+      - region "Resumen" [ref=e49]:
         - generic [ref=e50]:
-          - 'article "Überfälliger Saldo: $56,046.00" [ref=e53]':
+          - 'article "Saldo vencido: $56,046.00" [ref=e53]':
             - generic [ref=e54]:
               - generic [ref=e55]:
-                - paragraph [ref=e56]: Überfälliger Saldo
+                - paragraph [ref=e56]: Saldo vencido
                 - paragraph [ref=e57]: $56,046.00
               - generic [ref=e58]: attach_money
-          - 'article "Durchschnittliche Verspätungstage: 35" [ref=e62]':
+          - 'article "Días promedio de retraso: 35" [ref=e62]':
             - generic [ref=e63]:
               - generic [ref=e64]:
-                - paragraph [ref=e65]: Durchschnittliche Verspätungstage
+                - paragraph [ref=e65]: Días promedio de retraso
                 - paragraph [ref=e66]: "35"
               - generic [ref=e67]: schedule
       - generic [ref=e69]:
         - generic [ref=e73]:
-          - heading "Top 5 Kunden mit den höchsten Schulden" [level=2] [ref=e75]
-          - region "Top 5 Kunden mit den höchsten Schulden" [ref=e76]:
-            - img "Top 5 Kunden mit den höchsten Schulden-Diagramm. Die genauen Werte finden Sie in der Tabelle unten." [ref=e79]
-            - table "Kundenstatistik-Zusammenfassung" [ref=e83]:
+          - heading "Top 5 clientes con mayor deuda" [level=2] [ref=e75]
+          - region "Top 5 clientes con mayor deuda" [ref=e76]:
+            - img "Gráfico de Top 5 clientes con mayor deuda. Consulta la tabla a continuación para ver los valores exactos." [ref=e79]
+            - table "Resumen de estadísticas del cliente" [ref=e83]:
               - rowgroup [ref=e84]:
                 - row [ref=e85]:
                   - columnheader "#" [ref=e86]
-                  - columnheader "Kunde" [ref=e87]
-                  - columnheader "Gesamt" [ref=e88]
-                  - columnheader "Verzögerung" [ref=e89]
+                  - columnheader "Cliente" [ref=e87]
+                  - columnheader "Total" [ref=e88]
+                  - columnheader "Retraso" [ref=e89]
               - rowgroup [ref=e90]:
                 - row [ref=e91] [cursor=pointer]:
                   - cell "17" [ref=e92]
                   - cell [ref=e93]:
-                    - 'button "Jorge Peréz Mendieta: $23,148.40, 32 Tage überfällig" [ref=e94]': Jorge Peréz Mendieta
+                    - 'button "Jorge Peréz Mendieta: $23,148.40, 32 días de retraso" [ref=e94]': Jorge Peréz Mendieta
                   - cell "$23,148.40" [ref=e95]
-                  - cell "32 T" [ref=e96]:
+                  - cell "32 d" [ref=e96]:
                     - generic [ref=e98]: 
                 - row [ref=e99] [cursor=pointer]:
                   - cell "11" [ref=e100]
                   - cell [ref=e101]:
-                    - 'button "Tom''s Club: $11,498.00, 20 Tage überfällig" [ref=e102]': Tom's Club
+                    - 'button "Tom''s Club: $11,498.00, 20 días de retraso" [ref=e102]': Tom's Club
                   - cell "$11,498.00" [ref=e103]
-                  - cell "20 T" [ref=e104]:
+                  - cell "20 d" [ref=e104]:
                     - generic [ref=e106]: 
                 - row [ref=e107] [cursor=pointer]:
                   - cell "6" [ref=e108]
                   - cell [ref=e109]:
-                    - 'button "Carlos González Alvarado: $10,382.00, 35 Tage überfällig" [ref=e110]': Carlos González Alvarado
+                    - 'button "Carlos González Alvarado: $10,382.00, 35 días de retraso" [ref=e110]': Carlos González Alvarado
                   - cell "$10,382.00" [ref=e111]
-                  - cell "35 T" [ref=e112]:
+                  - cell "35 d" [ref=e112]:
                     - generic [ref=e114]: 
                 - row [ref=e115] [cursor=pointer]:
                   - cell "19" [ref=e116]
                   - cell [ref=e117]:
-                    - 'button "Diseño Web Barcelona: $6,148.00, 2 Tage überfällig" [ref=e118]': Diseño Web Barcelona
+                    - 'button "Diseño Web Barcelona: $6,148.00, 2 días de retraso" [ref=e118]': Diseño Web Barcelona
                   - cell "$6,148.00" [ref=e119]
-                  - cell "2 T" [ref=e120]:
+                  - cell "2 d" [ref=e120]:
                     - generic [ref=e122]: 
                 - row [ref=e123] [cursor=pointer]:
                   - cell "14" [ref=e124]
                   - cell [ref=e125]:
-                    - 'button "Ferretería Especializada: $4,640.00, 9 Tage überfällig" [ref=e126]': Ferretería Especializada
+                    - 'button "Ferretería Especializada: $4,640.00, 9 días de retraso" [ref=e126]': Ferretería Especializada
                   - cell "$4,640.00" [ref=e127]
-                  - cell "9 T" [ref=e128]:
+                  - cell "9 d" [ref=e128]:
                     - generic [ref=e130]: 
         - generic [ref=e134]:
-          - heading "Top 5 Kunden nach Verspätungstagen" [level=2] [ref=e136]
-          - region "Top 5 Kunden nach Verspätungstagen" [ref=e137]:
-            - img "Top 5 Kunden nach Verspätungstagen-Diagramm. Die genauen Werte finden Sie in der Tabelle unten." [ref=e140]
-            - table "Kundenstatistik-Zusammenfassung" [ref=e144]:
+          - heading "Top 5 clientes por días de retraso" [level=2] [ref=e136]
+          - region "Top 5 clientes por días de retraso" [ref=e137]:
+            - img "Gráfico de Top 5 clientes por días de retraso. Consulta la tabla a continuación para ver los valores exactos." [ref=e140]
+            - table "Resumen de estadísticas del cliente" [ref=e144]:
               - rowgroup [ref=e145]:
                 - row [ref=e146]:
                   - columnheader "#" [ref=e147]
-                  - columnheader "Kunde" [ref=e148]
-                  - columnheader "Gesamt" [ref=e149]
-                  - columnheader "Verzögerung" [ref=e150]
+                  - columnheader "Cliente" [ref=e148]
+                  - columnheader "Total" [ref=e149]
+                  - columnheader "Retraso" [ref=e150]
               - rowgroup [ref=e151]:
                 - row [ref=e152] [cursor=pointer]:
                   - cell "8" [ref=e153]
                   - cell [ref=e154]:
-                    - 'button "Electronics Depot: $3,480.00, 69 Tage überfällig" [ref=e155]': Electronics Depot
+                    - 'button "Electronics Depot: $3,480.00, 69 días de retraso" [ref=e155]': Electronics Depot
                   - cell "$3,480.00" [ref=e156]
-                  - cell "69 T" [ref=e157]:
+                  - cell "69 d" [ref=e157]:
                     - generic [ref=e159]: 
                 - row [ref=e160] [cursor=pointer]:
                   - cell "7" [ref=e161]
                   - cell [ref=e162]:
-                    - 'button "ACME: $2,668.00, 64 Tage überfällig" [ref=e163]': ACME
+                    - 'button "ACME: $2,668.00, 64 días de retraso" [ref=e163]': ACME
                   - cell "$2,668.00" [ref=e164]
-                  - cell "64 T" [ref=e165]:
+                  - cell "64 d" [ref=e165]:
                     - generic [ref=e167]: 
                 - row [ref=e168] [cursor=pointer]:
                   - cell "4" [ref=e169]
                   - cell [ref=e170]:
-                    - 'button "Comercio Mineiro: $2,900.00, 37 Tage überfällig" [ref=e171]': Comercio Mineiro
+                    - 'button "Comercio Mineiro: $2,900.00, 37 días de retraso" [ref=e171]': Comercio Mineiro
                   - cell "$2,900.00" [ref=e172]
-                  - cell "37 T" [ref=e173]:
+                  - cell "37 d" [ref=e173]:
                     - generic [ref=e175]: 
                 - row [ref=e176] [cursor=pointer]:
                   - cell "5" [ref=e177]
                   - cell [ref=e178]:
-                    - 'button "Ana Trujillo Cruz: $1,345.60, 36 Tage überfällig" [ref=e179]': Ana Trujillo Cruz
+                    - 'button "Ana Trujillo Cruz: $1,345.60, 36 días de retraso" [ref=e179]': Ana Trujillo Cruz
                   - cell "$1,345.60" [ref=e180]
-                  - cell "36 T" [ref=e181]:
+                  - cell "36 d" [ref=e181]:
                     - generic [ref=e183]: 
                 - row [ref=e184] [cursor=pointer]:
                   - cell "6" [ref=e185]
                   - cell [ref=e186]:
-                    - 'button "Carlos González Alvarado: $10,382.00, 35 Tage überfällig" [ref=e187]': Carlos González Alvarado
+                    - 'button "Carlos González Alvarado: $10,382.00, 35 días de retraso" [ref=e187]': Carlos González Alvarado
                   - cell "$10,382.00" [ref=e188]
-                  - cell "35 T" [ref=e189]:
+                  - cell "35 d" [ref=e189]:
                     - generic [ref=e191]: 
         - generic [ref=e195]:
-          - heading "Top 5 Kunden nach Verspätungszeitraum" [level=2] [ref=e197]
-          - region "Top 5 Kunden nach Verspätungszeitraum" [ref=e198]
+          - heading "Top 5 clientes por rango de días de retraso" [level=2] [ref=e197]
+          - region "Top 5 clientes por rango de días de retraso" [ref=e198]
         - generic [ref=e205]:
-          - heading "Verkaufsübersicht nach Fälligkeit" [level=2] [ref=e207]
-          - region "Verkaufsübersicht nach Fälligkeit" [ref=e208]:
-            - img "Verkaufsübersicht nach Fälligkeit-Diagramm. Die genauen Werte finden Sie in der Legende unten." [ref=e211]
-            - region "Verkaufsübersicht nach Fälligkeit" [ref=e213]:
+          - heading "Resumen de ventas por vencimiento" [level=2] [ref=e207]
+          - region "Resumen de ventas por vencimiento" [ref=e208]:
+            - img "Gráfico de Resumen de ventas por vencimiento. Consulta la leyenda a continuación para ver los valores exactos." [ref=e211]
+            - region "Resumen de ventas por vencimiento" [ref=e213]:
               - generic [ref=e214]:
-                - 'button "Demnächst fällig: $0.00, 0 %" [ref=e215] [cursor=pointer]':
-                  - generic [ref=e216]: Demnächst fällig
+                - 'button "Próximo a vencer: $0.00, 0%" [ref=e215] [cursor=pointer]':
+                  - generic [ref=e216]: Próximo a vencer
                   - generic [ref=e219]:
                     - generic [ref=e220]: $0.00
                     - generic [ref=e221]: 0%
                   - generic [ref=e222]: 
-                - 'button "30 Tage: $19,135.44, 0 %" [active] [ref=e223] [cursor=pointer]':
-                  - generic [ref=e224]: 30 Tage
+                - 'button "30 días: $19,135.44, 0%" [active] [ref=e223] [cursor=pointer]':
+                  - generic [ref=e224]: 30 días
                   - generic [ref=e227]:
                     - generic [ref=e228]: $19,135.44
                     - generic [ref=e229]: 0%
                   - generic [ref=e230]: 
-                - 'button "60 Tage: $26,122.56, 0 %" [ref=e231] [cursor=pointer]':
-                  - generic [ref=e232]: 60 Tage
+                - 'button "60 días: $26,122.56, 0%" [ref=e231] [cursor=pointer]':
+                  - generic [ref=e232]: 60 días
                   - generic [ref=e235]:
                     - generic [ref=e236]: $26,122.56
                     - generic [ref=e237]: 0%
                   - generic [ref=e238]: 
-                - 'button "+ 60 Tage: $10,788.00, 0 %" [ref=e239] [cursor=pointer]':
-                  - generic [ref=e240]: + 60 Tage
+                - 'button "+ 60 días: $10,788.00, 0%" [ref=e239] [cursor=pointer]':
+                  - generic [ref=e240]: + 60 días
                   - generic [ref=e243]:
                     - generic [ref=e244]: $10,788.00
                     - generic [ref=e245]: 0%
@@ -252,43 +242,43 @@ Call log:
           - generic [ref=e249]:
             - generic [ref=e250]: filter_list
             - generic [ref=e252]:
-              - generic [ref=e253]: Aktiver Filter
-              - text: "Kategorie: 30 Tage"
-          - button "close Filter zurücksetzen" [ref=e254] [cursor=pointer]:
+              - generic [ref=e253]: Filtro activo
+              - text: "Categoría: 30 días"
+          - button "close Limpiar filtro" [ref=e254] [cursor=pointer]:
             - generic [ref=e255]: close
-            - text: Filter zurücksetzen
+            - text: Limpiar filtro
         - generic [ref=e259]:
-          - heading "Top 10 (30 Tage)" [level=2] [ref=e261]
-          - region "Top 10 (30 Tage)" [ref=e262]
+          - heading "Top 10 (30 días)" [level=2] [ref=e261]
+          - region "Top 10 (30 días)" [ref=e262]
     - generic [ref=e267]:
-      - text: Erstellt mit
+      - text: Hecho con
       - generic [ref=e268]: 
-      - text: zum Üben von Tests von Abi
+      - text: para practicar testing por Abi
   - generic: 
   - generic [ref=e269]:
     - generic:
       - generic:
         - generic: 
         - generic:
-          - paragraph: KI-Assistent
-          - paragraph: Online · nur Debitorenbuchhaltung
-        - button "Chat schließen":
+          - paragraph: Asistente de IA
+          - paragraph: En línea · solo cuentas por cobrar
+        - button "Cerrar chat":
           - generic: 
       - generic:
         - generic:
           - generic:
             - generic:
-              - paragraph: Hallo, ich bin dein KI-Assistent. Ich helfe dir bei Fragen zur Debitorenbuchhaltung — überfällige Salden, säumigste Kunden, durchschnittliche Verzugstage oder die Fälligkeitsübersicht. Was möchtest du wissen?
+              - paragraph: Hola, soy tu Asistente de IA. Puedo ayudarte con preguntas de cuentas por cobrar — saldos vencidos, clientes más morosos, promedio de días de atraso, o el resumen de vencimientos. ¿Qué te gustaría saber?
       - generic:
-        - button "Wie hoch ist der gesamte überfällige Saldo?"
-        - button "Wer sind die 5 säumigsten Kunden?"
-        - button "Wie hoch sind die durchschnittlichen Verzugstage?"
-      - paragraph: Antworten beschränken sich auf deine Inkasso- und Debitorenbuchhaltungsdaten.
+        - button "¿Cuál es el saldo total vencido?"
+        - button "¿Quiénes son los 5 clientes con mayor mora?"
+        - button "¿Cuál es el promedio de días de atraso?"
+      - paragraph: Las respuestas se limitan a tus datos de cobranza y cuentas por cobrar.
       - generic:
-        - textbox "Frage zu deinen Forderungen…"
-        - button "Senden" [disabled]:
+        - textbox "Pregunta sobre tu cobranza…"
+        - button "Enviar" [disabled]:
           - generic: 
-    - button "Mit dem KI-Assistenten chatten" [ref=e270] [cursor=pointer]:
+    - button "Chatear con el Asistente de IA" [ref=e270] [cursor=pointer]:
       - generic [ref=e271]: 
 ```
 
