@@ -14,17 +14,15 @@ test.describe('Accessibility Testing', {
         const dashboardPage = new DashboardPage(page, locale);
         await dashboardPage.goTo(); 
         await dashboardPage.waitForChartsAreVisible();
-        await checkAccessibility(page, testInfo, { 
-            consoleLog: true,
-        });
+        await checkAccessibility(page, testInfo);
     });
 
     test('Server Page', async ({ page, locale }, testInfo) => {
         test.skip(testInfo.project.name !== 'English', 'Accessibility checks only run against the English locale');
         const serversPage = new ServersPage(page, locale);
-        const servers = await serversPage.goToServers();
+        await serversPage.goToServers();
         await checkAccessibility(page, testInfo, { 
-            consoleLog: true,
+            tags: ['wcag2a', 'wcag2aa'],
         });
     });
 });

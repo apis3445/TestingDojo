@@ -33,8 +33,8 @@ export default defineConfig({
                     moderate: '#a16207',
                     minor: '#1e40af',
                 },
-                verbose: true,      // Show in terminal
-                consoleLog: true,   // Show in browser console
+                verbose: true,
+                consoleLog: true,
                 // Optional: Azure DevOps Integration
                 ado: {
                     organization: process.env.ADO_ORGANIZATION,
