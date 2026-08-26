@@ -115,7 +115,7 @@ export class DashboardPage extends BasePage {
      */
     public async clickExpirationLegend(label: string) {
         await test.step(`Click "${label}" legend on "${this.localeInfo.dashboard.summaryExpirationChartTitle}" chart`, async () => {
-            await this.summaryExpiration.locator.getByRole('button', { name: label }).click();
+            await this.summaryExpiration.locator.getByRole('tab', { name: label }).click();
         });
     }
 
