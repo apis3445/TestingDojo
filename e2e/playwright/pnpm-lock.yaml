@@ -22,8 +22,8 @@ importers:
         specifier: ^26.2.0
         version: 26.2.0
       snap-ally:
-        specifier: ^1.0.5
-        version: 1.0.5(@playwright/test@1.62.1)(playwright-core@1.62.1)(playwright@1.62.1)
+        specifier: ^1.0.6
+        version: 1.0.6(@playwright/test@1.62.1)(playwright-core@1.62.1)(playwright@1.62.1)
       tsx:
         specifier: ^4.23.12
         version: 4.23.12
@@ -359,8 +359,8 @@ packages:
     engines: {node: '>=20'}
     hasBin: true
 
-  snap-ally@1.0.5:
-    resolution: {integrity: sha512-l7Ft4Ne9AYWPtvnfA1OyQVm2CzTYi3aFe+Pg7cs6cL5v69y8yAgAPLEWhkyDomb12I/CNIeKrEhInVfJLaVt4w==}
+  snap-ally@1.0.6:
+    resolution: {integrity: sha512-l8Yass+KiAS1veCpB17wGmQQboS07svyDLAtwOij4jZhvEbVa7X0UrddKlzojv36f0xRZ/SxXVOEsXGPMPnWgQ==}
     peerDependencies:
       '@playwright/test': ^1.60.0
       playwright: ^1.60.0
@@ -580,7 +580,7 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.2
 
-  snap-ally@1.0.5(@playwright/test@1.62.1)(playwright-core@1.62.1)(playwright@1.62.1):
+  snap-ally@1.0.6(@playwright/test@1.62.1)(playwright-core@1.62.1)(playwright@1.62.1):
     dependencies:
       '@axe-core/playwright': 4.13.0(playwright-core@1.62.1)
       '@playwright/test': 1.62.1

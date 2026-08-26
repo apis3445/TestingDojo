@@ -175,6 +175,11 @@ Then open `.env` and replace the placeholder values. The file looks like this (s
 | `NORMAL_USER` | Regular user username |
 | `NORMAL_PASSWORD` | Regular user password |
 | `LOCALE` | Browser locale for local runs |
+| `ADO_ORGANIZATION` *(optional)* | Azure DevOps org — lets `snap-ally`'s accessibility reporter file a11y violations as ADO bugs |
+| `ADO_PROJECT` *(optional)* | Azure DevOps project for the same integration |
+| `ADO_AREA_PATH` *(optional)* | Azure DevOps area path for the same integration |
+
+The three `ADO_*` variables are only needed if you want accessibility violations from `checkAccessibility()` (see `tests/accessibility.spec.ts`) filed as ADO bugs directly from the report — leave them unset otherwise.
 
 On CI these are injected automatically via GitHub Actions secrets and variables — no `.env` file needed.
 
