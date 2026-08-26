@@ -53,3 +53,4 @@ e2e/playwright/.env.*
 server.webm
 e2e/playwright/.playwright-mcp/
 e2e/playwright/.playwright-cli/
+a11y-report/

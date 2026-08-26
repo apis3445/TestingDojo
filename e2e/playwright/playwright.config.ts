@@ -22,6 +22,27 @@ export default defineConfig({
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
     ['html', { open: 'never', noSnippets: true }],
+    [
+            'snap-ally',
+            {
+                outputFolder: 'a11y-report',
+                // Optional: Visual Customization
+                colors: {
+                    critical: '#b91c1c',
+                    serious: '#c2410c',
+                    moderate: '#a16207',
+                    minor: '#1e40af',
+                },
+                verbose: true,
+                consoleLog: true,
+                // Optional: Azure DevOps Integration
+                ado: {
+                    organization: process.env.ADO_ORGANIZATION,
+                    project: process.env.ADO_PROJECT,
+                    areaPath: process.env.ADO_AREA_PATH, // Optional: Define where bugs should be created
+                },
+            },
+        ],
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
