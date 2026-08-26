@@ -31,7 +31,7 @@ export class DashboardPage extends BasePage {
     constructor(page: Page,  locale?: string) {
         super(page, 'Dashboard', locale);
         const noByRole = false;
-        this.title = new Heading(page, '#title', noByRole);
+        this.title = new Heading(page, '.page-header', noByRole);
         this.top5 = new Canvas(page, '#top5', 'Top 5 customers by range of delay days chart');
         this.top5Debt = new Canvas(page, '#top5-debt canvas', 'Top 5 customers with the highest debt chart');
         this.summaryExpiration = new Canvas(page, '#summary-expiration', 'Sales summary by expiration chart');
