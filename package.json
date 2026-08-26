@@ -1,0 +1,24 @@
+{
+  "name": "testingdojo",
+  "version": "1.0.0",
+  "description": "[![Tests](https://github.com/apis3445/TestingDojo/actions/workflows/tests.yml/badge.svg)](https://github.com/apis3445/TestingDojo/actions/workflows/tests.yml) [![Claude Code Review](https://github.com/apis3445/TestingDojo/actions/workflows/claude-code-review.yml/badge.svg)](https://github.com/apis3445/TestingDojo/actions/workflows/claude-code-review.yml)",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apis3445/TestingDojo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/apis3445/TestingDojo/issues"
+  },
+  "homepage": "https://github.com/apis3445/TestingDojo#readme"
+}
