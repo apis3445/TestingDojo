@@ -30,7 +30,7 @@
     "@faker-js/faker": "^10.5.0",
     "@playwright/test": "^1.62.1",
     "@types/node": "^26.2.0",
-    "snap-ally": "^1.0.6",
+    "snap-ally": "^1.0.7",
     "tsx": "^4.23.12",
     "typescript": "7.0.2"
   }
